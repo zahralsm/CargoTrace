@@ -13,7 +13,7 @@
                         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">
                             Pusat Administrasi Sistem & Log Audit
                         </h2>
-                        <p class="text-xs text-slate-500 font-mono">Slide 05: Kelola Maskapai Pelayaran, Pelabuhan, dan Rekam Jejak Forensik</p>
+                        <p class="text-xs text-slate-500 font-mono">Kelola master data maskapai pelayaran, pelabuhan, dan rekam jejak forensik sistem</p>
                     </div>
                 </div>
             </div>
