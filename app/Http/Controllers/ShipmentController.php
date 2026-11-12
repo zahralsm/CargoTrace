@@ -6,6 +6,7 @@ use App\Models\Location;
 use App\Models\Shipment;
 use App\Models\ShipmentException;
 use App\Models\TrackingEvent;
+use App\Services\ShipmentService;
 use App\Services\TrackingService;
 use App\Services\WeatherService;
 use Carbon\Carbon;
@@ -16,11 +17,64 @@ class ShipmentController extends Controller
 {
     protected TrackingService $trackingService;
     protected WeatherService $weatherService;
+    protected ShipmentService $shipmentService;
 
-    public function __construct(TrackingService $trackingService, WeatherService $weatherService)
-    {
+    public function __construct(
+        TrackingService $trackingService, 
+        WeatherService $weatherService,
+        ShipmentService $shipmentService
+    ) {
         $this->trackingService = $trackingService;
         $this->weatherService = $weatherService;
+        $this->shipmentService = $shipmentService;
+    }
+
+    /**
+     * Membuat Shipment Baru (Operator & Admin) - Slide 05 & 06
+     */
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->isCustomer()) {
+            abort(403, 'Akses Ditolak: Customer tidak memiliki hak membuat manifest pengiriman.');
+        }
+
+        $validated = $request->validate([
+            'customer_id'        => 'required|exists:users,id',
+            'carrier_id'         => 'required|exists:carriers,id',
+            'origin_id'          => 'required|exists:locations,id',
+            'destination_id'     => 'required|exists:locations,id|different:origin_id',
+            'cargo_type'         => 'required|string|max:255',
+            'weight_kg'          => 'required|numeric|min:1',
+            'volume_cbm'         => 'required|numeric|min:0.1',
+            'expected_departure' => 'required|date',
+            'expected_arrival'   => 'required|date|after:expected_departure',
+            'notes'              => 'nullable|string',
+        ]);
+
+        $shipmentNumber = $this->shipmentService->generateShipmentNumber();
+        $expectedArrival = Carbon::parse($validated['expected_arrival']);
+
+        Shipment::create([
+            'shipment_number'    => $shipmentNumber,
+            'customer_id'        => $validated['customer_id'],
+            'carrier_id'         => $validated['carrier_id'],
+            'origin_id'          => $validated['origin_id'],
+            'destination_id'     => $validated['destination_id'],
+            'cargo_type'         => $validated['cargo_type'],
+            'weight_kg'          => $validated['weight_kg'],
+            'volume_cbm'         => $validated['volume_cbm'],
+            'current_status'     => 'CREATED',
+            'expected_departure' => Carbon::parse($validated['expected_departure']),
+            'expected_arrival'   => $expectedArrival,
+            'estimated_arrival'  => $expectedArrival->copy(),
+            'delay_status'       => 'ON_TIME',
+            'delay_hours'        => 0,
+            'delay_severity'     => 'NONE',
+            'notes'              => $validated['notes'] ?? null,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', "Manifest kargo baru {$shipmentNumber} berhasil didaftarkan!");
     }
 
     /**

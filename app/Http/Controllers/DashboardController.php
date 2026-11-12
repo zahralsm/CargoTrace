@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Carrier;
+use App\Models\Location;
 use App\Models\Shipment;
 use App\Models\ShipmentException;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -102,6 +104,8 @@ class DashboardController extends Controller
             });
 
         $carriers = Carrier::where('is_active', true)->get();
+        $customers = User::where('role', 'customer')->get();
+        $locations = Location::all();
 
         return view('dashboard', compact(
             'shipments',
@@ -112,7 +116,9 @@ class DashboardController extends Controller
             'onTimeRate',
             'openExceptionsCount',
             'mapShipments',
-            'carriers'
+            'carriers',
+            'customers',
+            'locations'
         ));
     }
 }

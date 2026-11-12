@@ -40,12 +40,23 @@
             50% { transform: scale(1.6); opacity: 0.2; }
             100% { transform: scale(0.9); opacity: 0.9; }
         }
+        [x-cloak] { display: none !important; }
     </style>
 
-    <div class="bg-slate-100 min-h-screen py-4">
+    <div x-data="{ showCreateModal: false }" class="bg-slate-100 min-h-screen py-4">
         <div class="max-w-[1500px] mx-auto px-4 space-y-4">
 
-            {{-- 1. UNIFIED TELEMETRY RIBBON (Bukan 5 kartu terpisah biasa!) --}}
+            {{-- Flash Message --}}
+            @if(session('success'))
+                <div class="p-3.5 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg text-xs font-bold text-emerald-800 shadow-xs flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                </div>
+            @endif
+
+            {{-- 1. UNIFIED TELEMETRY RIBBON --}}
             <div class="bg-white rounded-xl border border-slate-200/90 shadow-xs px-5 py-3 flex flex-wrap items-center justify-between gap-4">
                 {{-- Left: Platform Title & Time --}}
                 <div class="flex items-center gap-3">
@@ -119,7 +130,16 @@
                                 <i class="fa-solid fa-layer-group text-sky-600 text-sm"></i>
                                 <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Active Voyage Queue</h3>
                             </div>
-                            <span class="text-[11px] text-slate-500 font-mono">{{ $shipments->total() }} Records</span>
+                            <div class="flex items-center gap-2">
+                                {{-- Tombol Tambah Shipment (Admin & Operator Only) --}}
+                                @if(!Auth::user()->isCustomer())
+                                    <button @click="showCreateModal = true" class="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-md text-[11px] font-bold shadow-xs flex items-center gap-1.5 transition">
+                                        <i class="fa-solid fa-plus text-[10px]"></i>
+                                        <span>Buat Kargo</span>
+                                    </button>
+                                @endif
+                                <span class="text-[11px] text-slate-500 font-mono">{{ $shipments->total() }} Records</span>
+                            </div>
                         </div>
 
                         {{-- Search & Status Chips --}}
@@ -264,7 +284,7 @@
                         </div>
                     </div>
 
-                    {{-- Chart.js Breakdown Widget (Dipindah ke bawah Radar, tidak makan tempat di atas) --}}
+                    {{-- Chart.js Breakdown Widget --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {{-- Chart.js Bar Chart --}}
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -311,6 +331,132 @@
             </div>
 
         </div>
+
+        {{-- MODAL TAMBAH SHIPMENT BARU (Admin & Operator Only) --}}
+        @if(!Auth::user()->isCustomer())
+            <div x-show="showCreateModal" x-cloak class="fixed inset-0 z-[999] overflow-y-auto" style="display: none;">
+                <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showCreateModal = false"></div>
+
+                <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                    <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                        
+                        {{-- Modal Header --}}
+                        <div class="bg-[#1b1f3b] px-6 py-4 flex items-center justify-between text-white border-b border-[#292f54]">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-white">
+                                    <i class="fa-solid fa-plus text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-white">Daftarkan Manifest Kargo Baru</h3>
+                                    <p class="text-[11px] text-slate-300 font-mono">STATUS AWAL: CREATED (Registrasi Pelayaran)</p>
+                                </div>
+                            </div>
+                            <button @click="showCreateModal = false" class="text-slate-400 hover:text-white text-lg">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        {{-- Form Input Shipment --}}
+                        <form method="POST" action="{{ route('shipments.store') }}" class="p-6 space-y-4 text-xs font-sans">
+                            @csrf
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {{-- Pilih Customer --}}
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Pelanggan / Pengirim (*Customer*)</label>
+                                    <select name="customer_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                        <option value="">-- Pilih Customer --</option>
+                                        @foreach($customers as $cust)
+                                            <option value="{{ $cust->id }}">{{ $cust->name }} ({{ $cust->email }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Pilih Carrier --}}
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Armada Logistik (*Carrier*)</label>
+                                    <select name="carrier_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                        <option value="">-- Pilih Maskapai / Kapal --</option>
+                                        @foreach($carriers as $c)
+                                            <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->code }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {{-- Origin Port --}}
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Pelabuhan Asal (*Origin*)</label>
+                                    <select name="origin_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                        <option value="">-- Pilih Pelabuhan Asal --</option>
+                                        @foreach($locations as $loc)
+                                            <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Destination Port --}}
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Pelabuhan Tujuan (*Destination*)</label>
+                                    <select name="destination_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                        <option value="">-- Pilih Pelabuhan Tujuan --</option>
+                                        @foreach($locations as $loc)
+                                            <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- Cargo Type --}}
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Nama Muatan / Komoditas Kargo</label>
+                                <input type="text" name="cargo_type" required placeholder="Misal: Kopi Robusta Lampung, Pupuk Organik, Biji Kakao..." class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Berat Muatan (KG)</label>
+                                    <input type="number" step="0.01" name="weight_kg" required placeholder="Contoh: 18500" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Volume Kargo (CBM)</label>
+                                    <input type="number" step="0.01" name="volume_cbm" required placeholder="Contoh: 45.5" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Rencana Keberangkatan</label>
+                                    <input type="datetime-local" name="expected_departure" required value="{{ date('Y-m-d\TH:i') }}" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Estimasi Tiba di Tujuan</label>
+                                    <input type="datetime-local" name="expected_arrival" required value="{{ date('Y-m-d\TH:i', strtotime('+14 days')) }}" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Catatan Tambahan (Opsional)</label>
+                                <textarea name="notes" rows="2" placeholder="Catatan segel kontainer, pendingin reefer, dll..." class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500"></textarea>
+                            </div>
+
+                            {{-- Footer Buttons --}}
+                            <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-2.5">
+                                <button type="button" @click="showCreateModal = false" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition">
+                                    Batal
+                                </button>
+                                <button type="submit" class="px-5 py-2 rounded-lg bg-[#1b1f3b] hover:bg-sky-600 text-white font-bold shadow-md transition flex items-center gap-2">
+                                    <i class="fa-solid fa-check"></i> Simpan & Daftarkan Kargo
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        @endif
+
     </div>
 
     {{-- Script Jam UTC, Leaflet Radar, dan Chart.js --}}
@@ -330,7 +476,7 @@
         setInterval(updateUtcClock, 1000);
         updateUtcClock();
 
-        // 2. Interactive Leaflet Radar Workbench
+        // 2. Interactive Leaflet Radar Workbench (Slide 09)
         document.addEventListener('DOMContentLoaded', function () {
             const mapData = @json($mapShipments);
             const mapEl = document.getElementById('radar-canvas');
@@ -341,9 +487,10 @@
                     attributionControl: false
                 }).setView([10.0, 75.0], 3);
 
-                // CartoDB Voyager tiles (terang, modern, dan sangat profesional)
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                    maxZoom: 18
+                // OpenStreetMap Tile Layer Resmi (100% Free & Tanpa Watermark "API KEY REQUIRED")
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(radarMap);
 
                 const bounds = [];
@@ -444,7 +591,7 @@
             }
         });
 
-        // Fungsi klik card kargo langsung geser peta ke kapal tersebut (Interaktif Human-Engineered!)
+        // Fungsi klik card kargo langsung geser peta ke kapal tersebut (Interaktif!)
         function focusOnShipment(id, lat, lng) {
             if (radarMap && lat && lng) {
                 radarMap.flyTo([lat, lng], 6, { duration: 1.2 });

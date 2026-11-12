@@ -16,6 +16,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // Manajemen Shipment & Pelacakan (Slide 07, 08, 09)
 Route::middleware('auth')->group(function () {
+    Route::post('/shipments', [ShipmentController::class, 'store'])->name('shipments.store');
     Route::get('/shipments/{shipment}', [ShipmentController::class, 'show'])->name('shipments.show');
     Route::post('/shipments/{shipment}/tracking', [ShipmentController::class, 'storeTrackingEvent'])->name('shipments.tracking.store');
     Route::post('/shipments/{shipment}/exceptions', [ShipmentController::class, 'storeException'])->name('shipments.exceptions.store');
