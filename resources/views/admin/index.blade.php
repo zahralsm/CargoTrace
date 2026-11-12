@@ -11,16 +11,16 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">
-                            System Administration & Audit Trail
+                            Pusat Administrasi Sistem & Log Audit
                         </h2>
-                        <p class="text-xs text-slate-500 font-mono">Slide 05: Kelola Carrier, Lokasi, dan Audit Log</p>
+                        <p class="text-xs text-slate-500 font-mono">Slide 05: Kelola Maskapai Pelayaran, Pelabuhan, dan Rekam Jejak Forensik</p>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
                 <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
-                    <i class="fa-solid fa-lock mr-1"></i> Admin Privilege Active
+                    <i class="fa-solid fa-lock mr-1"></i> Hak Akses Administrator Aktif
                 </span>
             </div>
         </div>
@@ -29,7 +29,7 @@
     <div x-data="{ activeTab: 'audit' }" class="py-6 bg-slate-100 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Flash Messages --}}
+            {{-- Pesan Notifikasi Sukses --}}
             @if(session('success'))
                 <div class="p-3.5 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg text-xs font-bold text-emerald-800 shadow-xs flex items-center gap-2">
                     <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
@@ -37,23 +37,23 @@
                 </div>
             @endif
 
-            {{-- Navigation Tabs --}}
+            {{-- Tab Navigasi Menu Admin --}}
             <div class="flex items-center gap-2 border-b border-slate-200 bg-white p-2 rounded-xl shadow-xs text-xs font-bold">
                 <button @click="activeTab = 'audit'" :class="activeTab === 'audit' ? 'bg-[#1b1f3b] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg transition flex items-center gap-2">
                     <i class="fa-solid fa-fingerprint"></i>
-                    <span>Audit Trail Log</span>
+                    <span>Log Rekam Jejak (Audit Trail)</span>
                     <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-700 text-slate-200">{{ $auditLogs->total() }}</span>
                 </button>
 
                 <button @click="activeTab = 'carriers'" :class="activeTab === 'carriers' ? 'bg-[#1b1f3b] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg transition flex items-center gap-2">
                     <i class="fa-solid fa-ship"></i>
-                    <span>Master Carriers (Armada)</span>
+                    <span>Kelola Maskapai Kapal (Carriers)</span>
                     <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-700 text-slate-200">{{ $carriers->count() }}</span>
                 </button>
 
                 <button @click="activeTab = 'locations'" :class="activeTab === 'locations' ? 'bg-[#1b1f3b] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg transition flex items-center gap-2">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span>Master Locations (Pelabuhan)</span>
+                    <span>Kelola Pelabuhan & Lokasi</span>
                     <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-700 text-slate-200">{{ $locations->count() }}</span>
                 </button>
             </div>
@@ -63,7 +63,7 @@
                 <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
                     <div>
                         <h3 class="text-sm font-bold text-slate-900">Catatan Aktivitas Sistem (Audit Trail)</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Merekam setiap aksi perubahan status kargo, checkpoint tracking, dan identitas pelakunya.</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Merekam setiap aksi perubahan status kargo, titik checkpoint tracking, dan identitas pengguna.</p>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                                 <th class="p-3.5">Aksi Sistem</th>
                                 <th class="p-3.5">Entitas Target</th>
                                 <th class="p-3.5">Detail Perubahan Data</th>
-                                <th class="p-3.5">IP Address</th>
+                                <th class="p-3.5">Alamat IP</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 font-mono">
@@ -86,7 +86,7 @@
                                         {{ $log->created_at->format('d M Y, H:i:s') }}
                                     </td>
                                     <td class="p-3.5 font-sans">
-                                        <div class="font-bold text-slate-900">{{ $log->user?->name ?? 'System' }}</div>
+                                        <div class="font-bold text-slate-900">{{ $log->user?->name ?? 'Sistem Otomatis' }}</div>
                                         <div class="text-[10px] text-slate-400 font-mono">{{ $log->user?->role ?? 'CRON/AUTO' }}</div>
                                     </td>
                                     <td class="p-3.5 font-sans">
@@ -96,9 +96,14 @@
                                                 'ADD_TRACKING_EVENT' => 'bg-sky-100 text-sky-800 border-sky-200',
                                                 'CREATE_SHIPMENT'    => 'bg-emerald-100 text-emerald-800 border-emerald-200',
                                             ];
+                                            $actionLabel = [
+                                                'STATUS_TRANSITION'  => 'PERUBAHAN STATUS',
+                                                'ADD_TRACKING_EVENT' => 'TITIK CHECKPOINT',
+                                                'CREATE_SHIPMENT'    => 'REGISTRASI KARGO',
+                                            ];
                                         @endphp
                                         <span class="px-2 py-0.5 rounded text-[10px] font-bold border {{ $actionBadge[$log->action] ?? 'bg-slate-100 text-slate-700' }}">
-                                            {{ $log->action }}
+                                            {{ $actionLabel[$log->action] ?? $log->action }}
                                         </span>
                                     </td>
                                     <td class="p-3.5 font-sans text-slate-700 font-semibold">
@@ -137,13 +142,13 @@
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
                     <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-plus text-sky-600"></i>
-                        <span>Tambah Carrier Baru</span>
+                        <span>Tambah Maskapai Baru</span>
                     </h3>
 
                     <form method="POST" action="{{ route('admin.carriers.store') }}" class="space-y-3 text-xs">
                         @csrf
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nama Maskapai / Operator</label>
+                            <label class="block font-bold text-slate-700 mb-1">Nama Maskapai / Operator Kapal</label>
                             <input type="text" name="name" required placeholder="Misal: Evergreen Marine Corp" class="w-full text-xs rounded-lg border-slate-300">
                         </div>
 
@@ -153,7 +158,7 @@
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Tipe Layanan</label>
+                            <label class="block font-bold text-slate-700 mb-1">Jenis Layanan</label>
                             <select name="service_type" required class="w-full text-xs rounded-lg border-slate-300">
                                 <option value="SEA_FREIGHT">SEA_FREIGHT (Kapal Kargo Laut)</option>
                                 <option value="AIR_FREIGHT">AIR_FREIGHT (Pesawat Kargo Udara)</option>
@@ -172,7 +177,7 @@
                         </div>
 
                         <button type="submit" class="w-full py-2 bg-[#1b1f3b] hover:bg-sky-600 text-white font-bold rounded-lg transition shadow-xs">
-                            + Daftarkan Carrier
+                            + Daftarkan Maskapai
                         </button>
                     </form>
                 </div>
@@ -180,7 +185,7 @@
                 {{-- Tabel Daftar Carrier --}}
                 <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="p-4 border-b border-slate-200 bg-slate-50">
-                        <h4 class="text-sm font-bold text-slate-900">Daftar Maskapai Kargo Terdaftar</h4>
+                        <h4 class="text-sm font-bold text-slate-900">Daftar Maskapai Pelayaran Terdaftar</h4>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
@@ -188,7 +193,7 @@
                                 <tr>
                                     <th class="p-3">Kode</th>
                                     <th class="p-3">Nama Maskapai</th>
-                                    <th class="p-3">Layanan</th>
+                                    <th class="p-3">Jenis Layanan</th>
                                     <th class="p-3">Kontak</th>
                                     <th class="p-3">Status</th>
                                 </tr>
@@ -231,11 +236,11 @@
                                 <input type="text" name="code" required placeholder="IDBLW" class="w-full text-xs rounded-lg border-slate-300 uppercase">
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Tipe</label>
+                                <label class="block font-bold text-slate-700 mb-1">Tipe Lokasi</label>
                                 <select name="type" required class="w-full text-xs rounded-lg border-slate-300">
-                                    <option value="PORT">PORT (Laut)</option>
-                                    <option value="AIRPORT">AIRPORT (Udara)</option>
-                                    <option value="WAREHOUSE">WAREHOUSE (Gudang)</option>
+                                    <option value="PORT">PORT (Pelabuhan Laut)</option>
+                                    <option value="AIRPORT">AIRPORT (Bandar Udara)</option>
+                                    <option value="WAREHOUSE">WAREHOUSE (Gudang Logistik)</option>
                                 </select>
                             </div>
                         </div>
@@ -256,11 +261,11 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Latitude (GPS)</label>
+                                <label class="block font-bold text-slate-700 mb-1">Latitude (Garis Lintang)</label>
                                 <input type="text" name="latitude" required placeholder="3.784" class="w-full text-xs rounded-lg border-slate-300">
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Longitude (GPS)</label>
+                                <label class="block font-bold text-slate-700 mb-1">Longitude (Garis Bujur)</label>
                                 <input type="text" name="longitude" required placeholder="98.691" class="w-full text-xs rounded-lg border-slate-300">
                             </div>
                         </div>
