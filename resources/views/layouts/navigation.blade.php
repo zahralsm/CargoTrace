@@ -30,6 +30,12 @@
                 </div>
             </div>
 
+            @if(Auth::user()->isAdmin())
+    <a href="{{ route('admin.index') }}" class="px-3.5 py-2 rounded-md text-xs font-bold transition {{ request()->routeIs('admin.*') ? 'bg-[#292f54] text-sky-400 ring-1 ring-sky-400' : 'text-purple-300 hover:bg-[#252b4d] hover:text-white' }}">
+        <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> Admin Console
+    </a>
+@endif
+
             <!-- Right Profile & User Role Badges -->
             <div class="hidden sm:flex sm:items-center sm:gap-4">
                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase {{ Auth::user()->role === 'admin' ? 'bg-purple-900/80 text-purple-300 border border-purple-600' : (Auth::user()->role === 'operator' ? 'bg-amber-900/80 text-amber-300 border border-amber-600' : 'bg-emerald-900/80 text-emerald-300 border border-emerald-600') }}">
