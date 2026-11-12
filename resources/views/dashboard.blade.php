@@ -464,6 +464,27 @@
             </div>
         @endif
 
+        {{-- FOOTER SISTEM OPERASIONAL --}}
+        <footer class="mt-8 pt-6 pb-4 border-t border-slate-200 text-xs text-slate-500">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-xs font-bold">
+                        <i class="fa-solid fa-anchor text-[10px]"></i>
+                    </div>
+                    <span class="font-bold text-slate-800">CargoTrace &copy; 2026</span>
+                    <span class="text-slate-300">•</span>
+                    <span>Sistem Visibilitas Pengiriman Global</span>
+                </div>
+                <div class="flex items-center gap-3 text-[11px]">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Semua Layanan & API Aktif (100% Operational)
+                    </span>
+                    <span class="text-slate-400">UAS Web Programming 2</span>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     {{-- Script Jam UTC, Leaflet Radar, dan Chart.js --}}
