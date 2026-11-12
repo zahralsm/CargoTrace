@@ -135,7 +135,7 @@
                                 @if(!Auth::user()->isCustomer())
                                     <button @click="showCreateModal = true" class="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-md text-[11px] font-bold shadow-xs flex items-center gap-1.5 transition">
                                         <i class="fa-solid fa-plus text-[10px]"></i>
-                                        <span>+ Buat Kargo</span>
+                                        <span>Buat Kargo</span>
                                     </button>
                                 @endif
                                 <span class="text-[11px] text-slate-500 font-mono">{{ $shipments->total() }} Data Tercatat</span>
@@ -341,120 +341,151 @@
 
         {{-- MODAL TAMBAH KARGO BARU (Hanya untuk Admin & Operator) --}}
         @if(!Auth::user()->isCustomer())
-            <div x-show="showCreateModal" x-cloak class="fixed inset-0 z-[999] overflow-y-auto" style="display: none;">
-                <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showCreateModal = false"></div>
+            <div x-show="showCreateModal" 
+                 x-cloak 
+                 class="fixed inset-0 z-[99999] overflow-y-auto" 
+                 style="display: none;"
+                 @keydown.escape.window="showCreateModal = false">
+                
+                {{-- Backdrop Gelap (z-index tinggi menutup seluruh elemen peta & kontrol Leaflet) --}}
+                <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" @click="showCreateModal = false"></div>
 
-                <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                    <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-6">
+                    <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-3xl border border-slate-200">
                         
                         {{-- Header Modal --}}
-                        <div class="bg-[#1b1f3b] px-6 py-4 flex items-center justify-between text-white border-b border-[#292f54]">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-white">
-                                    <i class="fa-solid fa-plus text-sm"></i>
+                        <div class="bg-[#1b1f3b] px-6 py-5 flex items-center justify-between text-white border-b border-[#292f54]">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 text-sky-400 flex items-center justify-center">
+                                    <i class="fa-solid fa-anchor text-lg"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-white">Daftarkan Manifest Kargo Baru</h3>
-                                    <p class="text-[11px] text-slate-300 font-mono">STATUS AWAL: DIBUAT (CREATED) - Registrasi Pelayaran</p>
+                                    <h3 class="text-base font-extrabold text-white tracking-tight">Daftarkan Manifest Kargo Baru</h3>
+                                    <p class="text-xs text-slate-300 mt-0.5">Siklus Awal: <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold border border-sky-400/30">DIBUAT (CREATED)</span></p>
                                 </div>
                             </div>
-                            <button @click="showCreateModal = false" class="text-slate-400 hover:text-white text-lg">
-                                <i class="fa-solid fa-xmark"></i>
+                            <button type="button" @click="showCreateModal = false" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark text-base"></i>
                             </button>
                         </div>
 
-                        {{-- Formulir Input Kargo --}}
-                        <form method="POST" action="{{ route('shipments.store') }}" class="p-6 space-y-4 text-xs font-sans">
+                        {{-- Formulir Registrasi Kargo --}}
+                        <form method="POST" action="{{ route('shipments.store') }}" class="p-6 sm:p-7 space-y-5 text-xs">
                             @csrf
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {{-- Pilih Pengirim / Pelanggan --}}
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Pelanggan / Pemilik Kargo (*Customer*)</label>
-                                    <select name="customer_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                        <option value="">-- Pilih Pelanggan --</option>
-                                        @foreach($customers as $cust)
-                                            <option value="{{ $cust->id }}">{{ $cust->name }} ({{ $cust->email }})</option>
-                                        @endforeach
-                                    </select>
+                            {{-- Bagian 1: Mitra & Maskapai --}}
+                            <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3">
+                                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-users text-sky-600"></i>
+                                    <span>Pihak Pengirim & Maskapai Armada</span>
                                 </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {{-- Pelanggan --}}
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Pelanggan / Pemilik Kargo</label>
+                                        <select name="customer_id" required class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <option value="">-- Pilih Pelanggan --</option>
+                                            @foreach($customers as $cust)
+                                                <option value="{{ $cust->id }}">{{ $cust->name }} ({{ $cust->email }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                {{-- Pilih Maskapai Pelayaran --}}
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Maskapai Pelayaran (*Carrier*)</label>
-                                    <select name="carrier_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                        <option value="">-- Pilih Maskapai / Kapal --</option>
-                                        @foreach($carriers as $c)
-                                            <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->code }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {{-- Pelabuhan Asal --}}
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Pelabuhan Asal (*Origin Port*)</label>
-                                    <select name="origin_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                        <option value="">-- Pilih Pelabuhan Asal --</option>
-                                        @foreach($locations as $loc)
-                                            <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                {{-- Pelabuhan Tujuan --}}
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Pelabuhan Tujuan (*Destination Port*)</label>
-                                    <select name="destination_id" required class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                        <option value="">-- Pilih Pelabuhan Tujuan --</option>
-                                        @foreach($locations as $loc)
-                                            <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
-                                        @endforeach
-                                    </select>
+                                    {{-- Maskapai --}}
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Maskapai Pelayaran (Carrier)</label>
+                                        <select name="carrier_id" required class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <option value="">-- Pilih Maskapai Kapal --</option>
+                                            @foreach($carriers as $c)
+                                                <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->code }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
-                            {{-- Komoditas Kargo --}}
+                            {{-- Bagian 2: Rute Pelabuhan --}}
+                            <div class="bg-slate-50/70 p-4 rounded-xl border border-slate-200/80 space-y-3">
+                                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-route text-sky-600"></i>
+                                    <span>Rute Koridor Pelabuhan</span>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {{-- Asal --}}
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Pelabuhan Keberangkatan (Asal)</label>
+                                        <select name="origin_id" required class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <option value="">-- Pilih Pelabuhan Asal --</option>
+                                            @foreach($locations as $loc)
+                                                <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    {{-- Tujuan --}}
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Pelabuhan Pembongkaran (Tujuan)</label>
+                                        <select name="destination_id" required class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <option value="">-- Pilih Pelabuhan Tujuan --</option>
+                                            @foreach($locations as $loc)
+                                                <option value="{{ $loc->id }}">{{ $loc->name }} ({{ $loc->city }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Bagian 3: Spesifikasi Muatan Kargo --}}
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1.5">Nama Muatan / Komoditas Kargo</label>
+                                    <input type="text" name="cargo_type" required placeholder="Contoh: Kopi Robusta Lampung, Pupuk Organik, Biji Kakao..." class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Total Berat Muatan (Kilogram)</label>
+                                        <div class="relative">
+                                            <input type="number" step="0.01" name="weight_kg" required placeholder="18500" class="w-full text-xs rounded-lg border-slate-300 py-2.5 pl-3 pr-10 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 font-bold pointer-events-none">KG</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1.5">Volume Muatan (Meter Kubik)</label>
+                                        <div class="relative">
+                                            <input type="number" step="0.01" name="volume_cbm" required placeholder="45.5" class="w-full text-xs rounded-lg border-slate-300 py-2.5 pl-3 pr-12 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 font-bold pointer-events-none">CBM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Bagian 4: Jadwal Pelayaran --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1.5">Rencana Keberangkatan (ETD)</label>
+                                    <input type="datetime-local" name="expected_departure" required value="{{ date('Y-m-d\TH:i') }}" class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1.5">Estimasi Tiba di Tujuan (ETA)</label>
+                                    <input type="datetime-local" name="expected_arrival" required value="{{ date('Y-m-d\TH:i', strtotime('+14 days')) }}" class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                                </div>
+                            </div>
+
+                            {{-- Bagian 5: Catatan --}}
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Nama Muatan / Komoditas Kargo</label>
-                                <input type="text" name="cargo_type" required placeholder="Misal: Kopi Robusta Lampung, Pupuk Organik, Biji Kakao, Tekstil..." class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
+                                <label class="block font-bold text-slate-700 mb-1.5">Catatan Operasional (Opsional)</label>
+                                <textarea name="notes" rows="2" placeholder="Catatan segel kontainer, temperatur pendingin reefer, petunjuk penanganan khusus..." class="w-full text-xs rounded-lg border-slate-300 py-2.5 px-3 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"></textarea>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Berat Muatan (Kilogram)</label>
-                                    <input type="number" step="0.01" name="weight_kg" required placeholder="Contoh: 18500" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Volume Muatan (CBM / Meter Kubik)</label>
-                                    <input type="number" step="0.01" name="volume_cbm" required placeholder="Contoh: 45.5" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Jadwal Keberangkatan (ETD)</label>
-                                    <input type="datetime-local" name="expected_departure" required value="{{ date('Y-m-d\TH:i') }}" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">Estimasi Tiba di Tujuan (ETA)</label>
-                                    <input type="datetime-local" name="expected_arrival" required value="{{ date('Y-m-d\TH:i', strtotime('+14 days')) }}" class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block font-bold text-slate-700 mb-1">Catatan Tambahan (Opsional)</label>
-                                <textarea name="notes" rows="2" placeholder="Catatan segel kontainer, pendingin reefer, instruksi penanganan..." class="w-full text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500"></textarea>
-                            </div>
-
-                            {{-- Tombol Aksi --}}
-                            <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-2.5">
-                                <button type="button" @click="showCreateModal = false" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition">
+                            {{-- Tombol Aksi Footer --}}
+                            <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+                                <button type="button" @click="showCreateModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition">
                                     Batal
                                 </button>
-                                <button type="submit" class="px-5 py-2 rounded-lg bg-[#1b1f3b] hover:bg-sky-600 text-white font-bold shadow-md transition flex items-center gap-2">
-                                    <i class="fa-solid fa-check"></i> Daftarkan & Simpan Kargo
+                                <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#1b1f3b] hover:bg-sky-600 text-white font-bold shadow-md transition flex items-center gap-2">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Daftarkan & Simpan Kargo</span>
                                 </button>
                             </div>
                         </form>
