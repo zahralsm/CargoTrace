@@ -10,9 +10,11 @@ use App\Services\EtaService;
 use App\Services\ShipmentService;
 use App\Services\TrackingService;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CargoTraceCoreTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * TEST 1: Menguji Rumus Keterlambatan & Tingkat Severity (Slide 08)
      */
