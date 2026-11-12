@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'CargoTrace') }} — Masuk</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <!-- Fontawesome 6 CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- Tailwind CSS CDN (Memastikan semua class CSS langsung aktif tanpa perlu build npm) -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+        </style>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+    <body class="bg-slate-100 text-slate-900 antialiased min-h-screen flex flex-col justify-center items-center p-4">
+        <!-- Logo CargoTrace Maritim -->
+        <div class="mb-4 text-center">
+            <a href="/" class="inline-flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-lg group-hover:bg-sky-400 transition">
+                    <i class="fa-solid fa-anchor text-2xl"></i>
+                </div>
+                <div class="text-left">
+                    <span class="text-2xl font-black tracking-tight text-slate-900 block leading-tight">CargoTrace</span>
+                    <span class="text-[11px] font-bold text-slate-500 tracking-wider uppercase">Global Shipment Visibility</span>
+                </div>
+            </a>
         </div>
+
+        <!-- Kartu Formulir Login -->
+        <div class="w-full sm:max-w-md bg-white border border-slate-200/90 shadow-xl rounded-2xl overflow-hidden p-6 sm:p-8">
+            {{ $slot }}
+        </div>
+
+        <p class="text-xs text-slate-400 mt-6 text-center">
+            &copy; 2026 CargoTrace — Sistem Pelacakan Logistik & Visibilitas Pengiriman Global
+        </p>
     </body>
 </html>
