@@ -1,66 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CargoTrace — Platform Visibilitas & Pelacakan Kargo Maritim Global
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com)
+[![Tests](https://img.shields.io/badge/PHPUnit-30%20Passed%20(100%25)-10B981?style=for-the-badge&logo=php&logoColor=white)](https://phpunit.de)
 
-## About Laravel
+> **Tugas Akhir — Web Programming 2 (UAS)**  
+> Platform pemantauan perjalanan pengiriman kargo laut/darat global yang dibangun dengan arsitektur **Service Layer**, **MySQL**, **Peta Interaktif Leaflet.js**, integrasi API cuaca live **Open-Meteo**, dan **REST API Laravel Sanctum**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Masalah & Solusi Bisnis
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Dalam industri logistik dan transportasi laut:
+- Informasi perjalanan kargo sering tersebar dan sulit dipantau secara terpusat oleh dispatcher pelabuhan.
+- Pelanggan (*Customer*) tidak mengetahui status dan riwayat terkini barang mereka.
+- Keterlambatan akibat badai laut, antrean pelabuhan, atau pemeriksaan bea cukai tidak terdeteksi secara otomatis.
 
-## Learning Laravel
+**CargoTrace** menyelesaikan masalah tersebut melalui:
+1. **Validasi Alur Status Ketat (*Finite State Machine*)**:
+   Alur status harus berurutan: `CREATED` → `BOOKED` → `PICKED_UP` → `IN_TRANSIT` → `DELIVERED`. Status akhir (`DELIVERED`) tidak boleh diubah kembali.
+2. **Kalkulasi Keterlambatan Otomatis (*Deterministic Delay Engine*)**:
+   Menghitung selisih antara estimasi tiba (*estimated arrival*) dan jadwal awal (*expected arrival*), lalu mengelompokkannya ke dalam tingkat keparahan:
+   - **LOW**: Keterlambatan 0 – 6 jam
+   - **MEDIUM**: Keterlambatan >6 – 24 jam
+   - **HIGH**: Keterlambatan >24 jam
+3. **Dispatch Workbench & Radar Peta Interaktif**:
+   Visualisasi jalur samudra menggunakan **Leaflet.js** lengkap dengan marker koordinat GPS, kapal berdenyut (*pulsing beacon*), dan fitur fokus zoom otomatis (*flyTo*) saat kartu kargo diklik.
+4. **Integrasi Cuaca Pelabuhan Live**:
+   Menampilkan suhu, kelembapan, dan kecepatan angin di pelabuhan asal & tujuan via **Open-Meteo API** dengan proteksi batas waktu (*timeout 3 detik*) dan penanganan fallback jika koneksi internet terputus.
+5. **Otorisasi Berbasis Peran (*Role-Based Access Control*)**:
+   Pemisahan hak akses yang ketat antara **Admin**, **Operator Logistik**, dan **Customer** (dengan proteksi keamanan IDOR).
+6. **REST API Standar Industri**:
+   Dilindungi dengan token Bearer **Laravel Sanctum** dan format respon JSON standar.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🏗️ Arsitektur Sistem: Service Layer Pattern
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sesuai panduan rekayasa perangkat lunak, logika bisnis dipisahkan secara tegas dari Controller:
 
-## Laravel Sponsors
+```
+[Browser Web / Klien Postman]
+              │
+              ▼
+   [Routes & Middleware (auth, can)]
+              │
+              ▼
+    [Controllers (Hanya Menangani HTTP & Validasi Input)]
+              │
+              ▼
+       [Service Layer (Logika Bisnis Reusable)]
+       ├── ShipmentService (Aturan transisi status & penomoran kargo)
+       ├── TrackingService (Pencatatan riwayat kronologis & koordinat)
+       ├── EtaService (Kalkulasi matematika delay & tingkat severity)
+       └── WeatherService (HTTP Client, batas timeout, & cache cuaca)
+              │
+              ▼
+[Eloquent Models & Database MySQL]
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🔑 Akun Demo Pengujian
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Semua akun pengujian menggunakan password yang sama: **`password`**
 
-## Contributing
+| Role / Peran | Alamat Email | Hak Akses Utama |
+| :--- | :--- | :--- |
+| **Administrator** | `admin@cargotrace.com` | Memiliki akses penuh ke seluruh kargo, armada carrier, dan audit log |
+| **Logistics Operator** | `operator@cargotrace.com` | Membuat kargo, menambah checkpoint pelacakan, dan menyelesaikan kendala |
+| **Customer** | `budi@agrologistics.com` | Hanya dapat melihat kargo miliknya sendiri (Aman dari kebocoran data) |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🚀 Panduan Menjalankan Aplikasi di Laptop
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Kebutuhan Sistem
+- PHP 8.2 atau 8.3
+- Composer 2.x
+- MySQL / MariaDB (melalui XAMPP)
+- Web Browser modern (Chrome / Edge / Firefox)
 
-## Security Vulnerabilities
+### Langkah-Langkah Menjalankan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **Clone Repositori dari GitHub**
+   ```bash
+   git clone https://github.com/zahraism/cargotrace.git
+   cd cargotrace
+   ```
 
-## License
+2. **Install Dependensi Paket**
+   ```bash
+   composer install
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **Konfigurasi Database**
+   Pastikan pengaturan database di file `.env` sudah mengarah ke MySQL kamu:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=cargotrace
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+4. **Jalankan Migrasi & Seeder Data**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+5. **Nyalakan Server Lokal**
+   ```bash
+   php artisan serve
+   ```
+   Buka browser dan akses alamat: **`http://127.0.0.1:8000`**
+
+---
+
+## 🧪 Pengujian Otomatis (Automated Testing)
+
+Aplikasi telah dilengkapi dengan rangkaian pengujian otomatis Feature & Unit test yang mencakup autentikasi, aturan transisi status, proteksi IDOR, dan REST API:
+
+```bash
+php artisan test
+```
+
+**Hasil Pengujian: 30 Passed (82 Assertions) — 100% HIJAU (PASS)**
+
+---
+
+## 📡 Dokumentasi Endpoint REST API
+
+URL Dasar: `http://127.0.0.1:8000/api`
+
+### 1. Autentikasi
+- `POST /api/register` — Pendaftaran akun Customer baru
+- `POST /api/login` — Login dan penerbitan Token Bearer Sanctum
+- `POST /api/logout` — Pencabutan (revoke) token aktif (Wajib `Bearer Token`)
+- `GET /api/user` — Mengambil data pengguna yang sedang login (Wajib `Bearer Token`)
+
+### 2. Kargo & Pelacakan
+- `GET /api/shipments` — Mengambil daftar kargo (dilengkapi filter status & paginasi)
+- `POST /api/shipments` — Membuat manifest kargo baru (Khusus Operator / Admin)
+- `GET /api/shipments/{id}` — Mengambil rincian lengkap satu kargo
+- `GET /api/shipments/{id}/tracking` — Mengambil riwayat titik perjalanan kronologis
+- `POST /api/shipments/{id}/tracking` — Menambahkan checkpoint baru beserta koordinat GPS
+
+---
+
+## 📄 Lisensi
+Proyek ini dikembangkan untuk keperluan akademik dan dilisensikan di bawah [MIT License](LICENSE).

@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "CargoTrace REST API Collection",
+    "description": "Postman Collection for CargoTrace Global Shipment Visibility Platform (Web Programming 2 UAS)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login (Operator)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"operator@cargotrace.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": "http://127.0.0.1:8000/api/login"
+          }
+        },
+        {
+          "name": "Get Authenticated User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "http://127.0.0.1:8000/api/user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Shipments",
+      "item": [
+        {
+          "name": "List All Shipments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "http://127.0.0.1:8000/api/shipments"
+          }
+        },
+        {
+          "name": "Get Single Shipment Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "http://127.0.0.1:8000/api/shipments/1"
+          }
+        },
+        {
+          "name": "Get Shipment Tracking Timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "http://127.0.0.1:8000/api/shipments/1/tracking"
+          }
+        }
+      ]
+    }
+  ]
+}
+
