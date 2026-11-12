@@ -4,34 +4,7 @@
 
     <div class="mb-6 text-center">
         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
-        <p class="text-xs text-slate-500 mt-1">Pilih peran akun atau masukkan kredensial Anda</p>
-    </div>
-
-    {{-- Pilihan Cepat Akun Demo (Mempermudah Pengujian UAS) --}}
-    <div class="mb-5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-        <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 text-center">
-            <i class="fa-solid fa-users mr-1 text-sky-600"></i> Klik Cepat Akun Demo (Password: password)
-        </span>
-        <div class="grid grid-cols-3 gap-2">
-            <button type="button" 
-                    onclick="fillCredentials('admin@cargotrace.com', 'password')"
-                    class="py-2 px-1 rounded-lg border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-800 text-center transition flex flex-col items-center">
-                <span class="text-xs font-bold">Admin</span>
-                <span class="text-[10px] text-purple-600">Full Akses</span>
-            </button>
-            <button type="button" 
-                    onclick="fillCredentials('operator@cargotrace.com', 'password')"
-                    class="py-2 px-1 rounded-lg border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 text-center transition flex flex-col items-center">
-                <span class="text-xs font-bold">Operator</span>
-                <span class="text-[10px] text-amber-600">Dispatch</span>
-            </button>
-            <button type="button" 
-                    onclick="fillCredentials('customer@cargotrace.com', 'password')"
-                    class="py-2 px-1 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-center transition flex flex-col items-center">
-                <span class="text-xs font-bold">Customer</span>
-                <span class="text-[10px] text-emerald-600">Pelanggan</span>
-            </button>
-        </div>
+        <p class="text-xs text-slate-500 mt-1">Masukkan kredensial Anda untuk melanjutkan</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
@@ -47,7 +20,7 @@
                 <input id="email" 
                        type="email" 
                        name="email" 
-                       value="{{ old('email', 'admin@cargotrace.com') }}" 
+                       value="{{ old('email') }}" 
                        required 
                        autofocus 
                        placeholder="nama@cargotrace.com"
@@ -73,7 +46,6 @@
                 <input id="password" 
                        type="password" 
                        name="password" 
-                       value="password"
                        required 
                        placeholder="••••••••"
                        class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 transition" />
@@ -95,11 +67,4 @@
             </button>
         </div>
     </form>
-
-    <script>
-        function fillCredentials(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-        }
-    </script>
 </x-guest-layout>
