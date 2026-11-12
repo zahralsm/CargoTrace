@@ -18,15 +18,6 @@
                     <a href="{{ route('dashboard') }}" class="px-3.5 py-2 rounded-md text-xs font-bold transition {{ request()->routeIs('dashboard') ? 'bg-[#292f54] text-sky-400' : 'text-slate-300 hover:bg-[#252b4d] hover:text-white' }}">
                         <i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard
                     </a>
-                    <a href="{{ route('dashboard') }}#manifest-table" class="px-3.5 py-2 rounded-md text-xs font-bold text-slate-300 hover:bg-[#252b4d] hover:text-white transition">
-                        <i class="fa-solid fa-box mr-1.5"></i> Daftar Kargo
-                    </a>
-                    <a href="{{ route('dashboard') }}#manifest-table" class="px-3.5 py-2 rounded-md text-xs font-bold text-slate-300 hover:bg-[#252b4d] hover:text-white transition">
-                        <i class="fa-solid fa-ship mr-1.5"></i> Maskapai Kapal
-                    </a>
-                    <a href="{{ route('dashboard') }}#manifest-table" class="px-3.5 py-2 rounded-md text-xs font-bold text-slate-300 hover:bg-[#252b4d] hover:text-white transition">
-                        <i class="fa-solid fa-location-dot mr-1.5"></i> Pelabuhan
-                    </a>
 
                     {{-- Tombol Konsol Admin Khusus Administrator (Slide 05) --}}
                     @if(Auth::user()->isAdmin())
@@ -86,9 +77,6 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-[#161a33] border-b border-[#292f54]">
         <div class="pt-2 pb-3 space-y-1 px-4">
             <a href="{{ route('dashboard') }}" class="block py-2 text-sm font-bold text-sky-400">Dashboard</a>
-            <a href="{{ route('dashboard') }}#manifest-table" class="block py-2 text-sm font-medium text-slate-300">Daftar Kargo</a>
-            <a href="{{ route('dashboard') }}#manifest-table" class="block py-2 text-sm font-medium text-slate-300">Maskapai Kapal</a>
-            <a href="{{ route('dashboard') }}#manifest-table" class="block py-2 text-sm font-medium text-slate-300">Pelabuhan</a>
             @if(Auth::user()->isAdmin())
                 <a href="{{ route('admin.index') }}" class="block py-2 text-sm font-bold text-purple-300">Konsol Admin</a>
             @endif
