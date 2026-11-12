@@ -7,16 +7,16 @@
 
         <title>{{ config('app.name', 'CargoTrace') }} - Global Shipment Visibility</title>
 
-        <!-- Google Fonts: Inter / Figtree -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
-
-        <!-- Tailwind CSS CDN (Memastikan semua warna & class langsung aktif tanpa perlu compile Vite manual) -->
+        <!-- Tailwind CSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
                 theme: {
                     extend: {
+                        fontFamily: {
+                            sans: ['"Segoe UI"', '-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                            mono: ['Consolas', '"Courier New"', 'monospace']
+                        },
                         colors: {
                             navy: {
                                 900: '#1b1f3b',
@@ -27,6 +27,16 @@
                 }
             }
         </script>
+
+        <!-- Font Native System App (Bukan font AI seperti Figtree / Inter) -->
+        <style>
+            body, button, input, select, textarea, table {
+                font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif !important;
+            }
+            code, pre, .font-mono {
+                font-family: Consolas, "Courier New", monospace !important;
+            }
+        </style>
 
         <!-- FontAwesome Icons CDN -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -47,7 +57,7 @@
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white border-b border-slate-200">
-                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-7xl mx-auto py-3.5 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>

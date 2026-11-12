@@ -1,461 +1,459 @@
 <x-app-layout>
-    <div class="py-6 bg-slate-100 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    {{-- Custom Styles untuk Workbench Maritim --}}
+    <style>
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Marker Kapal Berdenyut */
+        .beacon-pulse {
+            width: 12px;
+            height: 12px;
+            background-color: #0284c7;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 8px rgba(2, 132, 199, 0.8);
+        }
+        .beacon-pulse::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); opacity: 0.9; }
+            50% { transform: scale(1.6); opacity: 0.2; }
+            100% { transform: scale(0.9); opacity: 0.9; }
+        }
+    </style>
 
-            {{-- 1. TOP 5 COLORFUL STAT CARDS (Sesuai Mockup Gambar 2) --}}
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                
-                {{-- Card 1: Total Shipments (Cyan / Teal) --}}
-                <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-cyan-600 flex items-center justify-center text-white text-xl shadow-md shrink-0">
-                        <i class="fa-solid fa-boxes-stacked"></i>
+    <div class="bg-slate-100 min-h-screen py-4">
+        <div class="max-w-[1500px] mx-auto px-4 space-y-4">
+
+            {{-- 1. UNIFIED TELEMETRY RIBBON (Bukan 5 kartu terpisah biasa!) --}}
+            <div class="bg-white rounded-xl border border-slate-200/90 shadow-xs px-5 py-3 flex flex-wrap items-center justify-between gap-4">
+                {{-- Left: Platform Title & Time --}}
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-sm font-bold shadow-xs">
+                        <i class="fa-solid fa-radar"></i>
                     </div>
                     <div>
-                        <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Shipments</div>
-                        <div class="text-2xl font-black text-slate-900 leading-tight mt-0.5">{{ number_format($totalShipments) }}</div>
-                    </div>
-                </div>
-
-                {{-- Card 2: In Transit (Orange / Amber) --}}
-                <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-white text-xl shadow-md shrink-0">
-                        <i class="fa-solid fa-ship"></i>
-                    </div>
-                    <div>
-                        <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">In Transit</div>
-                        <div class="text-2xl font-black text-slate-900 leading-tight mt-0.5">{{ number_format($inTransitCount) }}</div>
-                    </div>
-                </div>
-
-                {{-- Card 3: Delivered (Emerald / Green) --}}
-                <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white text-xl shadow-md shrink-0">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                    <div>
-                        <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Delivered</div>
-                        <div class="text-2xl font-black text-slate-900 leading-tight mt-0.5">{{ number_format($deliveredCount) }}</div>
-                    </div>
-                </div>
-
-                {{-- Card 4: Delayed (Rose / Pink) --}}
-                <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-rose-500 flex items-center justify-center text-white text-xl shadow-md shrink-0">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <div>
-                        <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Delayed</div>
-                        <div class="text-2xl font-black text-slate-900 leading-tight mt-0.5">{{ number_format($delayedCount) }}</div>
-                    </div>
-                </div>
-
-                {{-- Card 5: Open Exceptions (Red / Coral) --}}
-                <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition col-span-2 sm:col-span-1">
-                    <div class="w-12 h-12 rounded-xl bg-red-600 flex items-center justify-center text-white text-xl shadow-md shrink-0">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                    <div>
-                        <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Open Exceptions</div>
-                        <div class="text-2xl font-black text-slate-900 leading-tight mt-0.5">{{ number_format($openExceptionsCount) }}</div>
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- 2. MIDDLE SECTION (2 COLUMNS: TIMELINE & MAP DI KIRI + CHART & EXCEPTIONS DI KANAN) --}}
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-                {{-- LEFT COLUMN: SHIPMENT TIMELINE & MAP VIEW (8 COLUMNS) --}}
-                <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-                    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-map-location-dot text-sky-600"></i>
-                            <h3 class="text-sm font-bold text-slate-900">Shipment Timeline & Map View</h3>
+                            <h2 class="text-sm font-extrabold text-slate-900 tracking-tight">Freight Dispatch Workbench</h2>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                LIVE TELEMETRY
+                            </span>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-200 font-mono">Leaflet.js</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 flex-1">
-                        {{-- Sub-Left: Timeline List (5 Columns) --}}
-                        <div class="md:col-span-5 p-4 border-r border-slate-200 flex flex-col justify-between bg-white">
-                            <div>
-                                <div class="relative mb-3">
-                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                                    <input type="text" placeholder="Search Timeline..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500 bg-slate-50">
-                                </div>
-
-                                {{-- Vertical Stepper with Colorful Pills --}}
-                                <div class="space-y-4 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 pl-7 text-xs">
-                                    
-                                    {{-- Item 1: Delivered --}}
-                                    <div class="relative">
-                                        <div class="absolute -left-7 top-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white ring-2 ring-emerald-200"></div>
-                                        <div class="font-bold text-slate-900">Shipment #CTG-2026-0082</div>
-                                        <div class="text-[11px] text-slate-500">Surabaya &rarr; Singapore</div>
-                                        <div class="mt-1 flex items-center gap-2">
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-white shadow-xs">DELIVERED</span>
-                                            <span class="text-[10px] text-slate-400">12 Nov</span>
-                                        </div>
-                                    </div>
-
-                                    {{-- Item 2: In Transit --}}
-                                    <div class="relative">
-                                        <div class="absolute -left-7 top-1 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white ring-2 ring-amber-200"></div>
-                                        <div class="font-bold text-slate-900">Shipment #CTG-2026-0081</div>
-                                        <div class="text-[11px] text-slate-500">Jakarta &rarr; Rotterdam</div>
-                                        <div class="mt-1 flex items-center gap-2">
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-white shadow-xs">IN TRANSIT</span>
-                                            <span class="text-[10px] text-slate-400">10 Nov</span>
-                                        </div>
-                                    </div>
-
-                                    {{-- Item 3: Picked Up --}}
-                                    <div class="relative">
-                                        <div class="absolute -left-7 top-1 w-3.5 h-3.5 rounded-full bg-purple-500 border-2 border-white ring-2 ring-purple-200"></div>
-                                        <div class="font-bold text-slate-900">Shipment #CTG-2026-0083</div>
-                                        <div class="text-[11px] text-slate-500">Jakarta &rarr; Hamburg</div>
-                                        <div class="mt-1 flex items-center gap-2">
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white shadow-xs">PICKED UP</span>
-                                            <span class="text-[10px] text-slate-400">02 Nov</span>
-                                        </div>
-                                    </div>
-
-                                    {{-- Item 4: Booked --}}
-                                    <div class="relative">
-                                        <div class="absolute -left-7 top-1 w-3.5 h-3.5 rounded-full bg-sky-500 border-2 border-white ring-2 ring-sky-200"></div>
-                                        <div class="font-bold text-slate-900">Shipment #CTG-2026-0084</div>
-                                        <div class="text-[11px] text-slate-500">Singapore &rarr; Sydney</div>
-                                        <div class="mt-1 flex items-center gap-2">
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500 text-white shadow-xs">BOOKED</span>
-                                            <span class="text-[10px] text-slate-400">28 Oct</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Sub-Right: Leaflet Map Embedded (7 Columns) --}}
-                        <div class="md:col-span-7 h-72 md:h-auto min-h-[300px] relative bg-slate-900">
-                            <div id="dashboard-radar-map" class="w-full h-full min-h-[320px]"></div>
+                        <div class="text-[11px] text-slate-500 font-mono flex items-center gap-2 mt-0.5">
+                            <span><i class="fa-regular fa-clock mr-1"></i> <strong id="utc-time-hud">--:--:-- UTC</strong></span>
+                            <span class="text-slate-300">•</span>
+                            <span>Role: <strong class="text-slate-700 uppercase font-sans font-bold">{{ Auth::user()->role }}</strong></span>
                         </div>
                     </div>
                 </div>
 
-                {{-- RIGHT COLUMN: CHART.JS & EXCEPTIONS TABLE (5 COLUMNS) --}}
-                <div class="lg:col-span-5 space-y-6">
-                    
-                    {{-- Performance Bar Chart (Chart.js) --}}
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-sm font-bold text-slate-900">Shipment Overview & Performance</h3>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 font-mono">Chart.js</span>
-                        </div>
-                        <p class="text-xs text-slate-500 mb-3">Shipment Volume by Status (Past 7 Days)</p>
-                        <div class="h-44 relative">
-                            <canvas id="shipmentStatusChart"></canvas>
-                        </div>
+                {{-- Right: Compact Industrial Metric Chips --}}
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    {{-- Total --}}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+                        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span class="text-slate-500 font-medium">Manifest:</span>
+                        <strong class="text-slate-900 font-mono">{{ $totalShipments }}</strong>
                     </div>
 
-                    {{-- Delayed Shipments & Exceptions Widget --}}
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-sm font-bold text-slate-900">Delayed Shipments & Exceptions</h3>
-                            <span class="text-[10px] text-slate-500">Live SLA status</span>
-                        </div>
-                        <div class="divide-y divide-slate-100 text-xs">
-                            <div class="py-2.5 flex items-center justify-between">
-                                <div>
-                                    <div class="font-bold text-slate-900">Shipment #CTG-2026-0081</div>
-                                    <div class="text-[11px] text-slate-500">Weather Squall Indian Ocean</div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
-                                    Delayed +14h
-                                </span>
-                            </div>
-
-                            <div class="py-2.5 flex items-center justify-between">
-                                <div>
-                                    <div class="font-bold text-slate-900">Shipment #CTG-2026-0083</div>
-                                    <div class="text-[11px] text-slate-500">Export Customs Verification</div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
-                                    In Transit
-                                </span>
-                            </div>
-
-                            <div class="py-2.5 flex items-center justify-between">
-                                <div>
-                                    <div class="font-bold text-slate-900">Shipment #CTG-2026-0082</div>
-                                    <div class="text-[11px] text-slate-500">Singapore PSA Discharge</div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
-                                    Delivered
-                                </span>
-                            </div>
-                        </div>
+                    {{-- In Transit --}}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span class="font-medium">In Transit:</span>
+                        <strong class="font-mono">{{ $inTransitCount }}</strong>
                     </div>
 
+                    {{-- Delivered --}}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="font-medium">Delivered:</span>
+                        <strong class="font-mono">{{ $deliveredCount }}</strong>
+                    </div>
+
+                    {{-- Delayed --}}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-900">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <span class="font-medium">Delayed:</span>
+                        <strong class="font-mono">{{ $delayedCount }}</strong>
+                    </div>
+
+                    {{-- Exceptions --}}
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-900">
+                        <i class="fa-solid fa-triangle-exclamation text-red-600 text-xs"></i>
+                        <span class="font-medium">Exceptions:</span>
+                        <strong class="font-mono">{{ $openExceptionsCount }}</strong>
+                    </div>
                 </div>
-
             </div>
 
-            {{-- 3. BOTTOM SECTION: SHIPMENT TIMELINE & STATUS TABLE (Slide 10) --}}
-            <div id="manifest-table" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Shipment Timeline & Status</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Filter manifest kargo dan klik nomor kargo untuk melihat peta dan cuaca live.</p>
+            {{-- 2. ASYMMETRICAL WORKBENCH: LEFT DISPATCH FEED (40%) + RIGHT RADAR WORKSPACE (60%) --}}
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+
+                {{-- PANE KIRI: DISPATCH QUEUE & ACTIVE VOYAGE CARDS (5 Kolom / 40%) --}}
+                <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[700px] overflow-hidden">
+                    
+                    {{-- Header Feed & Filter Bar --}}
+                    <div class="p-3.5 border-b border-slate-200 bg-slate-50 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group text-sky-600 text-sm"></i>
+                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Active Voyage Queue</h3>
+                            </div>
+                            <span class="text-[11px] text-slate-500 font-mono">{{ $shipments->total() }} Records</span>
+                        </div>
+
+                        {{-- Search & Status Chips --}}
+                        <form method="GET" action="{{ route('dashboard') }}" class="space-y-2">
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Ref / Komoditas kargo..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border-slate-300 focus:ring-sky-500 focus:border-sky-500 bg-white">
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                                <a href="{{ route('dashboard') }}" class="px-2.5 py-1 rounded-md font-bold transition {{ !request('status') ? 'bg-[#1b1f3b] text-white' : 'bg-slate-200/80 text-slate-700 hover:bg-slate-300' }}">
+                                    Semua
+                                </a>
+                                <a href="{{ route('dashboard', ['status' => 'IN_TRANSIT']) }}" class="px-2.5 py-1 rounded-md font-bold transition {{ request('status') === 'IN_TRANSIT' ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-800 hover:bg-amber-200' }}">
+                                    In Transit
+                                </a>
+                                <a href="{{ route('dashboard', ['delay_status' => 'DELAYED']) }}" class="px-2.5 py-1 rounded-md font-bold transition {{ request('delay_status') === 'DELAYED' ? 'bg-rose-500 text-white' : 'bg-rose-100 text-rose-800 hover:bg-rose-200' }}">
+                                    Delayed
+                                </a>
+                                <a href="{{ route('dashboard', ['status' => 'DELIVERED']) }}" class="px-2.5 py-1 rounded-md font-bold transition {{ request('status') === 'DELIVERED' ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' }}">
+                                    Delivered
+                                </a>
+                            </div>
+                        </form>
                     </div>
 
-                    {{-- Search & Filter Mini Bar --}}
-                    <form method="GET" action="{{ route('dashboard') }}" class="flex flex-wrap items-center gap-2">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari ref / kargo..." class="text-xs rounded-lg border-slate-300 py-1.5 px-3 focus:ring-sky-500 focus:border-sky-500">
-                        <select name="status" class="text-xs rounded-lg border-slate-300 py-1.5 focus:ring-sky-500 focus:border-sky-500">
-                            <option value="">Semua Status</option>
-                            <option value="CREATED" {{ request('status') === 'CREATED' ? 'selected' : '' }}>CREATED</option>
-                            <option value="BOOKED" {{ request('status') === 'BOOKED' ? 'selected' : '' }}>BOOKED</option>
-                            <option value="PICKED_UP" {{ request('status') === 'PICKED_UP' ? 'selected' : '' }}>PICKED_UP</option>
-                            <option value="IN_TRANSIT" {{ request('status') === 'IN_TRANSIT' ? 'selected' : '' }}>IN_TRANSIT</option>
-                            <option value="DELIVERED" {{ request('status') === 'DELIVERED' ? 'selected' : '' }}>DELIVERED</option>
-                        </select>
-                        <button type="submit" class="px-3 py-1.5 bg-[#1b1f3b] text-white rounded-lg text-xs font-bold hover:bg-[#292f54] transition">
-                            Filter
-                        </button>
-                        @if(request()->hasAny(['search', 'status', 'carrier_id', 'delay_status']))
-                            <a href="{{ route('dashboard') }}" class="px-2.5 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Reset</a>
-                        @endif
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 tracking-wider">
-                            <tr>
-                                <th class="p-3.5">Shipment Ref</th>
-                                <th class="p-3.5">Carrier</th>
-                                <th class="p-3.5">Rute (Origin &rarr; Dest)</th>
-                                <th class="p-3.5">Muatan Kargo</th>
-                                <th class="p-3.5">Status Lifecycle</th>
-                                <th class="p-3.5">Kondisi SLA / Delay</th>
-                                <th class="p-3.5 text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @forelse($shipments as $s)
-                                <tr class="hover:bg-slate-50 transition">
-                                    {{-- Shipment Ref --}}
-                                    <td class="p-3.5">
-                                        <a href="{{ route('shipments.show', $s) }}" class="font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1.5">
-                                            <span>{{ $s->shipment_number }}</span>
-                                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                                        </a>
-                                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $s->created_at->format('d M Y') }}</div>
-                                    </td>
-
-                                    {{-- Carrier --}}
-                                    <td class="p-3.5">
-                                        <div class="font-bold text-slate-800">{{ $s->carrier->name }}</div>
-                                        <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-200/80 text-slate-700 font-mono font-semibold">{{ $s->carrier->code }}</span>
-                                    </td>
-
-                                    {{-- Route --}}
-                                    <td class="p-3.5">
-                                        <div class="flex items-center gap-1.5 font-semibold text-slate-800">
-                                            <span>{{ $s->origin->city }}</span>
-                                            <span class="text-sky-500 font-bold">&rarr;</span>
-                                            <span>{{ $s->destination->city }}</span>
+                    {{-- Scrollable List of Voyage Cards --}}
+                    <div class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2.5">
+                        @forelse($shipments as $s)
+                            @php
+                                $statusBadge = [
+                                    'CREATED'    => 'bg-slate-200 text-slate-700',
+                                    'BOOKED'     => 'bg-sky-500 text-white',
+                                    'PICKED_UP'  => 'bg-purple-600 text-white',
+                                    'IN_TRANSIT' => 'bg-amber-500 text-white animate-pulse',
+                                    'DELIVERED'  => 'bg-emerald-500 text-white',
+                                ];
+                            @endphp
+                            <div class="p-3.5 rounded-xl border border-slate-200 hover:border-sky-400 bg-white hover:bg-sky-50/30 transition shadow-xs group cursor-pointer" onclick="focusOnShipment({{ $s->id }}, {{ $s->latestEvent?->latitude ?? $s->origin->latitude }}, {{ $s->latestEvent?->longitude ?? $s->origin->longitude }})">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-extrabold text-sm text-slate-900 group-hover:text-sky-600 transition">{{ $s->shipment_number }}</span>
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs {{ $statusBadge[$s->current_status] ?? 'bg-slate-200 text-slate-800' }}">
+                                                {{ $s->current_status }}
+                                            </span>
                                         </div>
-                                        <div class="text-[10px] text-slate-500 font-mono">{{ $s->origin->code }} to {{ $s->destination->code }}</div>
-                                    </td>
+                                        <div class="text-[11px] text-slate-500 mt-0.5">
+                                            <i class="fa-solid fa-ship text-slate-400 mr-1"></i> {{ $s->carrier->name }} ({{ $s->carrier->code }})
+                                        </div>
+                                    </div>
 
-                                    {{-- Cargo --}}
-                                    <td class="p-3.5">
-                                        <div class="font-semibold text-slate-900 truncate max-w-xs">{{ $s->cargo_type }}</div>
-                                        <div class="text-[11px] text-slate-500">{{ number_format($s->weight_kg, 0) }} kg | {{ $s->volume_cbm }} CBM</div>
-                                    </td>
-
-                                    {{-- Status Lifecycle --}}
-                                    <td class="p-3.5">
-                                        @php
-                                            $pillStyles = [
-                                                'CREATED'    => 'bg-slate-200 text-slate-800',
-                                                'BOOKED'     => 'bg-sky-500 text-white',
-                                                'PICKED_UP'  => 'bg-purple-600 text-white',
-                                                'IN_TRANSIT' => 'bg-amber-500 text-white font-bold animate-pulse',
-                                                'DELIVERED'  => 'bg-emerald-500 text-white font-bold',
-                                            ];
-                                        @endphp
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold shadow-xs {{ $pillStyles[$s->current_status] ?? 'bg-slate-200 text-slate-800' }}">
-                                            {{ $s->current_status }}
-                                        </span>
-                                    </td>
-
-                                    {{-- Delay --}}
-                                    <td class="p-3.5">
+                                    {{-- SLA / Delay Pill --}}
+                                    <div>
                                         @if($s->delay_status === 'DELAYED')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-500 text-white shadow-xs">
-                                                <i class="fa-solid fa-triangle-exclamation text-[9px]"></i> DELAY +{{ $s->delay_hours }}h ({{ $s->delay_severity }})
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1">
+                                                <i class="fa-solid fa-triangle-exclamation text-[9px]"></i> +{{ $s->delay_hours }}h
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
-                                                <i class="fa-solid fa-check text-[9px]"></i> ON TIME
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                                ON TIME
                                             </span>
                                         @endif
-                                    </td>
+                                    </div>
+                                </div>
 
-                                    {{-- Action --}}
-                                    <td class="p-3.5 text-right">
-                                        <a href="{{ route('shipments.show', $s) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-xs font-bold border border-sky-200 transition">
-                                            <span>Detail</span>
-                                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="p-8 text-center text-slate-500">
-                                        Tidak ada data shipment yang ditemukan.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                {{-- Route Stepper Line --}}
+                                <div class="mt-3 p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                                    <div class="text-left">
+                                        <div class="font-bold text-slate-800">{{ $s->origin->city }}</div>
+                                        <div class="text-[10px] text-slate-400 font-mono">{{ $s->origin->code }}</div>
+                                    </div>
+                                    <div class="flex-1 px-3 flex flex-col items-center">
+                                        <div class="w-full flex items-center">
+                                            <div class="w-2 h-2 rounded-full bg-sky-500"></div>
+                                            <div class="flex-1 border-t-2 border-dashed border-sky-300"></div>
+                                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                        </div>
+                                        <span class="text-[9px] text-slate-400 mt-0.5 font-mono">SEA CORRIDOR</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-slate-800">{{ $s->destination->city }}</div>
+                                        <div class="text-[10px] text-slate-400 font-mono">{{ $s->destination->code }}</div>
+                                    </div>
+                                </div>
+
+                                {{-- Cargo & Specs Footer --}}
+                                <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+                                    <span class="truncate max-w-[200px]" title="{{ $s->cargo_type }}"><i class="fa-solid fa-box-open mr-1 text-slate-400"></i> {{ $s->cargo_type }}</span>
+                                    <a href="{{ route('shipments.show', $s) }}" class="font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1">
+                                        <span>Buka Detail</span>
+                                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="p-8 text-center text-slate-400 text-xs">
+                                <i class="fa-solid fa-inbox text-3xl mb-2 text-slate-300"></i>
+                                <p>Tidak ada manifest pengiriman yang cocok.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    {{-- Pagination Footer --}}
+                    <div class="p-2.5 border-t border-slate-200 bg-slate-50 text-xs">
+                        {{ $shipments->links() }}
+                    </div>
                 </div>
 
-                {{-- Pagination --}}
-                <div class="p-4 border-t border-slate-200">
-                    {{ $shipments->links() }}
+                {{-- PANE KANAN: INTERACTIVE RADAR STAGE + FLOATING HUD (7 Kolom / 60%) --}}
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    {{-- Radar Map Container with Floating HUD Overlays --}}
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden relative">
+                        {{-- Map Header Bar --}}
+                        <div class="p-3 border-b border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></div>
+                                <span class="font-bold text-slate-800 uppercase tracking-wider">Live Ocean Radar & Fleet Trajectory</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-500">
+                                <span><i class="fa-solid fa-location-crosshairs text-sky-600 mr-1"></i> Multi-Point GIS</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-sky-100 text-sky-800 font-bold">OpenStreetMap</span>
+                            </div>
+                        </div>
+
+                        {{-- Leaflet Map Canvas (Tinggi 460px Lega & Interaktif!) --}}
+                        <div id="radar-canvas" class="w-full h-[460px] bg-slate-900 relative"></div>
+
+                        {{-- Floating Glass HUD: Performance Quick Metric --}}
+                        <div class="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-md p-3 rounded-xl border border-slate-200 shadow-lg max-w-xs text-xs space-y-1.5">
+                            <div class="flex items-center justify-between gap-3">
+                                <strong class="text-slate-900 font-bold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-shield-heart text-emerald-600"></i> SLA Reliability
+                                </strong>
+                                <span class="px-2 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-800 text-[10px]">{{ $onTimeRate }}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full rounded-full" style="width: {{ $onTimeRate }}%;"></div>
+                            </div>
+                            <p class="text-[10px] text-slate-500">{{ $totalShipments - $delayedCount }} dari {{ $totalShipments }} kargo bergerak sesuai estimasi.</p>
+                        </div>
+                    </div>
+
+                    {{-- Chart.js Breakdown Widget (Dipindah ke bawah Radar, tidak makan tempat di atas) --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {{-- Chart.js Bar Chart --}}
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-chart-column text-indigo-600"></i>
+                                    <span>Fleet Volume by Status</span>
+                                </h4>
+                                <span class="text-[10px] font-mono text-slate-400">Chart.js</span>
+                            </div>
+                            <div class="h-36 relative">
+                                <canvas id="fleetStatusBarChart"></canvas>
+                            </div>
+                        </div>
+
+                        {{-- Active Operational Incidents / Exceptions --}}
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+                                        <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                                        <span>Incident Dispatch Priority</span>
+                                    </h4>
+                                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700">Priority 1</span>
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <div class="p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-900">
+                                        <div class="font-bold flex items-center justify-between">
+                                            <span>Shipment #CTG-2026-0081</span>
+                                            <span class="text-[10px] bg-rose-200 px-1.5 py-0.2 rounded font-bold">WEATHER</span>
+                                        </div>
+                                        <p class="text-[11px] text-rose-700 mt-1">Severe monsoon squall line in Indian Ocean. Speed capped at 14 knots.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-right">
+                                <a href="{{ route('shipments.show', 1) }}" class="text-[11px] font-bold text-rose-700 hover:text-rose-900">Tinjau Exception &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
 
         </div>
     </div>
 
-    {{-- Script untuk Leaflet Map & Chart.js (Slide 09 & 14) --}}
+    {{-- Script Jam UTC, Leaflet Radar, dan Chart.js --}}
     <script>
+        let radarMap;
+        const markersMap = {};
+
+        // 1. Live UTC Clock
+        function updateUtcClock() {
+            const now = new Date();
+            const hours = String(now.getUTCHours()).padStart(2, '0');
+            const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+            const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+            const el = document.getElementById('utc-time-hud');
+            if (el) el.innerText = `${hours}:${minutes}:${seconds} UTC`;
+        }
+        setInterval(updateUtcClock, 1000);
+        updateUtcClock();
+
+        // 2. Interactive Leaflet Radar Workbench
         document.addEventListener('DOMContentLoaded', function () {
-            // 1. Chart.js: Shipment Volume by Status Bar Chart (Sesuai Mockup Gambar 2)
-            const ctx = document.getElementById('shipmentStatusChart');
-            if (ctx) {
-                new Chart(ctx, {
+            const mapData = @json($mapShipments);
+            const mapEl = document.getElementById('radar-canvas');
+
+            if (mapEl) {
+                radarMap = L.map('radar-canvas', {
+                    zoomControl: true,
+                    attributionControl: false
+                }).setView([10.0, 75.0], 3);
+
+                // CartoDB Voyager tiles (terang, modern, dan sangat profesional)
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 18
+                }).addTo(radarMap);
+
+                const bounds = [];
+
+                mapData.forEach(item => {
+                    const origin = [item.origin.lat, item.origin.lng];
+                    const dest = [item.destination.lat, item.destination.lng];
+                    const current = [item.current_location.lat, item.current_location.lng];
+
+                    bounds.push(origin, dest, current);
+
+                    const isDelayed = item.delay_status === 'DELAYED';
+                    const routeColor = isDelayed ? '#f43f5e' : (item.status === 'DELIVERED' ? '#10b981' : '#0284c7');
+
+                    // Garis Lintasan Laut (Polyline)
+                    L.polyline([origin, current, dest], {
+                        color: routeColor,
+                        weight: 2.5,
+                        dashArray: item.status === 'DELIVERED' ? null : '6, 8',
+                        opacity: 0.8
+                    }).addTo(radarMap);
+
+                    // Marker Origin
+                    L.circleMarker(origin, {
+                        radius: 5,
+                        color: '#0369a1',
+                        fillColor: '#ffffff',
+                        fillOpacity: 1,
+                        weight: 2
+                    }).addTo(radarMap).bindPopup(`<b>Origin:</b> ${item.origin.name}<br><b>Shipment:</b> ${item.number}`);
+
+                    // Marker Destination
+                    L.circleMarker(dest, {
+                        radius: 5,
+                        color: '#059669',
+                        fillColor: '#10b981',
+                        fillOpacity: 1,
+                        weight: 2
+                    }).addTo(radarMap).bindPopup(`<b>Destination:</b> ${item.destination.name}<br><b>Shipment:</b> ${item.number}`);
+
+                    // Custom Beacon Marker untuk Kapal / Titik Terkini
+                    const customBeacon = L.divIcon({
+                        className: 'custom-beacon-icon',
+                        html: `<div class="beacon-pulse" style="background-color: ${isDelayed ? '#e11d48' : '#0284c7'};"></div>`,
+                        iconSize: [12, 12],
+                        iconAnchor: [6, 6]
+                    });
+
+                    const beaconMarker = L.marker(current, { icon: customBeacon }).addTo(radarMap);
+                    beaconMarker.bindPopup(`
+                        <div style="font-family: sans-serif; font-size: 11px; line-height: 1.4;">
+                            <strong style="color: #0f172a; font-size: 12px;">${item.number}</strong><br>
+                            <span style="color: #64748b;">Carrier: ${item.carrier}</span><br>
+                            <span style="color: #64748b;">Cargo: ${item.cargo}</span><br>
+                            <div style="margin-top: 4px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; display: inline-block; background: ${isDelayed ? '#ffe4e6' : '#e0f2fe'}; color: ${isDelayed ? '#be123c' : '#0369a1'};">
+                                ${item.status} ${isDelayed ? '• DELAYED' : ''}
+                            </div>
+                        </div>
+                    `);
+
+                    markersMap[item.id] = { marker: beaconMarker, latLng: current };
+
+                    // Buka popup jika ada kapal delayed (prioritas operasional)
+                    if (isDelayed) {
+                        beaconMarker.openPopup();
+                    }
+                });
+
+                if (bounds.length > 0) {
+                    radarMap.fitBounds(bounds, { padding: [30, 30] });
+                }
+            }
+
+            // 3. Chart.js Bar Chart
+            const chartCanvas = document.getElementById('fleetStatusBarChart');
+            if (chartCanvas) {
+                new Chart(chartCanvas, {
                     type: 'bar',
                     data: {
                         labels: ['Booked', 'In Transit', 'Delivered', 'Delayed'],
                         datasets: [{
                             data: [{{ $totalShipments - $inTransitCount - $deliveredCount }}, {{ $inTransitCount }}, {{ $deliveredCount }}, {{ $delayedCount }}],
-                            backgroundColor: [
-                                '#3b82f6', // Booked: Blue
-                                '#f59e0b', // In Transit: Orange/Amber
-                                '#10b981', // Delivered: Green
-                                '#f43f5e'  // Delayed: Rose/Pink
-                            ],
+                            backgroundColor: ['#3b82f6', '#f59e0b', '#10b981', '#f43f5e'],
                             borderRadius: 6,
-                            borderSkipped: false
+                            barThickness: 24
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
+                        plugins: { legend: { display: false } },
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: '#f1f5f9' },
-                                ticks: { font: { size: 10 } }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 10 } }
-                            }
+                            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } }
                         }
                     }
                 });
             }
+        });
 
-            // 2. Leaflet Map View di Sub-kolom Kanan (Sesuai Mockup Gambar 2)
-            const mapData = @json($mapShipments);
-            const mapEl = document.getElementById('dashboard-radar-map');
-            
-            if (mapEl) {
-                const map = L.map('dashboard-radar-map', {
-                    zoomControl: true,
-                    attributionControl: false
-                }).setView([15.0, 75.0], 3);
-
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                    maxZoom: 18
-                }).addTo(map);
-
-                const bounds = [];
-
-                mapData.forEach(item => {
-                    const originLatLng = [item.origin.lat, item.origin.lng];
-                    const destLatLng = [item.destination.lat, item.destination.lng];
-                    const currentLatLng = [item.current_location.lat, item.current_location.lng];
-
-                    bounds.push(originLatLng, destLatLng, currentLatLng);
-
-                    // Polyline Garis Pelayaran
-                    const isDelayed = item.delay_status === 'DELAYED';
-                    const routeColor = isDelayed ? '#f43f5e' : (item.status === 'DELIVERED' ? '#10b981' : '#0284c7');
-
-                    L.polyline([originLatLng, currentLatLng, destLatLng], {
-                        color: routeColor,
-                        weight: 2.5,
-                        opacity: 0.8
-                    }).addTo(map);
-
-                    // Origin Marker
-                    L.circleMarker(originLatLng, {
-                        radius: 5,
-                        color: '#0369a1',
-                        fillColor: '#38bdf8',
-                        fillOpacity: 1,
-                        weight: 2
-                    }).addTo(map).bindPopup(`<b>Origin:</b> ${item.origin.name}`);
-
-                    // Destination Marker
-                    L.circleMarker(destLatLng, {
-                        radius: 5,
-                        color: '#059669',
-                        fillColor: '#34d399',
-                        fillOpacity: 1,
-                        weight: 2
-                    }).addTo(map).bindPopup(`<b>Destination:</b> ${item.destination.name}`);
-
-                    // Current Location Marker
-                    const beacon = L.circleMarker(currentLatLng, {
-                        radius: 6,
-                        color: isDelayed ? '#be123c' : '#0284c7',
-                        fillColor: isDelayed ? '#f43f5e' : '#38bdf8',
-                        fillOpacity: 1,
-                        weight: 2
-                    }).addTo(map);
-
-                    beacon.bindPopup(`
-                        <div style="font-family: sans-serif; font-size: 11px; line-height: 1.4;">
-                            <strong style="color: #0f172a;">Current Location</strong><br>
-                            <span style="color: #64748b;">Shipment: ${item.number}</span><br>
-                            <span style="color: #64748b;">Carrier: ${item.carrier}</span><br>
-                            <span style="color: ${isDelayed ? '#be123c' : '#059669'}; font-weight: bold;">
-                                Status: ${item.status} (${isDelayed ? 'Delayed' : 'On Schedule'})
-                            </span>
-                        </div>
-                    `);
-                    
-                    // Buka popup untuk shipment aktif pertama (persis seperti di gambar contoh)
-                    if (item.status === 'IN_TRANSIT') {
-                        beacon.openPopup();
-                    }
-                });
-
-                if (bounds.length > 0) {
-                    map.fitBounds(bounds, { padding: [25, 25] });
+        // Fungsi klik card kargo langsung geser peta ke kapal tersebut (Interaktif Human-Engineered!)
+        function focusOnShipment(id, lat, lng) {
+            if (radarMap && lat && lng) {
+                radarMap.flyTo([lat, lng], 6, { duration: 1.2 });
+                if (markersMap[id]) {
+                    setTimeout(() => {
+                        markersMap[id].marker.openPopup();
+                    }, 1200);
                 }
             }
-        });
+        }
     </script>
 </x-app-layout>
