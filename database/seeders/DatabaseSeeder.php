@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
         );
 
         $customer1 = User::firstOrCreate(
-            ['email' => 'budi@agrologistics.com'],
+            ['email' => 'zahra@cargotrace.com'],
             [
-                'name' => 'Budi Santoso (Nusantara Agri Export)',
+                'name' => 'Zahra (Nusantara Agri Export)',
                 'role' => 'customer',
                 'phone' => '+628110000003',
                 'password' => Hash::make('password'),
