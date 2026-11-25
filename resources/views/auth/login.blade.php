@@ -70,11 +70,4 @@
             </button>
         </div>
     </form>
-
-    <!-- Informasi Akun Uji Coba (Subtle & Rapi di Bawah) -->
-    <div class="mt-6 pt-4 border-t border-slate-200/80 text-center">
-        <p class="text-[11px] text-slate-400">
-            Kredensial Demo: <code class="font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">admin@cargotrace.com</code> (Sandi: <code class="font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">password</code>)
-        </p>
-    </div>
 </x-guest-layout>
