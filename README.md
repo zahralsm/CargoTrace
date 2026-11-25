@@ -75,7 +75,7 @@ All pre-seeded test accounts use the default password: **`password`**
 | :--- | :--- | :--- |
 | **Administrator** | `admin@cargotrace.com` | Complete access to shipments, carriers, locations, and audit logs |
 | **Logistics Operator** | `operator@cargotrace.com` | Manages operational shipments, creates voyages, logs checkpoints, and resolves exceptions |
-| **Customer** | `budi@agrologistics.com` | Restricted to viewing own cargo records only (IDOR-guarded) |
+| **Customer** | `zahra@cargotrace.com` | Restricted to viewing own cargo records only (IDOR-guarded) |
 
 ---
 
