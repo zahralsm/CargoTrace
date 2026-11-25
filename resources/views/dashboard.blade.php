@@ -64,11 +64,8 @@
                         <i class="fa-solid fa-radar"></i>
                     </div>
                     <div>
-                        <div class="flex items-center gap-2">
+                        <div>
                             <h2 class="text-sm font-extrabold text-slate-900 tracking-tight">Pusat Kendali Pengiriman Kargo</h2>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                RADAR & TELEMETRI AKTIF
-                            </span>
                         </div>
                         <div class="text-[11px] text-slate-500 font-mono flex items-center gap-2 mt-0.5">
                             <span><i class="fa-regular fa-clock mr-1"></i> <strong id="utc-time-hud">--:--:-- UTC</strong></span>
