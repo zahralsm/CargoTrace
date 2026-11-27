@@ -263,7 +263,7 @@
             </div>
 
             {{-- 3. AREA VISUAL KAPAL KARGO LAUT LEPAS + FLOATING HUD TELEMETRI (NAIK KE ATAS LIPATAN LAYAR) --}}
-            <div class="relative w-full h-[380px] sm:h-[460px] lg:h-[520px] max-w-7xl mx-auto -mt-2 sm:-mt-4 overflow-hidden rounded-t-[36px]">
+            <div class="relative w-full h-[340px] sm:h-[460px] lg:h-[520px] max-w-7xl mx-auto -mt-2 sm:-mt-4 overflow-hidden rounded-t-[28px] sm:rounded-t-[36px]">
                 
                 {{-- Foto Kapal Kontainer Aerial Resolusi Tinggi --}}
                 <div class="absolute inset-0 ocean-fog-mask">
@@ -273,64 +273,64 @@
                 </div>
 
                 {{-- Lapisan Gradien Kabut Putih Halus di Atas Air --}}
-                <div class="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none"></div>
+                <div class="absolute inset-x-0 top-0 h-32 sm:h-36 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none"></div>
 
-                {{-- FLOATING HUD KIRI BAWAH: KARTU TELEMETRI GELAP (DARK GLASSMORPHISM SEPERTI REFERENSI) --}}
-                <div class="absolute bottom-4 sm:bottom-8 left-3 sm:left-6 lg:left-10 z-20 max-w-[270px] sm:max-w-sm w-full animate-hud-left">
+                {{-- FLOATING HUD KIRI BAWAH: KARTU TELEMETRI GELAP (FOKUS UTAMA DI LAYAR HP MAUPUN DESKTOP) --}}
+                <div class="absolute bottom-3 sm:bottom-8 left-3 sm:left-6 lg:left-10 z-20 max-w-[260px] sm:max-w-sm w-full animate-hud-left">
                     
                     {{-- Badges di Atas Kartu: LIVE & Status Cuaca/Gelombang --}}
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                    <div class="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-rose-500/90 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider shadow-sm">
                             <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
                             <span>LIVE</span>
                         </span>
-                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/65 backdrop-blur-md text-white/90 text-[10px] font-bold border border-white/10 shadow-sm">
-                            <i class="fa-solid fa-water text-[9px] text-sky-400"></i>
+                        <span class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-slate-900/65 backdrop-blur-md text-white/90 text-[9px] sm:text-[10px] font-bold border border-white/10 shadow-sm">
+                            <i class="fa-solid fa-water text-[8px] sm:text-[9px] text-sky-400"></i>
                             <span>31°C · swell 0.6 m</span>
                         </span>
                     </div>
 
                     {{-- Badan Kartu Kaca Gelap (Dark HUD) --}}
-                    <div class="bg-[#0b1329]/88 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4.5 shadow-2xl text-white space-y-3 ring-1 ring-black/20">
-                        <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                    <div class="bg-[#0b1329]/88 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-4.5 shadow-2xl text-white space-y-2.5 sm:space-y-3 ring-1 ring-black/20">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-1.5 sm:pb-2">
                             <div>
                                 <h4 class="text-xs sm:text-sm font-black text-white tracking-tight">Berth 3 — MSC Aurora</h4>
-                                <p class="text-[10px] text-sky-300/80">Tanjung Priok &rarr; Port Botany</p>
+                                <p class="text-[9px] sm:text-[10px] text-sky-300/80">Tanjung Priok &rarr; Port Botany</p>
                             </div>
-                            <span class="text-[10px] sm:text-[11px] font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                            <span class="text-[9px] sm:text-[11px] font-extrabold text-emerald-400 bg-emerald-500/10 px-1.5 sm:px-2 py-0.5 rounded border border-emerald-500/20">
                                 ETD 18:40
                             </span>
                         </div>
 
                         {{-- Progress Bar: Discharge --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[9px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Discharge</span>
                                 <span class="font-extrabold text-white">82%</span>
                             </div>
-                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                            <div class="w-full h-1 sm:h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-sky-400 to-cyan-300 rounded-full" style="width: 82%"></div>
                             </div>
                         </div>
 
                         {{-- Progress Bar: Load --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[9px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Load</span>
                                 <span class="font-extrabold text-white">46%</span>
                             </div>
-                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                            <div class="w-full h-1 sm:h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-indigo-400 to-sky-400 rounded-full" style="width: 46%"></div>
                             </div>
                         </div>
 
                         {{-- Progress Bar: Crane Moves / Speed --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[9px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Crane moves / hr</span>
                                 <span class="font-extrabold text-sky-300">31.4</span>
                             </div>
-                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                            <div class="w-full h-1 sm:h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div class="h-full bg-cyan-400 rounded-full" style="width: 65%"></div>
                             </div>
                         </div>
@@ -338,8 +338,8 @@
 
                 </div>
 
-                {{-- FLOATING HUD KANAN BAWAH: STACK KARTU METRIK DENGAN PENGHITUNG ANGKA OTOMATIS --}}
-                <div class="absolute bottom-4 sm:bottom-8 right-3 sm:right-6 lg:right-10 z-20 flex flex-col gap-2 max-w-[190px] sm:max-w-[210px] w-full animate-hud-right">
+                {{-- FLOATING HUD KANAN BAWAH: STACK KARTU METRIK (DILINDUNGI KHUSUS LAYAR >= SM SUPAYA TIDAK TUMPANG TINDIH DI HP) --}}
+                <div class="absolute bottom-4 sm:bottom-8 right-3 sm:right-6 lg:right-10 z-20 hidden sm:flex flex-col gap-2 max-w-[190px] sm:max-w-[210px] w-full animate-hud-right">
                     
                     {{-- Kartu 1: Wind --}}
                     <div class="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
