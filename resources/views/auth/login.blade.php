@@ -10,46 +10,6 @@
         <p class="text-xs text-slate-500 mt-1">Masukkan kredensial akun Anda untuk mengakses dashboard</p>
     </div>
 
-    <!-- Alert Notifikasi Error Login (Sangat Jelas di Layar HP) -->
-    @if ($errors->any())
-        <div class="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5 shadow-2xs">
-            <i class="fa-solid fa-circle-exclamation text-rose-500 text-sm mt-0.5 shrink-0"></i>
-            <div>
-                <div class="font-bold">Gagal Masuk Akun:</div>
-                <div class="text-[11px] text-rose-600 mt-0.5">
-                    {{ $errors->first() ?: 'Email atau kata sandi tidak cocok. Pastikan tidak ada spasi atau huruf kapital yang salah.' }}
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <!-- Tombol Cepat Akun Demo (Solusi Anti-Typo Khusus Layar HP / Mobile) -->
-    <div class="mb-5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center mb-2 flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-bolt text-amber-500"></i> Pilih Cepat Akun Demo (1-Klik):
-        </div>
-        <div class="grid grid-cols-3 gap-1.5">
-            <button type="button" 
-                    onclick="setCreds('operator@cargotrace.com', 'password')"
-                    class="px-2 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 active:bg-amber-200 text-amber-900 border border-amber-300 text-[10px] font-bold flex flex-col items-center justify-center transition cursor-pointer shadow-2xs">
-                <i class="fa-solid fa-compass text-amber-600 text-xs mb-0.5"></i>
-                <span>Operator</span>
-            </button>
-            <button type="button" 
-                    onclick="setCreds('zahra@cargotrace.com', 'password')"
-                    class="px-2 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200 text-emerald-900 border border-emerald-300 text-[10px] font-bold flex flex-col items-center justify-center transition cursor-pointer shadow-2xs">
-                <i class="fa-solid fa-box-open text-emerald-600 text-xs mb-0.5"></i>
-                <span>Pelanggan</span>
-            </button>
-            <button type="button" 
-                    onclick="setCreds('admin@cargotrace.com', 'password')"
-                    class="px-2 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 active:bg-purple-200 text-purple-900 border border-purple-300 text-[10px] font-bold flex flex-col items-center justify-center transition cursor-pointer shadow-2xs">
-                <i class="fa-solid fa-shield-halved text-purple-600 text-xs mb-0.5"></i>
-                <span>Admin</span>
-            </button>
-        </div>
-    </div>
-
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
@@ -68,11 +28,6 @@
                        value="{{ old('email') }}" 
                        required 
                        autofocus 
-                       autocapitalize="none"
-                       autocorrect="off"
-                       spellcheck="false"
-                       inputmode="email"
-                       autocomplete="email"
                        placeholder="nama@cargotrace.com"
                        class="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 transition shadow-2xs" />
             </div>
@@ -99,10 +54,6 @@
                        :type="showPass ? 'text' : 'password'" 
                        name="password" 
                        required 
-                       autocapitalize="none"
-                       autocorrect="off"
-                       spellcheck="false"
-                       autocomplete="current-password"
                        placeholder="••••••••"
                        class="w-full pl-10 pr-11 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 transition-all duration-200 shadow-2xs font-sans" 
                        :class="showPass ? 'spell-anim-reveal tracking-normal font-medium' : 'spell-anim-mask tracking-widest'" />
@@ -158,19 +109,4 @@
             </button>
         </div>
     </form>
-
-    <script>
-        function setCreds(email, password) {
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            if (emailInput) {
-                emailInput.value = email;
-                emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-            if (passwordInput) {
-                passwordInput.value = password;
-                passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        }
-    </script>
 </x-guest-layout>
