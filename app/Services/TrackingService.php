@@ -53,6 +53,10 @@ class TrackingService
             // Jika tipe event sama dengan nama status lifecycle dan sah untuk ditransisikan,
             // otomatis sinkronkan status kargo
             $targetStatus = strtoupper($data['event_type']);
+            if ($targetStatus === 'DEPARTED') {
+                $targetStatus = 'IN_TRANSIT';
+            }
+
             if ($this->shipmentService->canTransitionTo($shipment, $targetStatus)) {
                 $this->shipmentService->transitionStatus(
                     $shipment, 

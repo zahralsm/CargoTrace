@@ -16,9 +16,9 @@ class ShipmentService
     // Matriks transisi status yang sah (Slide 06)
     // Kunci array adalah status saat ini, isinya adalah status berikutnya yang diperbolehkan
     private const ALLOWED_TRANSITIONS = [
-        'CREATED'    => ['BOOKED'],
-        'BOOKED'     => ['PICKED_UP'],
-        'PICKED_UP'  => ['IN_TRANSIT'],
+        'CREATED'    => ['BOOKED', 'PICKED_UP', 'IN_TRANSIT'],
+        'BOOKED'     => ['PICKED_UP', 'IN_TRANSIT'],
+        'PICKED_UP'  => ['IN_TRANSIT', 'DELIVERED'],
         'IN_TRANSIT' => ['DELIVERED'],
         'DELIVERED'  => [], // Status Terminal: tidak boleh berpindah lagi
     ];

@@ -265,12 +265,12 @@
                                 <div>
                                     <label class="block text-[11px] text-slate-300 font-semibold mb-1">Status / Jenis Peristiwa Baru</label>
                                     <select name="event_type" required class="w-full text-xs rounded-lg bg-[#252b4d] border-[#343b66] text-white">
-                                        <option value="BOOKED">BOOKED (Pemesanan Dikonfirmasi)</option>
-                                        <option value="PICKED_UP">PICKED_UP (Kontainer Dimuat di Dermaga)</option>
+                                        <option value="BOOKED" {{ $shipment->current_status === 'CREATED' ? 'selected' : '' }}>BOOKED (Pemesanan Dikonfirmasi)</option>
+                                        <option value="PICKED_UP" {{ $shipment->current_status === 'BOOKED' ? 'selected' : '' }}>PICKED_UP (Kontainer Dimuat di Dermaga)</option>
+                                        <option value="IN_TRANSIT" {{ $shipment->current_status === 'PICKED_UP' ? 'selected' : '' }}>IN_TRANSIT (Sedang Berlayar di Samudra)</option>
                                         <option value="DEPARTED">DEPARTED (Kapal Bertolak dari Pelabuhan)</option>
-                                        <option value="IN_TRANSIT">IN_TRANSIT (Sedang Berlayar di Samudra)</option>
                                         <option value="CUSTOMS_HOLD">CUSTOMS_HOLD (Tertahan Bea Cukai)</option>
-                                        <option value="DELIVERED">DELIVERED (Kargo Tiba di Tujuan)</option>
+                                        <option value="DELIVERED" {{ $shipment->current_status === 'IN_TRANSIT' ? 'selected' : '' }}>DELIVERED (Kargo Tiba di Tujuan)</option>
                                     </select>
                                 </div>
 
