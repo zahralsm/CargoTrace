@@ -159,35 +159,20 @@
         <header class="sticky top-0 inset-x-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-100 transition-all">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
                 
-                {{-- Sisi Kiri: Logo Utama & Nama CargoTrace --}}
+                {{-- Sisi Kiri: Logo Utama & Nama CargoTrace (Tanpa Kata MARITIM) --}}
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-base sm:text-lg font-bold shadow-sm ring-1 ring-slate-900/10">
                         <i class="fa-solid fa-anchor"></i>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-lg sm:text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
-                        <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
-                    </div>
+                    <span class="text-lg sm:text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
                 </div>
 
-                {{-- Sisi Tengah: Menu Navigasi Bersih & Sederhana --}}
-                <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-600">
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Fitur Sistem</a>
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Radar & Telemetri</a>
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Deteksi SLA</a>
-                    <a href="#jaringan-section" class="hover:text-sky-600 transition">Jaringan Pelabuhan</a>
-                </nav>
-
-                {{-- Sisi Kanan: Tombol Masuk & CTA Pill Bercahaya --}}
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <button @click="showLoginModal = true" class="text-xs font-bold text-slate-700 hover:text-sky-600 transition cursor-pointer">
-                        Log in
-                    </button>
-                    
-                    <button @click="showLoginModal = true" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-1.5 cursor-pointer">
-                        <span>Buka Portal</span>
-                        <span class="text-xs">↗</span>
-                    </button>
+                {{-- Sisi Kanan: Status Indikator Bersih (Tanpa Menu & Tanpa Tombol Login/Buka Portal di Atas) --}}
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="hidden sm:inline">AIS Online</span>
+                    </span>
                 </div>
 
             </div>
@@ -250,33 +235,28 @@
                     Pusat kendali intelijen dan visibilitas maritim armada kapal kargo global. Memonitor siklus pelayaran peti kemas secara <em>real-time</em>, mendeteksi potensi anomali keterlambatan cuaca ekstrem (<em>SLA Delay Engine</em>), integrasi koordinat GIS pelabuhan internasional, serta kendali operasional Administrator, Operator Armada, dan Pemilik Muatan.
                 </p>
 
-                {{-- FORM PELACAKAN RESI CEPAT & TOMBOL AKSI TERPADU --}}
-                <div class="pt-1 pb-3 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xl mx-auto animate-fade-up-5">
+                {{-- BAR AKSI: LACAK KARGO, BUKA PORTAL & BAR LOGIN --}}
+                <div class="pt-2 pb-3 flex flex-wrap items-center justify-center gap-3 max-w-xl mx-auto animate-fade-up-5">
                     
-                    {{-- Input Cepat Resi Kargo --}}
-                    <div class="relative w-full sm:w-auto flex-1">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i class="fa-solid fa-barcode text-xs"></i>
-                        </span>
-                        <input type="text" 
-                               x-model="quickSearchResi"
-                               placeholder="Lacak No. Resi (misal: CTG-2026-0006)"
-                               @keydown.enter="handleQuickTrack"
-                               class="w-full pl-10 pr-4 py-2.5 rounded-full text-xs border border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white shadow-xs transition" />
-                    </div>
-
-                    {{-- Tombol Lacak Resi --}}
-                    <button @click="handleQuickTrack" 
-                            class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-magnifying-glass text-[11px] text-sky-400"></i>
+                    {{-- 1. Tombol Lacak Kargo --}}
+                    <a href="#fitur-section" 
+                       class="px-6 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-xs sm:text-sm border border-slate-200 shadow-xs hover:border-sky-300 transition-all flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass text-[11px] text-sky-500"></i>
                         <span>Lacak Kargo</span>
-                    </button>
+                    </a>
 
-                    {{-- Tombol Masuk Portal --}}
+                    {{-- 2. Tombol Buka Portal --}}
                     <button @click="showLoginModal = true" 
-                            class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
+                            class="px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
                         <span>Buka Portal</span>
                         <span>↗</span>
+                    </button>
+
+                    {{-- 3. Bar / Tombol Login di Sampingnya --}}
+                    <button @click="showLoginModal = true" 
+                            class="px-6 py-2.5 rounded-full bg-[#1b1f3b] hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-sky-500/20 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-right-to-bracket text-xs text-sky-400"></i>
+                        <span>Login</span>
                     </button>
                 </div>
 
