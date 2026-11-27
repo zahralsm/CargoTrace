@@ -48,6 +48,28 @@
             .fa-regular, .far {
                 font-weight: 400 !important;
             }
+
+            /* Animasi Reveal Password ala Column (Design Spells) */
+            @keyframes spell-reveal {
+                0% { filter: blur(2.5px); opacity: 0.7; transform: translateY(-0.5px); }
+                100% { filter: blur(0); opacity: 1; transform: translateY(0); }
+            }
+            @keyframes spell-mask {
+                0% { filter: blur(2px); opacity: 0.7; }
+                100% { filter: blur(0); opacity: 1; }
+            }
+            .spell-anim-reveal {
+                animation: spell-reveal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .spell-anim-mask {
+                animation: spell-mask 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .spell-eye-toggle {
+                transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+            }
+            .spell-eye-toggle:active {
+                transform: scale(0.85);
+            }
         </style>
 
         <!-- FontAwesome Icons CDN -->
