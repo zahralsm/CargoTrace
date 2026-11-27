@@ -50,24 +50,51 @@
         }
         [x-cloak] { display: none !important; }
 
+        /* Latar Belakang Berthwise dengan Pola Grid Koordinat Telemetri GIS */
+        .berthwise-telemetry-bg {
+            background-color: #ffffff;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(2, 132, 199, 0.08) 0%, transparent 60%),
+                radial-gradient(rgba(2, 132, 199, 0.12) 1px, transparent 1px);
+            background-size: 100% 100%, 32px 32px;
+        }
+
         /* Animasi Mengambang Logo Kapal */
         @keyframes float-hero {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(0.5deg); }
+            50% { transform: translateY(-6px) rotate(0.4deg); }
         }
         .animate-float {
             animation: float-hero 5s ease-in-out infinite;
         }
 
-        /* Ambient Glow & Gradien Halus Latar Belakang Berthwise */
-        .berthwise-bg {
-            background: radial-gradient(circle at 50% 12%, rgba(2, 132, 199, 0.06) 0%, rgba(255, 255, 255, 1) 60%);
+        /* Animasi Reveal Masuk Bertahap (Staggered Entrance Animation) */
+        @keyframes hero-fade-up {
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-up-1 { animation: hero-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+        .animate-fade-up-2 { animation: hero-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+        .animate-fade-up-3 { animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+        .animate-fade-up-4 { animation: hero-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+        .animate-fade-up-5 { animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both; }
+
+        /* Animasi Meluncur Masuk Kartu HUD Kiri & Kanan */
+        @keyframes hud-in-left {
+            0% { opacity: 0; transform: translateX(-28px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes hud-in-right {
+            0% { opacity: 0; transform: translateX(28px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        .animate-hud-left { animation: hud-in-left 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+        .animate-hud-right { animation: hud-in-right 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both; }
 
         /* Masking Gradien Kabut Halus untuk Transisi Foto Lautan & Kapal Kargo */
         .ocean-fog-mask {
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 12%, rgba(0,0,0,0.6) 30%, black 55%);
-            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 12%, rgba(0,0,0,0.6) 30%, black 55%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 10%, rgba(0,0,0,0.6) 28%, black 50%);
+            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 10%, rgba(0,0,0,0.6) 28%, black 50%);
         }
 
         /* Animasi Reveal Password ala Column (Design Spells) */
@@ -97,26 +124,54 @@
 
     {{-- KOMPONEN UTAMA DENGAN ALPINE.JS STATE --}}
     <div x-data="{
-        showLoginModal: false
+        showLoginModal: false,
+        quickSearchResi: '',
+        countWind: 0,
+        countYard: 0,
+        countCrane: 0,
+        countTeu: 0,
+        init() {
+            this.animateCounters();
+        },
+        animateCounters() {
+            const duration = 1400;
+            const startTime = performance.now();
+            const step = (now) => {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); // cubic out ease
+                this.countWind = Math.round(14 * ease);
+                this.countYard = Math.round(74 * ease);
+                this.countCrane = (28.9 * ease).toFixed(1);
+                this.countTeu = Math.round(4812 * ease).toLocaleString('id-ID');
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        },
+        handleQuickTrack() {
+            if (!this.quickSearchResi.trim()) {
+                this.quickSearchResi = 'CTG-2026-0006';
+            }
+            this.showLoginModal = true;
+        }
     }" class="relative min-h-screen flex flex-col">
 
-        {{-- 1. NAVBAR MINIMALIS BERTHWISE-INSPIRED (LOGO & KATA-KATA PERSIS DESAIN ASLI) --}}
+        {{-- 1. NAVBAR MINIMALIS ELEGAN (LOGO & TAUTAN KATA ASLI) --}}
         <header class="sticky top-0 inset-x-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-100 transition-all">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
                 
                 {{-- Sisi Kiri: Logo Utama & Nama CargoTrace --}}
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-lg font-bold shadow-sm ring-1 ring-slate-900/10">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-base sm:text-lg font-bold shadow-sm ring-1 ring-slate-900/10">
                         <i class="fa-solid fa-anchor"></i>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
+                        <span class="text-lg sm:text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
                         <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
                     </div>
                 </div>
 
                 {{-- Sisi Tengah: Menu Navigasi Bersih & Sederhana --}}
-                <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+                <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-600">
                     <a href="#fitur-section" class="hover:text-sky-600 transition">Fitur Sistem</a>
                     <a href="#fitur-section" class="hover:text-sky-600 transition">Radar & Telemetri</a>
                     <a href="#fitur-section" class="hover:text-sky-600 transition">Deteksi SLA</a>
@@ -124,12 +179,12 @@
                 </nav>
 
                 {{-- Sisi Kanan: Tombol Masuk & CTA Pill Bercahaya --}}
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 sm:gap-4">
                     <button @click="showLoginModal = true" class="text-xs font-bold text-slate-700 hover:text-sky-600 transition cursor-pointer">
                         Log in
                     </button>
                     
-                    <button @click="showLoginModal = true" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-1.5 cursor-pointer">
+                    <button @click="showLoginModal = true" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-1.5 cursor-pointer">
                         <span>Buka Portal</span>
                         <span class="text-xs">↗</span>
                     </button>
@@ -138,112 +193,138 @@
             </div>
         </header>
 
-        {{-- 2. HERO SECTION DENGAN TATA LETAK REFERENSI BERTHWISE --}}
-        <section class="relative w-full berthwise-bg pt-12 sm:pt-16 pb-0 overflow-hidden border-b border-slate-200/80">
+        {{-- 2. HERO SECTION COMPACT ONE-SCREEN (KAPAL & FLOATING HUD LANGSUNG TAMPAK UTUH DI LAYAR) --}}
+        <section class="relative w-full berthwise-telemetry-bg pt-6 sm:pt-8 pb-0 overflow-hidden border-b border-slate-200/80">
             
-            {{-- Cahaya Halus Dekoratif --}}
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-sky-400/10 rounded-full blur-[140px] pointer-events-none"></div>
+            {{-- Elemen Lingkaran Radar GIS Halus di Background Atas --}}
+            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full border border-sky-400/15 pointer-events-none"></div>
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full border border-sky-400/20 pointer-events-none"></div>
+            <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[220px] h-[220px] rounded-full border border-sky-400/25 pointer-events-none"></div>
 
-            {{-- Konten Teks Hero (Atas): Terpusat, Tenang, dan Bersih --}}
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6 relative z-10">
+            {{-- Titik-Titik Koordinat Pelabuhan Global Berkedip Halus di Sekitar Hero --}}
+            <div class="hidden lg:flex items-center gap-2 absolute top-14 left-12 text-[10px] font-mono text-slate-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping"></span>
+                <span>IDTPP: -6.103°S, 106.882°E (Tg. Priok)</span>
+            </div>
+            <div class="hidden lg:flex items-center gap-2 absolute top-14 right-12 text-[10px] font-mono text-slate-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>AUBOT: -33.957°S, 151.217°E (Sydney)</span>
+            </div>
+
+            {{-- Konten Teks Hero (Atas): Proporsional, Tidak Boros Ruang Vertikal --}}
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-3.5 relative z-10">
                 
                 {{-- Logo Utama "CargoTrace" Mengambang (Sesuai Desain Lama) --}}
-                <div class="inline-flex justify-center mb-1">
+                <div class="inline-flex justify-center animate-fade-up-1">
                     <div class="animate-float relative">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-1.5 shadow-[0_10px_30px_rgba(2,132,199,0.15)] border border-slate-200/90 flex items-center justify-center">
-                            <div class="w-full h-full bg-[#1b1f3b] rounded-xl flex items-center justify-center text-sky-400 text-2xl sm:text-3xl shadow-sm">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1 shadow-[0_8px_24px_rgba(2,132,199,0.14)] border border-slate-200/90 flex items-center justify-center">
+                            <div class="w-full h-full bg-[#1b1f3b] rounded-xl flex items-center justify-center text-sky-400 text-xl sm:text-2xl shadow-sm">
                                 <i class="fa-solid fa-anchor"></i>
                             </div>
                         </div>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white animate-ping"></span>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-xs"></span>
+                        <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-ping"></span>
+                        <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white shadow-xs"></span>
                     </div>
                 </div>
 
                 {{-- Pill Badge Terinspirasi Berthwise ("✦ Terminal operations, with AI") --}}
-                <div>
-                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200/80 shadow-xs">
+                <div class="animate-fade-up-2">
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200/80 shadow-xs">
                         <span class="text-sky-500 text-xs">✦</span>
                         <span>MARITIME CARGO LOGISTICS TELEMETRY</span>
                     </span>
                 </div>
 
-                {{-- Judul Utama (Headings) --}}
-                <div class="space-y-2">
-                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 leading-[1.08]">
+                {{-- Judul Utama & Sub-Judul --}}
+                <div class="space-y-1 animate-fade-up-3">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
                         Cargo <span class="text-sky-600">Trace</span>
                     </h1>
-                    <p class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">
+                    <p class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">
                         Siklus kargo, radar AIS & telemetri, dalam satu layar tenang.
                     </p>
                 </div>
 
-                {{-- Teks Penjelasan Lengkap (Persis Kata-Kata Desain Lama) --}}
-                <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal pt-1">
-                    Pusat kendali intelijen dan visibilitas maritim modern untuk armada kapal kargo global. 
-                    Dirancang untuk memonitor siklus pelayaran peti kemas secara <em>real-time</em>, mendeteksi potensi anomali 
-                    keterlambatan cuaca ekstrem (<em>SLA Delay Engine</em>), integrasi koordinat GIS maritim pelabuhan internasional, 
-                    serta memberikan kendali operasional komprehensif bagi Administrator, Operator Armada, dan Pemilik Muatan.
+                {{-- Teks Penjelasan Lengkap (Persis Kata-Kata Desain Lama, Ringkas Padat) --}}
+                <p class="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal animate-fade-up-4">
+                    Pusat kendali intelijen dan visibilitas maritim armada kapal kargo global. Memonitor siklus pelayaran peti kemas secara <em>real-time</em>, mendeteksi potensi anomali keterlambatan cuaca ekstrem (<em>SLA Delay Engine</em>), integrasi koordinat GIS pelabuhan internasional, serta kendali operasional Administrator, Operator Armada, dan Pemilik Muatan.
                 </p>
 
-                {{-- Tombol Cepat Aksi (CTA) --}}
-                <div class="flex flex-wrap items-center justify-center gap-4 pt-3 pb-8">
-                    <button @click="showLoginModal = true" class="px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer">
-                        <span>Buka Portal Login</span>
-                        <span>↗</span>
+                {{-- FORM PELACAKAN RESI CEPAT & TOMBOL AKSI TERPADU --}}
+                <div class="pt-1 pb-3 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xl mx-auto animate-fade-up-5">
+                    
+                    {{-- Input Cepat Resi Kargo --}}
+                    <div class="relative w-full sm:w-auto flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-barcode text-xs"></i>
+                        </span>
+                        <input type="text" 
+                               x-model="quickSearchResi"
+                               placeholder="Lacak No. Resi (misal: CTG-2026-0006)"
+                               @keydown.enter="handleQuickTrack"
+                               class="w-full pl-10 pr-4 py-2.5 rounded-full text-xs border border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white shadow-xs transition" />
+                    </div>
+
+                    {{-- Tombol Lacak Resi --}}
+                    <button @click="handleQuickTrack" 
+                            class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass text-[11px] text-sky-400"></i>
+                        <span>Lacak Kargo</span>
                     </button>
 
-                    <a href="#fitur-section" class="px-6 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex items-center gap-2">
-                        <span>Eksplorasi Fitur Sistem</span>
-                        <i class="fa-solid fa-arrow-down text-xs text-sky-600"></i>
-                    </a>
+                    {{-- Tombol Masuk Portal --}}
+                    <button @click="showLoginModal = true" 
+                            class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>Buka Portal</span>
+                        <span>↗</span>
+                    </button>
                 </div>
 
             </div>
 
-            {{-- 3. AREA VISUAL KAPAL KARGO LAUT LEPAS + FLOATING HUD TELEMETRI (PERSIS REFERENSI BERTHWISE) --}}
-            <div class="relative w-full h-[460px] sm:h-[580px] lg:h-[660px] max-w-7xl mx-auto mt-4 overflow-hidden rounded-t-[40px]">
+            {{-- 3. AREA VISUAL KAPAL KARGO LAUT LEPAS + FLOATING HUD TELEMETRI (NAIK KE ATAS LIPATAN LAYAR) --}}
+            <div class="relative w-full h-[380px] sm:h-[460px] lg:h-[520px] max-w-7xl mx-auto -mt-2 sm:-mt-4 overflow-hidden rounded-t-[36px]">
                 
                 {{-- Foto Kapal Kontainer Aerial Resolusi Tinggi --}}
                 <div class="absolute inset-0 ocean-fog-mask">
                     <img src="{{ asset('images/berthwise-cargo-ship.jpg') }}" 
                          alt="Kapal Kontainer Berlayar di Samudra" 
-                         class="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000 ease-out hover:scale-100" />
+                         class="w-full h-full object-cover object-center transform scale-102 hover:scale-100 transition-transform duration-1000 ease-out" />
                 </div>
 
                 {{-- Lapisan Gradien Kabut Putih Halus di Atas Air --}}
-                <div class="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none"></div>
+                <div class="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none"></div>
 
                 {{-- FLOATING HUD KIRI BAWAH: KARTU TELEMETRI GELAP (DARK GLASSMORPHISM SEPERTI REFERENSI) --}}
-                <div class="absolute bottom-6 sm:bottom-10 left-4 sm:left-8 lg:left-12 z-20 max-w-[280px] sm:max-w-sm w-full">
+                <div class="absolute bottom-4 sm:bottom-8 left-3 sm:left-6 lg:left-10 z-20 max-w-[270px] sm:max-w-sm w-full animate-hud-left">
                     
                     {{-- Badges di Atas Kartu: LIVE & Status Cuaca/Gelombang --}}
-                    <div class="flex items-center gap-2 mb-2.5">
+                    <div class="flex items-center gap-2 mb-2">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
-                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
                             <span>LIVE</span>
                         </span>
-                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md text-white/90 text-[10px] font-bold border border-white/10 shadow-sm">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/65 backdrop-blur-md text-white/90 text-[10px] font-bold border border-white/10 shadow-sm">
                             <i class="fa-solid fa-water text-[9px] text-sky-400"></i>
                             <span>31°C · swell 0.6 m</span>
                         </span>
                     </div>
 
                     {{-- Badan Kartu Kaca Gelap (Dark HUD) --}}
-                    <div class="bg-[#0b1329]/85 backdrop-blur-xl border border-white/15 rounded-2xl p-4 sm:p-5 shadow-2xl text-white space-y-3.5 ring-1 ring-black/20">
-                        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+                    <div class="bg-[#0b1329]/88 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4.5 shadow-2xl text-white space-y-3 ring-1 ring-black/20">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-2">
                             <div>
                                 <h4 class="text-xs sm:text-sm font-black text-white tracking-tight">Berth 3 — MSC Aurora</h4>
                                 <p class="text-[10px] text-sky-300/80">Tanjung Priok &rarr; Port Botany</p>
                             </div>
-                            <span class="text-[11px] font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                            <span class="text-[10px] sm:text-[11px] font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                                 ETD 18:40
                             </span>
                         </div>
 
                         {{-- Progress Bar: Discharge --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Discharge</span>
                                 <span class="font-extrabold text-white">82%</span>
                             </div>
@@ -254,7 +335,7 @@
 
                         {{-- Progress Bar: Load --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Load</span>
                                 <span class="font-extrabold text-white">46%</span>
                             </div>
@@ -265,7 +346,7 @@
 
                         {{-- Progress Bar: Crane Moves / Speed --}}
                         <div class="space-y-1">
-                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                            <div class="flex justify-between text-[10px] sm:text-[11px] font-semibold text-slate-300">
                                 <span>Crane moves / hr</span>
                                 <span class="font-extrabold text-sky-300">31.4</span>
                             </div>
@@ -277,62 +358,62 @@
 
                 </div>
 
-                {{-- FLOATING HUD KANAN BAWAH: STACK KARTU METRIK PUTIH (SEPERTI REFERENSI BERTHWISE) --}}
-                <div class="absolute bottom-6 sm:bottom-10 right-4 sm:right-8 lg:right-12 z-20 flex flex-col gap-2 max-w-[200px] sm:max-w-[220px] w-full">
+                {{-- FLOATING HUD KANAN BAWAH: STACK KARTU METRIK DENGAN PENGHITUNG ANGKA OTOMATIS --}}
+                <div class="absolute bottom-4 sm:bottom-8 right-3 sm:right-6 lg:right-10 z-20 flex flex-col gap-2 max-w-[190px] sm:max-w-[210px] w-full animate-hud-right">
                     
                     {{-- Kartu 1: Wind --}}
-                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
-                        <div class="flex items-center justify-between text-[10px] text-slate-500 font-bold mb-1">
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="flex items-center justify-between text-[10px] text-slate-500 font-bold mb-0.5">
                             <span class="flex items-center gap-1.5">
                                 <i class="fa-solid fa-wind text-sky-500"></i>
                                 <span>Wind</span>
                             </span>
                             <span class="text-[9px] text-emerald-600 font-extrabold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">safe</span>
                         </div>
-                        <div class="text-base sm:text-lg font-black text-slate-900">
-                            14 km/h
+                        <div class="text-sm sm:text-base font-black text-slate-900">
+                            <span x-text="countWind">0</span> km/h
                         </div>
                     </div>
 
                     {{-- Kartu 2: Yard Occupancy --}}
-                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
-                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-0.5 flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
                                 <i class="fa-solid fa-boxes-stacked text-amber-500"></i>
                                 <span>Yard occupancy</span>
                             </span>
                             <span class="text-[9px] font-extrabold text-emerald-600">+5.1%</span>
                         </div>
-                        <div class="text-base sm:text-lg font-black text-slate-900">
-                            74%
+                        <div class="text-sm sm:text-base font-black text-slate-900">
+                            <span x-text="countYard">0</span>%
                         </div>
                     </div>
 
                     {{-- Kartu 3: Crane Moves / hr --}}
-                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
-                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-0.5 flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
                                 <i class="fa-solid fa-gears text-indigo-500"></i>
                                 <span>Crane moves / hr</span>
                             </span>
                             <span class="text-[9px] font-extrabold text-emerald-600">+1.4</span>
                         </div>
-                        <div class="text-base sm:text-lg font-black text-slate-900">
-                            28.9
+                        <div class="text-sm sm:text-base font-black text-slate-900">
+                            <span x-text="countCrane">0.0</span>
                         </div>
                     </div>
 
                     {{-- Kartu 4: Throughput TEU --}}
-                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
-                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-0.5 flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
                                 <i class="fa-solid fa-ship text-sky-600"></i>
                                 <span>Throughput, TEU</span>
                             </span>
                             <span class="text-[9px] font-extrabold text-emerald-600">+6.2%</span>
                         </div>
-                        <div class="text-base sm:text-lg font-black text-slate-900">
-                            4,812
+                        <div class="text-sm sm:text-base font-black text-slate-900">
+                            <span x-text="countTeu">0</span>
                         </div>
                     </div>
 
