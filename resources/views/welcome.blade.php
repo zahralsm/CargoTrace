@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cargo Trash — Sistem Visibilitas & Pelacakan Kargo Maritim Global</title>
+    <title>CargoTrace — Sistem Visibilitas & Pelacakan Kargo Maritim Global</title>
 
     <!-- Favicon Logo Jangkar -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%230284c7'/><path fill='white' d='M256 112c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-32 144v-16h64v16c61.9 0 112 50.1 112 112h32c0-79.5-64.5-144-144-144v-16c44.2 0 80-35.8 80-80s-35.8-80-80-80-80 35.8-80 80c0 44.2 35.8 80 80 80v16c-79.5 0-144 64.5-144 144h32c0-61.9 50.1-112 112-112zM144 384c0 61.9 50.1 112 112 112s112-50.1 112-112h48c0 88.4-71.6 160-160 160S96 472.4 96 384h48z'/></svg>">
@@ -41,6 +41,12 @@
         }
         .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"], [class*="fa-"]::before {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        }
+        .fa-solid, .fas {
+            font-weight: 900 !important;
+        }
+        .fa-regular, .far {
+            font-weight: 400 !important;
         }
         [x-cloak] { display: none !important; }
 
@@ -104,7 +110,7 @@
             {{-- Konten Utama Hero Section --}}
             <div class="max-w-4xl mx-auto flex flex-col items-center z-10 space-y-6 my-auto">
                 
-                {{-- Logo Utama "Cargo Trash" (Sama dengan Gaya Kartu Dashboard) --}}
+                {{-- Logo Utama "CargoTrace" (Sama dengan Gaya Kartu Dashboard) --}}
                 <div class="animate-float relative">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-2 shadow-[0_12px_36px_rgba(2,132,199,0.18)] border border-slate-200/90 flex items-center justify-center">
                         <div class="w-full h-full bg-[#1b1f3b] rounded-[20px] flex items-center justify-center text-sky-400 text-4xl sm:text-5xl shadow-md">
@@ -116,7 +122,7 @@
                     <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-white shadow-xs"></span>
                 </div>
 
-                {{-- Judul Merek "Cargo Trash" --}}
+                {{-- Judul Merek "CargoTrace" --}}
                 <div class="space-y-2.5">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200 shadow-xs">
                         <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
@@ -124,7 +130,7 @@
                     </span>
 
                     <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900">
-                        Cargo <span class="text-sky-600">Trash</span>
+                        Cargo <span class="text-sky-600">Trace</span>
                     </h1>
                 </div>
 
@@ -168,7 +174,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3">
                 <div class="bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-md px-6 py-3.5 flex items-center justify-between">
                     
-                    {{-- Sisi Kiri Navbar: Logo & Nama "Cargo Trash" --}}
+                    {{-- Sisi Kiri Navbar: Logo & Nama "CargoTrace" --}}
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-base font-bold shadow-xs">
                             <i class="fa-solid fa-anchor"></i>
@@ -231,7 +237,7 @@
                                 <i class="fa-solid fa-anchor"></i>
                             </div>
                             <div>
-                                <h3 class="text-sm font-black tracking-tight text-white">Portal Masuk Cargo Trash</h3>
+                                <h3 class="text-sm font-black tracking-tight text-white">Portal Masuk CargoTrace</h3>
                                 <p class="text-[11px] text-slate-300">Sistem Pelacakan Kapal Maritim</p>
                             </div>
                         </div>
@@ -261,7 +267,9 @@
                                 <label for="modal-email" class="block font-bold text-xs text-slate-700 mb-1.5">Alamat Email / Username</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                        <i class="fa-regular fa-envelope text-xs"></i>
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
                                     </span>
                                     <input id="modal-email" 
                                            type="email" 
@@ -286,7 +294,9 @@
                                 </div>
                                 <div x-data="{ showPass: false }" class="relative group/pass">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within/pass:text-sky-600 transition-colors duration-200">
-                                        <i class="fa-solid fa-lock text-xs"></i>
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
                                     </span>
                                     <input id="modal-password" 
                                            :type="showPass ? 'text' : 'password'" 
@@ -356,7 +366,7 @@
         {{-- 7. KONTEN LANDING PAGE DI BAWAH HERO SECTION (TEMA BENTO GRID PUTIH BERSIH) --}}
         <main id="fitur-section" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
 
-            {{-- Bagian 1: 3 Pilar Kapabilitas Utama Cargo Trash --}}
+            {{-- Bagian 1: 3 Pilar Kapabilitas Utama CargoTrace --}}
             <section class="space-y-10">
                 <div class="text-center max-w-2xl mx-auto space-y-2.5">
                     <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-sky-50 text-sky-700 border border-sky-200">
@@ -435,7 +445,7 @@
                     <div class="w-6 h-6 rounded-lg bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-xs font-bold">
                         <i class="fa-solid fa-anchor text-[10px]"></i>
                     </div>
-                    <span class="font-extrabold text-slate-800">Cargo Trash &copy; 2026</span>
+                    <span class="font-extrabold text-slate-800">CargoTrace &copy; 2026</span>
                     <span class="text-slate-300">•</span>
                     <span>Sistem Visibilitas & Pelacakan Kargo Maritim Global</span>
                 </div>
