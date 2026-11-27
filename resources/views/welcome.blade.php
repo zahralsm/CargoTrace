@@ -91,16 +91,199 @@
         .spell-eye-toggle:active {
             transform: scale(0.85);
         }
+
+        /* Animasi Launch Screen Ala Luma App (Design Spells #243) */
+        @keyframes launch-ship-bob {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(-0.5deg); }
+        }
+        .animate-launch-ship {
+            animation: launch-ship-bob 3.2s ease-in-out infinite;
+        }
+
+        @keyframes wave-flow {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-12px); }
+            100% { transform: translateX(0); }
+        }
+        .animate-waves {
+            animation: wave-flow 3.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.7); opacity: 0.9; }
+            50% { opacity: 0.35; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+        }
+
+        @keyframes radar-scan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-radar-scan {
+            animation: radar-scan 4s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-white text-slate-800 antialiased selection:bg-sky-500 selection:text-white">
 
     {{-- KOMPONEN UTAMA DENGAN ALPINE.JS STATE --}}
     <div x-data="{
-        showLoginModal: false
+        launchActive: true,
+        launchProgress: 0,
+        launchStatusText: 'Menginisialisasi Radar AIS...',
+        showLoginModal: false,
+        init() {
+            this.runLaunchAnimation();
+        },
+        runLaunchAnimation() {
+            this.launchActive = true;
+            this.launchProgress = 0;
+            this.launchStatusText = 'Mendeteksi Sinyal AIS Satelit Kapal...';
+            
+            let start = null;
+            const duration = 1800; // 1.8 detik berjalan mulus di 60 FPS
+            
+            const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const elapsed = timestamp - start;
+                const progress = Math.min(Math.round((elapsed / duration) * 100), 100);
+                this.launchProgress = progress;
+                
+                if (progress < 35) {
+                    this.launchStatusText = 'Mendeteksi Sinyal AIS Satelit Kapal...';
+                } else if (progress < 75) {
+                    this.launchStatusText = 'Sinkronisasi Koridor Laut & Manifes Kontainer...';
+                } else {
+                    this.launchStatusText = 'Sistem Visibilitas Kargo Siap.';
+                }
+                
+                if (elapsed < duration) {
+                    requestAnimationFrame(step);
+                } else {
+                    setTimeout(() => {
+                        this.launchActive = false;
+                    }, 280);
+                }
+            };
+            requestAnimationFrame(step);
+        },
+        triggerLaunchAnimation() {
+            this.runLaunchAnimation();
+        }
     }" class="relative min-h-screen flex flex-col">
 
-        {{-- 1. NAVBAR MINIMALIS BERTHWISE-INSPIRED (LOGO & KATA-KATA PERSIS DESAIN ASLI) --}}
+        {{-- ANIMATED LAUNCH SCREEN ALA LUMA APP (DESIGN SPELLS #243) TEMA MARITIM CARGOTRACE --}}
+        <div x-show="launchActive"
+             x-cloak
+             x-transition:leave="transition ease-out duration-700"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-110 filter blur-sm"
+             class="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-[#070e1e] text-white overflow-hidden select-none">
+            
+            {{-- Latar Belakang Gradien Deep Ocean & Radial Glow --}}
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.20)_0%,rgba(7,14,30,0.98)_70%)] pointer-events-none"></div>
+            
+            {{-- Gelombang Radar Melingkar Memancar dari Kapal --}}
+            <div class="absolute w-[460px] h-[460px] rounded-full border border-sky-500/20 animate-pulse-ring pointer-events-none"></div>
+            <div class="absolute w-[320px] h-[320px] rounded-full border border-sky-400/25 pointer-events-none"></div>
+
+            {{-- Tombol Lewati di Pojok Kanan Atas --}}
+            <button @click="launchActive = false" 
+                    class="absolute top-6 right-6 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white text-xs font-semibold backdrop-blur-md transition cursor-pointer z-20">
+                Lewati &times;
+            </button>
+
+            {{-- Kontainer Utama Animasi Kapal Kargo Maritim --}}
+            <div class="relative z-10 flex flex-col items-center text-center max-w-sm sm:max-w-md px-6">
+                
+                {{-- Ilustrasi Vektor Kapal Kargo Kontainer Berlayar Membelah Ombak --}}
+                <div class="animate-launch-ship relative mb-6">
+                    
+                    {{-- Efek Radar Scan Line --}}
+                    <div class="absolute -inset-10 flex items-center justify-center pointer-events-none opacity-40">
+                        <div class="w-48 h-48 rounded-full border border-dashed border-sky-400/40 animate-radar-scan"></div>
+                    </div>
+
+                    {{-- SVG Kapal Kargo & Kontainer Presisi Berwarna-warni --}}
+                    <svg class="w-56 h-36 sm:w-64 sm:h-40 drop-shadow-[0_15px_30px_rgba(2,132,199,0.35)]" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Air Laut & Riak Ombak Bawah -->
+                        <path class="animate-waves" d="M10 165 C 60 155, 100 175, 160 165 C 220 155, 260 175, 310 165" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-opacity="0.4" fill="none" />
+                        <path d="M30 175 C 80 168, 120 182, 170 175 C 220 168, 250 182, 290 175" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.6" fill="none" />
+
+                        <!-- Badan Kapal (Hull) Bagian Bawah Merah Maritim & Atas Navy Gelap -->
+                        <path d="M40 145 L80 165 L240 165 L280 145 L255 125 L65 125 Z" fill="#e11d48" />
+                        <path d="M40 145 L65 125 L255 125 L280 145 Z" fill="#1e293b" />
+                        <!-- Garis Aksen Putih di Lambung Kapal -->
+                        <line x1="50" y1="135" x2="270" y2="135" stroke="white" stroke-width="2" stroke-opacity="0.9" />
+
+                        <!-- Menara Anjungan Kapal (Bridge & Superstructure) di Belakang -->
+                        <rect x="210" y="80" width="38" height="45" rx="3" fill="#f8fafc" />
+                        <rect x="215" y="85" width="28" height="8" rx="1.5" fill="#0284c7" />
+                        <rect x="222" y="65" width="14" height="15" rx="2" fill="#cbd5e1" />
+                        <!-- Tiang Radar & Sinyal Hijau/Biru -->
+                        <line x1="229" y1="65" x2="229" y2="48" stroke="#f8fafc" stroke-width="2.5" />
+                        <circle cx="229" cy="46" r="3.5" fill="#38bdf8" />
+                        <circle cx="229" cy="46" r="6" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.6" class="animate-ping" />
+
+                        <!-- Tumpukan Peti Kemas (Cargo Containers) Penuh Warna ala Kargo Global -->
+                        <!-- Baris Dasar -->
+                        <rect x="75" y="105" width="30" height="20" rx="2" fill="#0284c7" stroke="#0369a1" stroke-width="1" />
+                        <rect x="108" y="105" width="30" height="20" rx="2" fill="#f97316" stroke="#ea580c" stroke-width="1" />
+                        <rect x="141" y="105" width="30" height="20" rx="2" fill="#10b981" stroke="#059669" stroke-width="1" />
+                        <rect x="174" y="105" width="30" height="20" rx="2" fill="#eab308" stroke="#ca8a04" stroke-width="1" />
+
+                        <!-- Baris Kedua -->
+                        <rect x="80" y="82" width="30" height="20" rx="2" fill="#ef4444" stroke="#dc2626" stroke-width="1" />
+                        <rect x="113" y="82" width="30" height="20" rx="2" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+                        <rect x="146" y="82" width="30" height="20" rx="2" fill="#6366f1" stroke="#4f46e5" stroke-width="1" />
+                        <rect x="179" y="82" width="26" height="20" rx="2" fill="#f97316" stroke="#ea580c" stroke-width="1" />
+
+                        <!-- Baris Ketiga (Puncak) -->
+                        <rect x="95" y="60" width="30" height="20" rx="2" fill="#10b981" stroke="#059669" stroke-width="1" />
+                        <rect x="128" y="60" width="30" height="20" rx="2" fill="#38bdf8" stroke="#0284c7" stroke-width="1" />
+                        <rect x="161" y="60" width="30" height="20" rx="2" fill="#ec4899" stroke="#db2777" stroke-width="1" />
+
+                        <!-- Haluan Kapal & Semprotan Buih Ombak Depan -->
+                        <path d="M40 145 Q 30 155, 18 162" stroke="white" stroke-width="3" stroke-linecap="round" stroke-opacity="0.8" />
+                        <path d="M42 148 Q 28 160, 12 167" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6" />
+                    </svg>
+                </div>
+
+                {{-- Judul Merek & Sub-judul Telemetri --}}
+                <div class="space-y-1 mb-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-sky-500/10 text-sky-400 border border-sky-400/20 mb-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>MARITIME TELEMETRY LAUNCH</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                        Cargo<span class="text-sky-400">Trace</span>
+                    </h2>
+                    <p class="text-[11px] text-slate-400 tracking-wide font-medium" x-text="launchStatusText">
+                        Menghubungkan Sinyal AIS Satelit...
+                    </p>
+                </div>
+
+                {{-- Progress Bar Ramping Bercahaya (0% - 100%) --}}
+                <div class="w-full max-w-xs space-y-2">
+                    <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
+                        <div class="h-full rounded-full bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 transition-all duration-100 ease-out shadow-[0_0_12px_rgba(56,189,248,0.7)]" 
+                             :style="'width: ' + launchProgress + '%'"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
+                        <span class="tracking-widest uppercase text-[9px] text-slate-500">AIS TELEMETRY READY</span>
+                        <span class="text-sky-400" x-text="launchProgress + '%'">0%</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- 1. NAVBAR MINIMALIS BERTHWISE-INSPIRED (BERSIH TANPA MENU & TANPA LOGIN/BUKA PORTAL GANDA) --}}
         <header class="sticky top-0 inset-x-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-100 transition-all">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 
@@ -111,28 +294,23 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
-                        <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
                     </div>
                 </div>
 
-                {{-- Sisi Tengah: Menu Navigasi Bersih & Sederhana --}}
-                <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Fitur Sistem</a>
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Radar & Telemetri</a>
-                    <a href="#fitur-section" class="hover:text-sky-600 transition">Deteksi SLA</a>
-                    <a href="#jaringan-section" class="hover:text-sky-600 transition">Jaringan Pelabuhan</a>
-                </nav>
-
-                {{-- Sisi Kanan: Tombol Masuk & CTA Pill Bercahaya --}}
-                <div class="flex items-center gap-4">
-                    <button @click="showLoginModal = true" class="text-xs font-bold text-slate-700 hover:text-sky-600 transition cursor-pointer">
-                        Log in
+                {{-- Sisi Kanan: Status AIS Online & Tombol Putar Ulang Animasi Launch --}}
+                <div class="flex items-center gap-3">
+                    <button @click="triggerLaunchAnimation()" 
+                            title="Putar Ulang Animasi Launch Maritim" 
+                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-600 hover:text-sky-600 hover:bg-sky-50 border border-slate-200 hover:border-sky-200 transition cursor-pointer">
+                        <i class="fa-solid fa-play text-[10px] text-sky-500"></i>
+                        <span>Animasi Launch</span>
                     </button>
                     
-                    <button @click="showLoginModal = true" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-1.5 cursor-pointer">
-                        <span>Buka Portal</span>
-                        <span class="text-xs">↗</span>
-                    </button>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="hidden sm:inline">AIS Online</span>
+                    </span>
                 </div>
 
             </div>
