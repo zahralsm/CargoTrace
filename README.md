@@ -1,8 +1,12 @@
 # CargoTrace — Global Shipment Visibility and Tracking Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://cargotrace-zahra.up.railway.app)
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
 [![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com)
 [![Tests](https://img.shields.io/badge/PHPUnit-30%20Passed%20(100%25)-10B981?style=for-the-badge&logo=php&logoColor=white)](https://phpunit.de)
+
+> 🌐 **Live Production Deployment:** [https://cargotrace-zahra.up.railway.app](https://cargotrace-zahra.up.railway.app)  
+> *Pre-seeded Demo Accounts:* **Administrator** (`admin@cargotrace.com`), **Logistics Operator** (`operator@cargotrace.com`), **Customer** (`zahra@cargotrace.com`) — Password: `password`
 
 > **Final Project — Web Programming 2**  
 > A global ocean and intermodal freight tracking platform engineered with Laravel 11, the **Service Layer Pattern**, **MySQL**, an interactive **Leaflet.js Radar Map**, live port telemetry via **Open-Meteo API**, and a token-authenticated **Laravel Sanctum REST API**.
@@ -112,6 +116,7 @@ All pre-seeded test accounts use the default password: **`password`**
    ```
 
 4. **Run Migrations and Database Seeders**
+   ```bash
    php artisan migrate:fresh --seed
    ```
 
