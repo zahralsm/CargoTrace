@@ -60,13 +60,7 @@
     {{-- KOMPONEN UTAMA DENGAN ALPINE.JS STATE --}}
     <div x-data="{
         scrolledPastHero: false,
-        showLoginModal: false,
-        emailInput: '{{ old('email', '') }}',
-        passwordInput: '',
-        fillCredentials(email, pwd) {
-            this.emailInput = email;
-            this.passwordInput = pwd;
-        }
+        showLoginModal: false
     }"
     @scroll.window="scrolledPastHero = (window.pageYOffset > window.innerHeight * 0.65)"
     class="relative min-h-screen">
@@ -246,7 +240,7 @@
                                     <input id="modal-email" 
                                            type="email" 
                                            name="email" 
-                                           x-model="emailInput" 
+                                           value="{{ old('email') }}" 
                                            required 
                                            autofocus 
                                            placeholder="nama@cargotrace.com"
@@ -258,7 +252,11 @@
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
                                     <label for="modal-password" class="block font-bold text-xs text-slate-700">Kata Sandi</label>
-                                    <span class="text-[10px] text-slate-400 font-mono">Demo: password</span>
+                                    @if (Route::has('password.request'))
+                                        <a class="text-[11px] text-sky-600 hover:text-sky-800 font-semibold transition" href="{{ route('password.request') }}">
+                                            Lupa kata sandi?
+                                        </a>
+                                    @endif
                                 </div>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -267,7 +265,6 @@
                                     <input id="modal-password" 
                                            type="password" 
                                            name="password" 
-                                           x-model="passwordInput" 
                                            required 
                                            placeholder="••••••••"
                                            class="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 transition shadow-2xs placeholder-slate-400" />
@@ -288,22 +285,6 @@
                                 </button>
                             </div>
                         </form>
-
-                        {{-- Chip Pintasan Akun Demo (Memudahkan Pengujian Tanpa Menghalangi Form) --}}
-                        <div class="pt-3 border-t border-slate-100 text-center">
-                            <div class="text-[10px] text-slate-400 font-mono mb-2 uppercase tracking-wider font-semibold">Isi Cepat Akun Demo:</div>
-                            <div class="flex flex-wrap items-center justify-center gap-2">
-                                <button type="button" @click="fillCredentials('admin@cargotrace.com', 'password')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 transition">
-                                    Admin
-                                </button>
-                                <button type="button" @click="fillCredentials('operator@cargotrace.com', 'password')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition">
-                                    Operator
-                                </button>
-                                <button type="button" @click="fillCredentials('zahra@cargotrace.com', 'password')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition">
-                                    Customer (Zahra)
-                                </button>
-                            </div>
-                        </div>
 
                     </div>
 
