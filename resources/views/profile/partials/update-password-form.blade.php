@@ -18,25 +18,26 @@
         @csrf
         @method('put')
 
-        {{-- Baris 1: Kata Sandi Saat Ini --}}
-        <div>
-            <label for="update_password_current_password" class="block font-bold text-slate-700 mb-1.5 text-xs">Kata Sandi Saat Ini</label>
-            <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <i class="fa-solid fa-lock text-xs"></i>
-                </span>
-                <input id="update_password_current_password" 
-                       name="current_password" 
-                       type="password" 
-                       class="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 shadow-2xs transition" 
-                       placeholder="Masukkan kata sandi aktif akun..." 
-                       autocomplete="current-password" />
+        {{-- 3 Kolom Sejajar Proporsional: Kata Sandi Saat Ini, Kata Sandi Baru, Konfirmasi --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {{-- Kolom 1: Kata Sandi Saat Ini --}}
+            <div>
+                <label for="update_password_current_password" class="block font-bold text-slate-700 mb-1.5 text-xs">Kata Sandi Saat Ini</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                    </span>
+                    <input id="update_password_current_password" 
+                           name="current_password" 
+                           type="password" 
+                           class="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white text-slate-900 shadow-2xs transition" 
+                           placeholder="Kata sandi aktif..." 
+                           autocomplete="current-password" />
+                </div>
+                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1.5" />
             </div>
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1.5" />
-        </div>
 
-        {{-- Baris 2: Kata Sandi Baru & Konfirmasi (2 Kolom Lebar & Proporsional) --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {{-- Kolom 2: Kata Sandi Baru --}}
             <div>
                 <label for="update_password_password" class="block font-bold text-slate-700 mb-1.5 text-xs">Kata Sandi Baru</label>
                 <div class="relative">
@@ -53,6 +54,7 @@
                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-1.5" />
             </div>
 
+            {{-- Kolom 3: Konfirmasi Kata Sandi Baru --}}
             <div>
                 <label for="update_password_password_confirmation" class="block font-bold text-slate-700 mb-1.5 text-xs">Konfirmasi Kata Sandi Baru</label>
                 <div class="relative">
