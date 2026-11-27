@@ -35,12 +35,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
     <style>
-        *, ::before, ::after {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        body, button, input, select, textarea, p, h1, h2, h3, h4, h5, h6, span, a, div, td, th, li, label {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             scroll-behavior: smooth;
         }
-        ., [class*=""], text, svg text {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"], [class*="fa-"]::before {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
         }
         [x-cloak] { display: none !important; }
 

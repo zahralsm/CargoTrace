@@ -30,13 +30,23 @@
             }
         </script>
 
-        <!-- Standarisasi Mutlak Font Inter untuk Seluruh Elemen Web -->
+        <!-- Standarisasi Mutlak Font Inter untuk Teks & Menjaga Ikon FontAwesome Utuh -->
         <style>
-            *, ::before, ::after {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+            body, button, input, select, textarea, p, h1, h2, h3, h4, h5, h6, span, a, div, td, th, li, label {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             }
-            .font-mono, [class*="font-mono"], text, svg text {
+            .font-mono, [class*="font-mono"] {
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            }
+            /* Menjaga Ikon FontAwesome agar tidak tertimpa menjadi kotak */
+            .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"], [class*="fa-"]::before {
+                font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            }
+            .fa-solid, .fas {
+                font-weight: 900 !important;
+            }
+            .fa-regular, .far {
+                font-weight: 400 !important;
             }
         </style>
 
