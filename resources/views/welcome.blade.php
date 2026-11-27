@@ -56,12 +56,18 @@
             50% { transform: translateY(-8px) rotate(0.5deg); }
         }
         .animate-float {
-            animation: float-hero 4.5s ease-in-out infinite;
+            animation: float-hero 5s ease-in-out infinite;
         }
 
-        /* Latar Belakang Hero Putih Bersih Bernuansa Maritim (Sama dengan Tema Dashboard) */
-        .hero-light-gradient {
-            background: radial-gradient(circle at 50% 25%, rgba(2, 132, 199, 0.08) 0%, rgba(241, 245, 249, 0.9) 55%, #f1f5f9 100%);
+        /* Ambient Glow & Gradien Halus Latar Belakang Berthwise */
+        .berthwise-bg {
+            background: radial-gradient(circle at 50% 12%, rgba(2, 132, 199, 0.06) 0%, rgba(255, 255, 255, 1) 60%);
+        }
+
+        /* Masking Gradien Kabut Halus untuk Transisi Foto Lautan & Kapal Kargo */
+        .ocean-fog-mask {
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 12%, rgba(0,0,0,0.6) 30%, black 55%);
+            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.08) 12%, rgba(0,0,0,0.6) 30%, black 55%);
         }
 
         /* Animasi Reveal Password ala Column (Design Spells) */
@@ -87,119 +93,256 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased selection:bg-sky-500 selection:text-white">
+<body class="bg-white text-slate-800 antialiased selection:bg-sky-500 selection:text-white">
 
     {{-- KOMPONEN UTAMA DENGAN ALPINE.JS STATE --}}
     <div x-data="{
-        scrolledPastHero: false,
         showLoginModal: false
-    }"
-    @scroll.window="scrolledPastHero = (window.pageYOffset > window.innerHeight * 0.65)"
-    class="relative min-h-screen">
+    }" class="relative min-h-screen flex flex-col">
 
-        {{-- 1. HERO SECTION (HALAMAN PENUH / FULL-SCREEN - TEMA PUTIH BERSIH PERSIS DASHBOARD - TANPA NAVBAR DI ATAS) --}}
-        <section id="hero-section" class="relative w-full h-screen min-h-[700px] flex flex-col justify-between items-center text-center px-4 sm:px-6 lg:px-8 hero-light-gradient overflow-hidden border-b border-slate-200/80">
-            
-            {{-- Elemen Dekorasi Cahaya & Aksen Grid Halus --}}
-            <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-sky-400/10 rounded-full blur-[130px] pointer-events-none"></div>
-            <div class="absolute bottom-0 inset-x-0 h-36 bg-gradient-to-t from-slate-100 to-transparent pointer-events-none"></div>
-
-            {{-- Ruang Kosong Paling Atas (Menjamin tidak ada navigasi apapun di puncak hero) --}}
-            <div class="pt-8"></div>
-
-            {{-- Konten Utama Hero Section --}}
-            <div class="max-w-4xl mx-auto flex flex-col items-center z-10 space-y-6 my-auto">
+        {{-- 1. NAVBAR MINIMALIS BERTHWISE-INSPIRED (LOGO & KATA-KATA PERSIS DESAIN ASLI) --}}
+        <header class="sticky top-0 inset-x-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-100 transition-all">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 
-                {{-- Logo Utama "CargoTrace" (Sama dengan Gaya Kartu Dashboard) --}}
-                <div class="animate-float relative">
-                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-2 shadow-[0_12px_36px_rgba(2,132,199,0.18)] border border-slate-200/90 flex items-center justify-center">
-                        <div class="w-full h-full bg-[#1b1f3b] rounded-[20px] flex items-center justify-center text-sky-400 text-4xl sm:text-5xl shadow-md">
-                            <i class="fa-solid fa-anchor"></i>
-                        </div>
+                {{-- Sisi Kiri: Logo Utama & Nama CargoTrace --}}
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-lg font-bold shadow-sm ring-1 ring-slate-900/10">
+                        <i class="fa-solid fa-anchor"></i>
                     </div>
-                    {{-- Ping Beacon di Pojok Logo --}}
-                    <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-white animate-ping"></span>
-                    <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-white shadow-xs"></span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl font-black tracking-tight text-slate-900">Cargo<span class="text-sky-600">Trace</span></span>
+                        <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
+                    </div>
                 </div>
 
-                {{-- Judul Merek "CargoTrace" --}}
-                <div class="space-y-2.5">
-                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
-                        MARITIME CARGO LOGISTICS TELEMETRY
-                    </span>
+                {{-- Sisi Tengah: Menu Navigasi Bersih & Sederhana --}}
+                <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+                    <a href="#fitur-section" class="hover:text-sky-600 transition">Fitur Sistem</a>
+                    <a href="#fitur-section" class="hover:text-sky-600 transition">Radar & Telemetri</a>
+                    <a href="#fitur-section" class="hover:text-sky-600 transition">Deteksi SLA</a>
+                    <a href="#jaringan-section" class="hover:text-sky-600 transition">Jaringan Pelabuhan</a>
+                </nav>
 
-                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900">
-                        Cargo <span class="text-sky-600">Trace</span>
-                    </h1>
-                </div>
-
-                {{-- Teks Penjelasan Lengkap Mengenai Sistem & Kegunaan untuk Kapal Kargo --}}
-                <p class="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl leading-relaxed font-normal">
-                    Pusat kendali intelijen dan visibilitas maritim modern untuk armada kapal kargo global. 
-                    Dirancang untuk memonitor siklus pelayaran peti kemas secara <em>real-time</em>, mendeteksi potensi anomali 
-                    keterlambatan cuaca ekstrem (*SLA Delay Engine*), integrasi koordinat GIS maritim pelabuhan internasional, 
-                    serta memberikan kendali operasional komprehensif bagi Administrator, Operator Armada, dan Pemilik Muatan.
-                </p>
-
-                {{-- Tombol Cepat Aksi di Hero --}}
-                <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
-                    <button @click="showLoginModal = true" class="px-7 py-3.5 rounded-2xl bg-[#1b1f3b] hover:bg-sky-600 text-white font-extrabold text-sm shadow-md hover:shadow-sky-500/25 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2.5 cursor-pointer">
-                        <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
-                        <span>Buka Portal Login</span>
+                {{-- Sisi Kanan: Tombol Masuk & CTA Pill Bercahaya --}}
+                <div class="flex items-center gap-4">
+                    <button @click="showLoginModal = true" class="text-xs font-bold text-slate-700 hover:text-sky-600 transition cursor-pointer">
+                        Log in
                     </button>
-
-                    <a href="#fitur-section" class="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-compass text-sky-600"></i>
-                        <span>Eksplorasi Fitur Sistem</span>
-                    </a>
-                </div>
-            </div>
-
-            {{-- Indikator Scroll di Bagian Bawah Hero --}}
-            <div class="pb-10 z-10">
-                <a href="#fitur-section" class="flex flex-col items-center gap-2 text-slate-400 hover:text-sky-600 transition group text-xs ">
-                    <span class="tracking-wider uppercase text-[10px] font-bold">Gulir ke Bawah</span>
-                    <div class="w-7 h-10 rounded-full border-2 border-slate-300 group-hover:border-sky-500 flex items-start justify-center p-1.5 transition bg-white/70 shadow-2xs">
-                        <div class="w-1.5 h-2 bg-sky-500 rounded-full animate-bounce"></div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        {{-- 2. STICKY NAVBAR (HANYA MUNCUL KETIKA PENGGUNA MENGGULIR KE BAWAH MELEWATI HERO SECTION) --}}
-        <header 
-            class="fixed top-0 inset-x-0 z-50 transition-all duration-500 transform"
-            :class="scrolledPastHero ? 'translate-y-0 opacity-100 pointer-events-auto' : '-translate-y-full opacity-0 pointer-events-none'">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3">
-                <div class="bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-md px-6 py-3.5 flex items-center justify-between">
                     
-                    {{-- Sisi Kiri Navbar: Logo & Nama "CargoTrace" --}}
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-base font-bold shadow-xs">
-                            <i class="fa-solid fa-anchor"></i>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-lg font-black tracking-tight text-slate-900">Cargo <span class="text-sky-600">Trash</span></span>
-                            <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[9px] font-bold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
-                        </div>
-                    </div>
-
-                    {{-- 3. ISI NAVBAR: KOSONG TANPA MENU STANDAR, HANYA SATU TOMBOL LOGIN MENONJOL DI KANAN --}}
-                    <div>
-                        <button 
-                            @click="showLoginModal = true" 
-                            class="px-6 py-2.5 rounded-xl bg-[#1b1f3b] hover:bg-sky-600 text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-sky-500/25 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
-                            <span>Login</span>
-                        </button>
-                    </div>
-
+                    <button @click="showLoginModal = true" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-1.5 cursor-pointer">
+                        <span>Buka Portal</span>
+                        <span class="text-xs">↗</span>
+                    </button>
                 </div>
+
             </div>
         </header>
 
-        {{-- 4, 5, 6. MODAL LOGIN LANGSUNG (FORM USERNAME & PASSWORD PERSIS SEPERTI DESAIN LOGIN SEBELUMNYA) --}}
+        {{-- 2. HERO SECTION DENGAN TATA LETAK REFERENSI BERTHWISE --}}
+        <section class="relative w-full berthwise-bg pt-12 sm:pt-16 pb-0 overflow-hidden border-b border-slate-200/80">
+            
+            {{-- Cahaya Halus Dekoratif --}}
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-sky-400/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+            {{-- Konten Teks Hero (Atas): Terpusat, Tenang, dan Bersih --}}
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6 relative z-10">
+                
+                {{-- Logo Utama "CargoTrace" Mengambang (Sesuai Desain Lama) --}}
+                <div class="inline-flex justify-center mb-1">
+                    <div class="animate-float relative">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-1.5 shadow-[0_10px_30px_rgba(2,132,199,0.15)] border border-slate-200/90 flex items-center justify-center">
+                            <div class="w-full h-full bg-[#1b1f3b] rounded-xl flex items-center justify-center text-sky-400 text-2xl sm:text-3xl shadow-sm">
+                                <i class="fa-solid fa-anchor"></i>
+                            </div>
+                        </div>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white animate-ping"></span>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-xs"></span>
+                    </div>
+                </div>
+
+                {{-- Pill Badge Terinspirasi Berthwise ("✦ Terminal operations, with AI") --}}
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200/80 shadow-xs">
+                        <span class="text-sky-500 text-xs">✦</span>
+                        <span>MARITIME CARGO LOGISTICS TELEMETRY</span>
+                    </span>
+                </div>
+
+                {{-- Judul Utama (Headings) --}}
+                <div class="space-y-2">
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 leading-[1.08]">
+                        Cargo <span class="text-sky-600">Trace</span>
+                    </h1>
+                    <p class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">
+                        Siklus kargo, radar AIS & telemetri, dalam satu layar tenang.
+                    </p>
+                </div>
+
+                {{-- Teks Penjelasan Lengkap (Persis Kata-Kata Desain Lama) --}}
+                <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal pt-1">
+                    Pusat kendali intelijen dan visibilitas maritim modern untuk armada kapal kargo global. 
+                    Dirancang untuk memonitor siklus pelayaran peti kemas secara <em>real-time</em>, mendeteksi potensi anomali 
+                    keterlambatan cuaca ekstrem (<em>SLA Delay Engine</em>), integrasi koordinat GIS maritim pelabuhan internasional, 
+                    serta memberikan kendali operasional komprehensif bagi Administrator, Operator Armada, dan Pemilik Muatan.
+                </p>
+
+                {{-- Tombol Cepat Aksi (CTA) --}}
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-3 pb-8">
+                    <button @click="showLoginModal = true" class="px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer">
+                        <span>Buka Portal Login</span>
+                        <span>↗</span>
+                    </button>
+
+                    <a href="#fitur-section" class="px-6 py-3 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex items-center gap-2">
+                        <span>Eksplorasi Fitur Sistem</span>
+                        <i class="fa-solid fa-arrow-down text-xs text-sky-600"></i>
+                    </a>
+                </div>
+
+            </div>
+
+            {{-- 3. AREA VISUAL KAPAL KARGO LAUT LEPAS + FLOATING HUD TELEMETRI (PERSIS REFERENSI BERTHWISE) --}}
+            <div class="relative w-full h-[460px] sm:h-[580px] lg:h-[660px] max-w-7xl mx-auto mt-4 overflow-hidden rounded-t-[40px]">
+                
+                {{-- Foto Kapal Kontainer Aerial Resolusi Tinggi --}}
+                <div class="absolute inset-0 ocean-fog-mask">
+                    <img src="{{ asset('images/berthwise-cargo-ship.jpg') }}" 
+                         alt="Kapal Kontainer Berlayar di Samudra" 
+                         class="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000 ease-out hover:scale-100" />
+                </div>
+
+                {{-- Lapisan Gradien Kabut Putih Halus di Atas Air --}}
+                <div class="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none"></div>
+
+                {{-- FLOATING HUD KIRI BAWAH: KARTU TELEMETRI GELAP (DARK GLASSMORPHISM SEPERTI REFERENSI) --}}
+                <div class="absolute bottom-6 sm:bottom-10 left-4 sm:left-8 lg:left-12 z-20 max-w-[280px] sm:max-w-sm w-full">
+                    
+                    {{-- Badges di Atas Kartu: LIVE & Status Cuaca/Gelombang --}}
+                    <div class="flex items-center gap-2 mb-2.5">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            <span>LIVE</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md text-white/90 text-[10px] font-bold border border-white/10 shadow-sm">
+                            <i class="fa-solid fa-water text-[9px] text-sky-400"></i>
+                            <span>31°C · swell 0.6 m</span>
+                        </span>
+                    </div>
+
+                    {{-- Badan Kartu Kaca Gelap (Dark HUD) --}}
+                    <div class="bg-[#0b1329]/85 backdrop-blur-xl border border-white/15 rounded-2xl p-4 sm:p-5 shadow-2xl text-white space-y-3.5 ring-1 ring-black/20">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-black text-white tracking-tight">Berth 3 — MSC Aurora</h4>
+                                <p class="text-[10px] text-sky-300/80">Tanjung Priok &rarr; Port Botany</p>
+                            </div>
+                            <span class="text-[11px] font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                                ETD 18:40
+                            </span>
+                        </div>
+
+                        {{-- Progress Bar: Discharge --}}
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                                <span>Discharge</span>
+                                <span class="font-extrabold text-white">82%</span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-sky-400 to-cyan-300 rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+
+                        {{-- Progress Bar: Load --}}
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                                <span>Load</span>
+                                <span class="font-extrabold text-white">46%</span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-400 to-sky-400 rounded-full" style="width: 46%"></div>
+                            </div>
+                        </div>
+
+                        {{-- Progress Bar: Crane Moves / Speed --}}
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-300">
+                                <span>Crane moves / hr</span>
+                                <span class="font-extrabold text-sky-300">31.4</span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                <div class="h-full bg-cyan-400 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- FLOATING HUD KANAN BAWAH: STACK KARTU METRIK PUTIH (SEPERTI REFERENSI BERTHWISE) --}}
+                <div class="absolute bottom-6 sm:bottom-10 right-4 sm:right-8 lg:right-12 z-20 flex flex-col gap-2 max-w-[200px] sm:max-w-[220px] w-full">
+                    
+                    {{-- Kartu 1: Wind --}}
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="flex items-center justify-between text-[10px] text-slate-500 font-bold mb-1">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-wind text-sky-500"></i>
+                                <span>Wind</span>
+                            </span>
+                            <span class="text-[9px] text-emerald-600 font-extrabold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">safe</span>
+                        </div>
+                        <div class="text-base sm:text-lg font-black text-slate-900">
+                            14 km/h
+                        </div>
+                    </div>
+
+                    {{-- Kartu 2: Yard Occupancy --}}
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-boxes-stacked text-amber-500"></i>
+                                <span>Yard occupancy</span>
+                            </span>
+                            <span class="text-[9px] font-extrabold text-emerald-600">+5.1%</span>
+                        </div>
+                        <div class="text-base sm:text-lg font-black text-slate-900">
+                            74%
+                        </div>
+                    </div>
+
+                    {{-- Kartu 3: Crane Moves / hr --}}
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-gears text-indigo-500"></i>
+                                <span>Crane moves / hr</span>
+                            </span>
+                            <span class="text-[9px] font-extrabold text-emerald-600">+1.4</span>
+                        </div>
+                        <div class="text-base sm:text-lg font-black text-slate-900">
+                            28.9
+                        </div>
+                    </div>
+
+                    {{-- Kartu 4: Throughput TEU --}}
+                    <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-lg text-slate-900 transition-all hover:scale-102">
+                        <div class="text-[10px] text-slate-500 font-bold mb-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-ship text-sky-600"></i>
+                                <span>Throughput, TEU</span>
+                            </span>
+                            <span class="text-[9px] font-extrabold text-emerald-600">+6.2%</span>
+                        </div>
+                        <div class="text-base sm:text-lg font-black text-slate-900">
+                            4,812
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {{-- 4. MODAL LOGIN LANGSUNG (DENGAN ANIMASI REVEAL COLUMN DESIGN SPELLS & IKON VEKTOR PRESISI) --}}
         <div 
             x-show="showLoginModal" 
             x-cloak
@@ -241,7 +384,7 @@
                                 <p class="text-[11px] text-slate-300">Sistem Pelacakan Kapal Maritim</p>
                             </div>
                         </div>
-                        <button type="button" @click="showLoginModal = false" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition">
+                        <button type="button" @click="showLoginModal = false" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
                             <i class="fa-solid fa-xmark text-sm"></i>
                         </button>
                     </div>
@@ -363,13 +506,13 @@
             </div>
         </div>
 
-        {{-- 7. KONTEN LANDING PAGE DI BAWAH HERO SECTION (TEMA BENTO GRID PUTIH BERSIH) --}}
-        <main id="fitur-section" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+        {{-- 5. KONTEN LANDING PAGE DI BAWAH HERO (3 PILAR KAPABILITAS PERSIS DESAIN ASLI) --}}
+        <main id="fitur-section" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-20">
 
             {{-- Bagian 1: 3 Pilar Kapabilitas Utama CargoTrace --}}
             <section class="space-y-10">
                 <div class="text-center max-w-2xl mx-auto space-y-2.5">
-                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-sky-50 text-sky-700 border border-sky-200">
+                    <span class="px-3.5 py-1 rounded-full text-xs font-extrabold uppercase bg-sky-50 text-sky-700 border border-sky-200">
                         KEUNGGULAN OPERASIONAL
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -382,8 +525,8 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {{-- Fitur 1 --}}
-                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-sky-400 hover:shadow-md transition-all duration-300 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold border border-sky-100">
+                    <div class="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-sky-400 hover:shadow-lg transition-all duration-300 space-y-3.5 group">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl font-bold border border-sky-100 group-hover:bg-sky-600 group-hover:text-white transition-colors duration-300">
                             <i class="fa-solid fa-satellite-dish"></i>
                         </div>
                         <h3 class="text-base font-extrabold text-slate-900">Radar & Telemetri AIS 24/7</h3>
@@ -393,8 +536,8 @@
                     </div>
 
                     {{-- Fitur 2 --}}
-                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-rose-400 hover:shadow-md transition-all duration-300 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold border border-rose-100">
+                    <div class="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-rose-400 hover:shadow-lg transition-all duration-300 space-y-3.5 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold border border-rose-100 group-hover:bg-rose-600 group-hover:text-white transition-colors duration-300">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <h3 class="text-base font-extrabold text-slate-900">Deteksi Keterlambatan SLA</h3>
@@ -404,8 +547,8 @@
                     </div>
 
                     {{-- Fitur 3 --}}
-                    <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-emerald-400 hover:shadow-md transition-all duration-300 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold border border-emerald-100">
+                    <div class="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-emerald-400 hover:shadow-lg transition-all duration-300 space-y-3.5 group">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
                             <i class="fa-solid fa-box-archive"></i>
                         </div>
                         <h3 class="text-base font-extrabold text-slate-900">Siklus Manifes Multi-Moda</h3>
@@ -417,9 +560,9 @@
             </section>
 
             {{-- Bagian 2: Jaringan Hub Pelabuhan Maritim Dunia (Bento Card Putih Elegan) --}}
-            <section class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex flex-col md:flex-row items-center justify-between gap-8">
+            <section id="jaringan-section" class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="space-y-3.5 max-w-xl">
-                    <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                    <span class="px-3.5 py-1 rounded-full text-[11px] font-extrabold uppercase bg-sky-50 text-sky-700 border border-sky-200">
                         GLOBAL MARITIME NETWORK
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -430,7 +573,7 @@
                     </p>
                 </div>
                 <div class="shrink-0">
-                    <button @click="showLoginModal = true" class="px-7 py-3.5 rounded-2xl bg-[#1b1f3b] hover:bg-sky-600 text-white font-extrabold text-sm shadow-md hover:shadow-sky-500/25 transition cursor-pointer">
+                    <button @click="showLoginModal = true" class="px-7 py-3.5 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">
                         Mulai Akses Monitoring &rarr;
                     </button>
                 </div>
@@ -438,8 +581,8 @@
 
         </main>
 
-        {{-- 8. FOOTER OPERASIONAL SISTEM (PERSIS SAMA DENGAN FOOTER DASHBOARD) --}}
-        <footer class="bg-white border-t border-slate-200 py-6 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+        {{-- 6. FOOTER OPERASIONAL SISTEM (PERSIS SAMA DENGAN FOOTER DASHBOARD) --}}
+        <footer class="bg-white border-t border-slate-200 py-6 px-4 sm:px-6 lg:px-8 text-xs text-slate-500 mt-auto">
             <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-2.5">
                     <div class="w-6 h-6 rounded-lg bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-xs font-bold">
