@@ -534,8 +534,8 @@
                         {{-- Panel Sisi Kiri: Daftar Wilayah Pelabuhan (Vercel Regions Sidebar) --}}
                         <div id="regions-sidebar" class="hidden md:flex flex-col w-56 border-r border-slate-200 bg-slate-50/70 p-3 space-y-2 overflow-y-auto custom-scroll text-xs transition-all duration-200">
                             <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-                                <span class="font-bold text-[11px] text-slate-700 uppercase tracking-wider">Wilayah Pelabuhan</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold ">6 Hub</span>
+                                <span class="font-bold text-[11px] text-slate-700 uppercase tracking-wider">{{ Auth::user()->isCustomer() ? 'Pelabuhan Kargo Anda' : 'Wilayah Pelabuhan' }}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold ">{{ Auth::user()->isCustomer() ? '5 Hub Kargo' : '6 Hub' }}</span>
                             </div>
 
                             {{-- Item Wilayah Pelabuhan --}}
@@ -573,6 +573,7 @@
                                     <div class="text-[10px] text-slate-500 mt-0.5">PSA Singapore, Hub Transit</div>
                                 </button>
 
+                                @if(!Auth::user()->isCustomer())
                                 <button onclick="selectPortFromList('DEHAM')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-1.5">
@@ -583,6 +584,7 @@
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Hamburg, Jerman</div>
                                 </button>
+                                @endif
 
                                 <button onclick="selectPortFromList('AUBOT')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
                                     <div class="flex items-center justify-between">
@@ -634,7 +636,7 @@
                             <div class="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-lg max-w-xs text-xs space-y-2 pointer-events-auto">
                                 <div class="flex items-center justify-between gap-4">
                                     <strong class="text-slate-900 font-extrabold flex items-center gap-2">
-                                        <i class="fa-solid fa-shield-heart text-emerald-600"></i> SLA Ketepatan Armada
+                                        <i class="fa-solid fa-shield-heart text-emerald-600"></i> {{ Auth::user()->isCustomer() ? 'Ketepatan Kargo Saya' : 'SLA Ketepatan Armada' }}
                                     </strong>
                                     <span class="px-2 py-0.5 rounded-lg font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px]">{{ $onTimeRate }}%</span>
                                 </div>
@@ -642,7 +644,7 @@
                                     <div class="bg-gradient-to-r from-emerald-500 to-sky-500 h-full rounded-full" style="width: {{ $onTimeRate }}%;"></div>
                                 </div>
                                 <p class="text-[10px] text-slate-500 leading-relaxed">
-                                    {{ $totalShipments - $delayedCount }} dari {{ $totalShipments }} kargo berlayar tepat waktu. Putar globe 3D atau klik wilayah untuk inspeksi.
+                                    {{ $totalShipments - $delayedCount }} dari {{ $totalShipments }} kargo {{ Auth::user()->isCustomer() ? 'Anda tepat waktu' : 'berlayar tepat waktu' }}. Putar globe 3D atau klik wilayah untuk inspeksi.
                                 </p>
                             </div>
 
@@ -1156,21 +1158,26 @@
 
         // 2. Data Wilayah Pelabuhan & Koridor Maritim (Vercel Regions Inspired)
         const maritimeRegions = [
-            { id: 1, code: 'IDTPP', city: 'Jakarta', name: 'Port of Tanjung Priok', country: 'Indonesia', lat: -6.1038, lng: 106.8827, role: 'Hub Utama (Flagship)', cargo: 'Arabica Coffee, Textile', isDelayed: true },
-            { id: 2, code: 'NLRTM', city: 'Rotterdam', name: 'Port of Rotterdam', country: 'Belanda', lat: 51.9496, lng: 4.1453, role: 'Gateway Eropa Barat', cargo: 'Crude Oil, Electronics', isDelayed: false },
-            { id: 3, code: 'SGSIN', city: 'Singapura', name: 'Port of Singapore', country: 'Singapura', lat: 1.2644, lng: 103.8228, role: 'Hub Transit Malaka', cargo: 'Transshipment Cargo', isDelayed: false },
+            { id: 1, code: 'IDTPP', city: 'Jakarta', name: 'Port of Tanjung Priok', country: 'Indonesia', lat: -6.1038, lng: 106.8827, role: '{{ Auth::user()->isCustomer() ? "Pelabuhan Muat Utama" : "Hub Utama (Flagship)" }}', cargo: 'Arabica Coffee, Textile', isDelayed: true },
+            { id: 2, code: 'NLRTM', city: 'Rotterdam', name: 'Port of Rotterdam', country: 'Belanda', lat: 51.9496, lng: 4.1453, role: '{{ Auth::user()->isCustomer() ? "Pelabuhan Tujuan Kargo" : "Gateway Eropa Barat" }}', cargo: 'Crude Oil, Electronics', isDelayed: false },
+            { id: 3, code: 'SGSIN', city: 'Singapura', name: 'Port of Singapore', country: 'Singapura', lat: 1.2644, lng: 103.8228, role: '{{ Auth::user()->isCustomer() ? "Pelabuhan Tujuan Kargo" : "Hub Transit Malaka" }}', cargo: 'Transshipment Cargo', isDelayed: false },
+            @if(!Auth::user()->isCustomer())
             { id: 4, code: 'DEHAM', city: 'Hamburg', name: 'Port of Hamburg', country: 'Jerman', lat: 53.5353, lng: 9.9872, role: 'Koridor Baltik', cargo: 'Machinery & Steel', isDelayed: false },
-            { id: 5, code: 'AUBOT', city: 'Sydney', name: 'Port Botany', country: 'Australia', lat: -33.9744, lng: 151.2181, role: 'Terminal Pasifik Selatan', cargo: 'Agricultural Grains', isDelayed: false },
-            { id: 6, code: 'IDSUB', city: 'Surabaya', name: 'Port of Tanjung Perak', country: 'Indonesia', lat: -7.1982, lng: 112.7339, role: 'Feeder Domestik Timur', cargo: 'Fertilizer, Cocoa', isDelayed: false }
+            @endif
+            { id: 5, code: 'AUBOT', city: 'Sydney', name: 'Port Botany', country: 'Australia', lat: -33.9744, lng: 151.2181, role: '{{ Auth::user()->isCustomer() ? "Pelabuhan Tujuan Kargo" : "Terminal Pasifik Selatan" }}', cargo: 'Agricultural Grains', isDelayed: false },
+            { id: 6, code: 'IDSUB', city: 'Surabaya', name: 'Port of Tanjung Perak', country: 'Indonesia', lat: -7.1982, lng: 112.7339, role: '{{ Auth::user()->isCustomer() ? "Pelabuhan Muat Kargo" : "Feeder Domestik Timur" }}', cargo: 'Fertilizer, Cocoa', isDelayed: false }
         ];
 
         // Rute Koridor Kapal
+        const getPort = (code) => maritimeRegions.find(p => p.code === code);
         const activeCorridors = [
-            { from: maritimeRegions[0], to: maritimeRegions[1], label: 'Jakarta - Rotterdam', isDelayed: true },
-            { from: maritimeRegions[0], to: maritimeRegions[4], label: 'Jakarta - Sydney', isDelayed: false },
-            { from: maritimeRegions[0], to: maritimeRegions[3], label: 'Jakarta - Hamburg', isDelayed: false },
-            { from: maritimeRegions[5], to: maritimeRegions[2], label: 'Surabaya - Singapore', isDelayed: false }
-        ];
+            { from: getPort('IDTPP'), to: getPort('NLRTM'), label: 'Jakarta - Rotterdam', isDelayed: true },
+            { from: getPort('IDTPP'), to: getPort('AUBOT'), label: 'Jakarta - Sydney', isDelayed: false },
+            @if(!Auth::user()->isCustomer())
+            { from: getPort('IDTPP'), to: getPort('DEHAM'), label: 'Jakarta - Hamburg', isDelayed: false },
+            @endif
+            { from: getPort('IDSUB'), to: getPort('SGSIN'), label: 'Surabaya - Singapore', isDelayed: false }
+        ].filter(c => c.from && c.to);
 
         // Titik Benua (Stippled World Dots)
         let worldPoints = [];
