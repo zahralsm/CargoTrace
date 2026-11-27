@@ -11,7 +11,7 @@
                 Perbarui nama lengkap dan alamat email akun resmi Anda pada platform CargoTrace.
             </p>
         </div>
-        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sky-50 text-sky-700 border border-sky-200">
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             DATA UTAMA
         </span>

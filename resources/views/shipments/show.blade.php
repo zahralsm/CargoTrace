@@ -90,7 +90,7 @@
                             $isCurrent = $idx === $currentIndex;
                         @endphp
                         <div class="p-3.5 rounded-xl border transition {{ $isCurrent ? 'bg-sky-500 text-white border-sky-600 shadow-md ring-2 ring-sky-300' : ($isPassed ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-400') }}">
-                            <div class="text-[10px] font-mono {{ $isCurrent ? 'text-sky-100' : ($isPassed ? 'text-emerald-600' : 'text-slate-400') }}">Tahap 0{{ $idx + 1 }}</div>
+                            <div class="text-[10px] {{ $isCurrent ? 'text-sky-100' : ($isPassed ? 'text-emerald-600' : 'text-slate-400') }}">Tahap 0{{ $idx + 1 }}</div>
                             <div class="text-xs font-extrabold mt-1 tracking-tight">
                                 {{ $stepNames[$step] }}
                             </div>
@@ -112,7 +112,7 @@
                         <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-cloud-sun text-amber-500 mr-1"></i> {{ $originWeather['condition'] }}</p>
                     </div>
                     <div class="text-right">
-                        <div class="text-3xl font-black text-slate-900 font-mono">
+                        <div class="text-3xl font-black text-slate-900 ">
                             {{ $originWeather['temperature'] ? $originWeather['temperature'] . '°C' : 'N/A' }}
                         </div>
                         <div class="text-[11px] text-slate-500 mt-0.5">
@@ -132,7 +132,7 @@
                         <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-cloud-sun text-amber-500 mr-1"></i> {{ $destinationWeather['condition'] }}</p>
                     </div>
                     <div class="text-right">
-                        <div class="text-3xl font-black text-slate-900 font-mono">
+                        <div class="text-3xl font-black text-slate-900 ">
                             {{ $destinationWeather['temperature'] ? $destinationWeather['temperature'] . '°C' : 'N/A' }}
                         </div>
                         <div class="text-[11px] text-slate-500 mt-0.5">
@@ -164,7 +164,7 @@
                             <i class="fa-solid fa-timeline text-sky-600"></i>
                             <span>Riwayat Perjalanan (Timeline Kronologis)</span>
                         </h3>
-                        <span class="text-xs text-slate-500 font-mono">{{ $shipment->trackingEvents->count() }} Titik Pemeriksaan Tercatat</span>
+                        <span class="text-xs text-slate-500 ">{{ $shipment->trackingEvents->count() }} Titik Pemeriksaan Tercatat</span>
                     </div>
 
                     <div class="relative border-l-2 border-slate-200 ml-4 space-y-6">
@@ -174,12 +174,12 @@
 
                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                     <span class="text-xs font-black text-slate-900 tracking-tight">{{ $event->event_type }}</span>
-                                    <span class="text-[11px] font-mono text-slate-500">{{ $event->event_time->format('d M Y, H:i') }} UTC</span>
+                                    <span class="text-[11px] text-slate-500">{{ $event->event_time->format('d M Y, H:i') }} UTC</span>
                                 </div>
                                 <div class="text-xs font-semibold text-slate-700 mt-0.5">
                                     {{ $event->location_name ?? $event->location?->name ?? 'Titik Koordinat Laut' }}
                                     @if($event->latitude && $event->longitude)
-                                        <span class="text-[10px] font-mono text-slate-400">({{ $event->latitude }}, {{ $event->longitude }})</span>
+                                        <span class="text-[10px] text-slate-400">({{ $event->latitude }}, {{ $event->longitude }})</span>
                                     @endif
                                 </div>
                                 <p class="text-xs text-slate-600 mt-1.5 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
@@ -257,7 +257,7 @@
                         <div class="bg-[#1b1f3b] text-white p-5 rounded-xl border border-[#292f54] shadow-sm space-y-4">
                             <div class="flex items-center justify-between border-b border-[#292f54] pb-2">
                                 <h4 class="text-xs font-bold uppercase tracking-wider text-sky-400">Konsol Pengendali Dispatch</h4>
-                                <span class="text-[10px] text-slate-400 font-mono">MODE OPERATOR</span>
+                                <span class="text-[10px] text-slate-400 ">MODE OPERATOR</span>
                             </div>
 
                             <form method="POST" action="{{ route('shipments.tracking.store', $shipment) }}" class="space-y-3 text-xs">

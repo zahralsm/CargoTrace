@@ -23,16 +23,20 @@
                     extend: {
                         fontFamily: {
                             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                            mono: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                         }
                     }
                 }
             }
         </script>
 
-        <!-- Standarisasi Font untuk Seluruh Elemen -->
+        <!-- Standarisasi Mutlak Font Inter untuk Seluruh Elemen Web -->
         <style>
-            * {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            *, ::before, ::after {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+            }
+            .font-mono, [class*="font-mono"], text, svg text {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
             }
         </style>
 

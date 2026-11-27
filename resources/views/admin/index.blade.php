@@ -13,7 +13,7 @@
                         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">
                             Pusat Administrasi Sistem & Log Audit
                         </h2>
-                        <p class="text-xs text-slate-500 font-mono">Kelola master data maskapai pelayaran, pelabuhan, dan rekam jejak forensik sistem</p>
+                        <p class="text-xs text-slate-500 ">Kelola master data maskapai pelayaran, pelabuhan, dan rekam jejak forensik sistem</p>
                     </div>
                 </div>
             </div>
@@ -79,15 +79,15 @@
                                 <th class="p-3.5">Alamat IP</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 font-mono">
+                        <tbody class="divide-y divide-slate-100 ">
                             @forelse($auditLogs as $log)
                                 <tr class="hover:bg-slate-50 transition">
-                                    <td class="p-3.5 text-slate-500 font-mono text-[11px]">
+                                    <td class="p-3.5 text-slate-500 text-[11px]">
                                         {{ $log->created_at->format('d M Y, H:i:s') }}
                                     </td>
                                     <td class="p-3.5 font-sans">
                                         <div class="font-bold text-slate-900">{{ $log->user?->name ?? 'Sistem Otomatis' }}</div>
-                                        <div class="text-[10px] text-slate-400 font-mono">{{ $log->user?->role ?? 'CRON/AUTO' }}</div>
+                                        <div class="text-[10px] text-slate-400 ">{{ $log->user?->role ?? 'CRON/AUTO' }}</div>
                                     </td>
                                     <td class="p-3.5 font-sans">
                                         @php
@@ -109,14 +109,14 @@
                                     <td class="p-3.5 font-sans text-slate-700 font-semibold">
                                         {{ class_basename($log->entity_type) }} #{{ $log->entity_id }}
                                     </td>
-                                    <td class="p-3.5 font-mono text-[11px] max-w-xs truncate text-slate-600">
+                                    <td class="p-3.5 text-[11px] max-w-xs truncate text-slate-600">
                                         @if($log->new_values)
                                             <span class="text-emerald-700">{{ json_encode($log->new_values) }}</span>
                                         @else
                                             <span class="text-slate-400">-</span>
                                         @endif
                                     </td>
-                                    <td class="p-3.5 text-slate-500 font-mono text-[11px]">
+                                    <td class="p-3.5 text-slate-500 text-[11px]">
                                         {{ $log->ip_address ?? '127.0.0.1' }}
                                     </td>
                                 </tr>
@@ -201,9 +201,9 @@
                             <tbody class="divide-y divide-slate-100">
                                 @foreach($carriers as $carrier)
                                     <tr class="hover:bg-slate-50 transition">
-                                        <td class="p-3 font-mono font-bold text-sky-600">{{ $carrier->code }}</td>
+                                        <td class="p-3 font-bold text-sky-600">{{ $carrier->code }}</td>
                                         <td class="p-3 font-bold text-slate-900">{{ $carrier->name }}</td>
-                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 font-mono text-[10px]">{{ $carrier->service_type }}</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px]">{{ $carrier->service_type }}</span></td>
                                         <td class="p-3 text-slate-500">{{ $carrier->contact_email ?? '-' }}</td>
                                         <td class="p-3"><span class="text-emerald-700 font-bold">AKTIF</span></td>
                                     </tr>
@@ -295,11 +295,11 @@
                             <tbody class="divide-y divide-slate-100">
                                 @foreach($locations as $loc)
                                     <tr class="hover:bg-slate-50 transition">
-                                        <td class="p-3 font-mono font-bold text-sky-600">{{ $loc->code }}</td>
+                                        <td class="p-3 font-bold text-sky-600">{{ $loc->code }}</td>
                                         <td class="p-3 font-bold text-slate-900">{{ $loc->name }}</td>
                                         <td class="p-3 text-slate-700">{{ $loc->city }}, {{ $loc->country_code }}</td>
-                                        <td class="p-3 font-mono text-[11px] text-slate-500">{{ $loc->latitude }}, {{ $loc->longitude }}</td>
-                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 font-mono text-[10px]">{{ $loc->type }}</span></td>
+                                        <td class="p-3 text-[11px] text-slate-500">{{ $loc->latitude }}, {{ $loc->longitude }}</td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px]">{{ $loc->type }}</span></td>
                                     </tr>
                                 @endforeach
                             </tbody>

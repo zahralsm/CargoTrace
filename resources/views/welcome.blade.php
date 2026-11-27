@@ -21,6 +21,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                     }
                 }
             }
@@ -34,9 +35,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
     <style>
-        * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        *, ::before, ::after {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
             scroll-behavior: smooth;
+        }
+        ., [class*=""], text, svg text {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
         }
         [x-cloak] { display: none !important; }
 
@@ -92,7 +96,7 @@
 
                 {{-- Judul Merek "Cargo Trash" --}}
                 <div class="space-y-2.5">
-                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold font-mono tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200 shadow-xs">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-widest uppercase bg-sky-50 text-sky-700 border border-sky-200 shadow-xs">
                         <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
                         MARITIME CARGO LOGISTICS TELEMETRY
                     </span>
@@ -126,7 +130,7 @@
 
             {{-- Indikator Scroll di Bagian Bawah Hero --}}
             <div class="pb-10 z-10">
-                <a href="#fitur-section" class="flex flex-col items-center gap-2 text-slate-400 hover:text-sky-600 transition group text-xs font-mono">
+                <a href="#fitur-section" class="flex flex-col items-center gap-2 text-slate-400 hover:text-sky-600 transition group text-xs ">
                     <span class="tracking-wider uppercase text-[10px] font-bold">Gulir ke Bawah</span>
                     <div class="w-7 h-10 rounded-full border-2 border-slate-300 group-hover:border-sky-500 flex items-start justify-center p-1.5 transition bg-white/70 shadow-2xs">
                         <div class="w-1.5 h-2 bg-sky-500 rounded-full animate-bounce"></div>
@@ -149,7 +153,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-lg font-black tracking-tight text-slate-900">Cargo <span class="text-sky-600">Trash</span></span>
-                            <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
+                            <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[9px] font-bold bg-sky-50 text-sky-700 border border-sky-200">MARITIM</span>
                         </div>
                     </div>
 
@@ -298,7 +302,7 @@
             {{-- Bagian 1: 3 Pilar Kapabilitas Utama Cargo Trash --}}
             <section class="space-y-10">
                 <div class="text-center max-w-2xl mx-auto space-y-2.5">
-                    <span class="px-3 py-1 rounded-full text-xs font-bold font-mono uppercase bg-sky-50 text-sky-700 border border-sky-200">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-sky-50 text-sky-700 border border-sky-200">
                         KEUNGGULAN OPERASIONAL
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -348,7 +352,7 @@
             {{-- Bagian 2: Jaringan Hub Pelabuhan Maritim Dunia (Bento Card Putih Elegan) --}}
             <section class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-xs hover:border-sky-300 transition-all flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="space-y-3.5 max-w-xl">
-                    <span class="px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                    <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
                         GLOBAL MARITIME NETWORK
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">

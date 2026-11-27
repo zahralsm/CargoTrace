@@ -90,7 +90,7 @@
                                 TELEMETRI BENTO AKTIF
                             </span>
                         </div>
-                        <div class="text-xs text-slate-500 font-mono flex flex-wrap items-center gap-3 mt-0.5">
+                        <div class="text-xs text-slate-500 flex flex-wrap items-center gap-3 mt-0.5">
                             <span class="text-sky-700 font-semibold"><i class="fa-regular fa-clock mr-1 text-sky-600"></i> <strong id="utc-time-hud">--:--:-- UTC</strong></span>
                             <span class="text-slate-300">•</span>
                             <span>Satelit AIS: <strong class="text-emerald-700 font-bold">TERKONEKSI (100% ONLINE)</strong></span>
@@ -109,7 +109,7 @@
                         </button>
                     @endif
 
-                    <div class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-mono">
+                    <div class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 ">
                         <i class="fa-solid fa-location-crosshairs text-sky-600"></i>
                         <span>GIS WGS-84</span>
                     </div>
@@ -146,7 +146,7 @@
                                     KAPAL FLAGSHIP AKTIF
                                 </span>
                             </div>
-                            <span class="text-[11px] font-mono text-slate-400">IMO CALLSIGN: 9463047</span>
+                            <span class="text-[11px] text-slate-400">IMO CALLSIGN: 9463047</span>
                         </div>
 
                         {{-- Ilustrasi Kapal Kontainer Isometrik 3D Modern --}}
@@ -252,7 +252,7 @@
                                         {{ $flagship?->carrier->name ?? 'Maersk Line Intercontinental' }}
                                     </p>
                                 </div>
-                                <span class="px-3 py-1 rounded-lg text-xs font-bold font-mono {{ ($flagship?->delay_status === 'DELAYED') ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
+                                <span class="px-3 py-1 rounded-lg text-xs font-bold {{ ($flagship?->delay_status === 'DELAYED') ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
                                     {{ $flagship?->delay_status === 'DELAYED' ? '+'.$flagship->delay_hours.' JAM TERLAMBAT' : 'TEPAT WAKTU' }}
                                 </span>
                             </div>
@@ -260,9 +260,9 @@
                             {{-- Lintasan Koridor Pelabuhan --}}
                             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 flex items-center justify-between text-xs">
                                 <div>
-                                    <div class="text-[10px] text-slate-400 font-mono">PELABUHAN ASAL</div>
+                                    <div class="text-[10px] text-slate-400 ">PELABUHAN ASAL</div>
                                     <div class="font-extrabold text-slate-800 text-sm mt-0.5">{{ $flagship?->origin->city ?? 'Jakarta' }}</div>
-                                    <div class="text-[10px] text-sky-600 font-mono font-bold">{{ $flagship?->origin->code ?? 'IDTPP' }}</div>
+                                    <div class="text-[10px] text-sky-600 font-bold">{{ $flagship?->origin->code ?? 'IDTPP' }}</div>
                                 </div>
                                 <div class="flex-1 px-4 flex flex-col items-center">
                                     <div class="w-full flex items-center">
@@ -270,12 +270,12 @@
                                         <div class="flex-1 border-t-2 border-dashed border-sky-300 mx-1"></div>
                                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-xs"></span>
                                     </div>
-                                    <span class="text-[9px] font-mono text-slate-400 mt-1">KORIDOR MARITIM INTERNASIONAL</span>
+                                    <span class="text-[9px] text-slate-400 mt-1">KORIDOR MARITIM INTERNASIONAL</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[10px] text-slate-400 font-mono">TUJUAN AKHIR</div>
+                                    <div class="text-[10px] text-slate-400 ">TUJUAN AKHIR</div>
                                     <div class="font-extrabold text-slate-800 text-sm mt-0.5">{{ $flagship?->destination->city ?? 'Rotterdam' }}</div>
-                                    <div class="text-[10px] text-emerald-600 font-mono font-bold">{{ $flagship?->destination->code ?? 'NLRTM' }}</div>
+                                    <div class="text-[10px] text-emerald-600 font-bold">{{ $flagship?->destination->code ?? 'NLRTM' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +283,7 @@
 
                     {{-- Footer Tile 1: Telemetri GPS & Tautan Kendali --}}
                     <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs mt-4">
-                        <div class="flex items-center gap-3 text-slate-500 font-mono text-[11px]">
+                        <div class="flex items-center gap-3 text-slate-500 text-[11px]">
                             <span><i class="fa-solid fa-gauge-high text-sky-600 mr-1"></i> <strong>19.4 Knots</strong></span>
                             <span>•</span>
                             <span><i class="fa-solid fa-box text-slate-400 mr-1"></i> <strong class="text-slate-700">{{ Str::limit($flagship?->cargo_type ?? 'Grade-1 Arabica Coffee Beans', 20) }}</strong></span>
@@ -306,7 +306,7 @@
                                 <i class="fa-solid fa-compass text-sky-600 text-sm"></i>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Kompas & Cuaca Laut</h3>
                             </div>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-bold border border-sky-200">GYRO 042°</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200">GYRO 042°</span>
                         </div>
 
                         {{-- Dial Kompas Melingkar SVG (Light Theme) --}}
@@ -320,11 +320,11 @@
                                     <!-- Lingkaran Skala Derajat -->
                                     <circle cx="100" cy="100" r="76" stroke="#0284c7" stroke-width="0.8" opacity="0.3" fill="none" />
 
-                                    <!-- Indikator Arah Mata Angin (N, E, S, W) -->
-                                    <text x="100" y="26" text-anchor="middle" font-size="12" font-weight="900" fill="#e11d48" font-family="monospace">N</text>
-                                    <text x="180" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#0284c7" font-family="monospace">E</text>
-                                    <text x="100" y="184" text-anchor="middle" font-size="11" font-weight="800" fill="#64748b" font-family="monospace">S</text>
-                                    <text x="20" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#64748b" font-family="monospace">W</text>
+                                    <!-- Indikator Arah Mata Angin (N, E, S, W) - Font Inter Tebal & Jelas -->
+                                    <text x="100" y="26" text-anchor="middle" font-size="12" font-weight="900" fill="#e11d48" font-family="Inter, sans-serif">N</text>
+                                    <text x="180" y="104" text-anchor="middle" font-size="11" font-weight="900" fill="#0284c7" font-family="Inter, sans-serif">E</text>
+                                    <text x="100" y="184" text-anchor="middle" font-size="11" font-weight="900" fill="#64748b" font-family="Inter, sans-serif">S</text>
+                                    <text x="20" y="104" text-anchor="middle" font-size="11" font-weight="900" fill="#64748b" font-family="Inter, sans-serif">W</text>
 
                                     <!-- Garis-Garis Skala Derajat Halus -->
                                     @for($deg = 0; $deg < 360; $deg += 30)
@@ -348,7 +348,7 @@
                                 </svg>
 
                                 <!-- Badge Haluan Digital Tengah -->
-                                <div class="absolute -bottom-2 bg-white px-2.5 py-0.5 rounded-full border border-slate-300 text-[10px] font-mono font-extrabold text-sky-700 shadow-xs">
+                                <div class="absolute -bottom-2 bg-white px-2.5 py-0.5 rounded-full border border-slate-300 text-[10px] font-extrabold text-sky-700 shadow-xs">
                                     HALUAN 042° NE
                                 </div>
                             </div>
@@ -357,34 +357,34 @@
                         {{-- Grid Sensor Oseanografi (4 Indikator) --}}
                         <div class="grid grid-cols-2 gap-2 text-xs pt-2">
                             <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-mono">
+                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-bold">
                                     <i class="fa-solid fa-wind text-sky-600"></i> ANGIN
                                 </div>
-                                <div class="font-extrabold text-slate-800 text-xs mt-1 font-mono">14.2 Knots</div>
+                                <div class="font-extrabold text-slate-800 text-xs mt-1">14.2 Knots</div>
                                 <div class="text-[9px] text-slate-400">Beaufort 4 (Moderat)</div>
                             </div>
 
                             <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-mono">
+                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-bold">
                                     <i class="fa-solid fa-water text-cyan-600"></i> GELOMBANG
                                 </div>
-                                <div class="font-extrabold text-slate-800 text-xs mt-1 font-mono">1.8 Meter</div>
+                                <div class="font-extrabold text-slate-800 text-xs mt-1">1.8 Meter</div>
                                 <div class="text-[9px] text-slate-400">Swell Aman</div>
                             </div>
 
                             <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-mono">
+                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-bold">
                                     <i class="fa-solid fa-temperature-three-quarters text-emerald-600"></i> SUHU LAUT
                                 </div>
-                                <div class="font-extrabold text-slate-800 text-xs mt-1 font-mono">26.4°C</div>
+                                <div class="font-extrabold text-slate-800 text-xs mt-1">26.4°C</div>
                                 <div class="text-[9px] text-slate-400">Tropis Stabil</div>
                             </div>
 
                             <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-mono">
+                                <div class="text-[10px] text-slate-500 flex items-center gap-1 font-bold">
                                     <i class="fa-solid fa-cloud-sun text-amber-600"></i> TEKANAN
                                 </div>
-                                <div class="font-extrabold text-slate-800 text-xs mt-1 font-mono">1013 hPa</div>
+                                <div class="font-extrabold text-slate-800 text-xs mt-1">1013 hPa</div>
                                 <div class="text-[9px] text-slate-400">Barometer Normal</div>
                             </div>
                         </div>
@@ -400,7 +400,7 @@
                                 <i class="fa-solid fa-chart-pie text-emerald-600 text-sm"></i>
                                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Telemetri Armada & SLA</h3>
                             </div>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">LIVE METRICS</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">LIVE METRICS</span>
                         </div>
 
                         {{-- 3 Circular Radial Progress Gauges (Tema Terang) --}}
@@ -416,11 +416,11 @@
                                         <circle cx="40" cy="40" r="35" stroke="#10b981" stroke-width="6" stroke-dasharray="220" stroke-dashoffset="{{ $slaDashOffset }}" stroke-linecap="round" fill="transparent" />
                                     </svg>
                                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                        <span class="text-sm font-extrabold text-slate-900 font-mono">{{ $onTimeRate }}%</span>
+                                        <span class="text-sm font-extrabold text-slate-900 ">{{ $onTimeRate }}%</span>
                                     </div>
                                 </div>
                                 <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">SLA On-Time</span>
-                                <span class="text-[9px] text-emerald-700 font-mono font-bold">Target: &gt;95%</span>
+                                <span class="text-[9px] text-emerald-700 font-bold">Target: &gt;95%</span>
                             </div>
 
                             {{-- Gauge 2: Dalam Pelayaran --}}
@@ -435,11 +435,11 @@
                                         <circle cx="40" cy="40" r="35" stroke="#f59e0b" stroke-width="6" stroke-dasharray="220" stroke-dashoffset="{{ $transitDashOffset }}" stroke-linecap="round" fill="transparent" />
                                     </svg>
                                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                        <span class="text-sm font-extrabold text-slate-900 font-mono">{{ $inTransitCount }}</span>
+                                        <span class="text-sm font-extrabold text-slate-900 ">{{ $inTransitCount }}</span>
                                     </div>
                                 </div>
                                 <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">Berlayar</span>
-                                <span class="text-[9px] text-amber-700 font-mono font-bold">Aktif di Laut</span>
+                                <span class="text-[9px] text-amber-700 font-bold">Aktif di Laut</span>
                             </div>
 
                             {{-- Gauge 3: Total Manifest --}}
@@ -450,11 +450,11 @@
                                         <circle cx="40" cy="40" r="35" stroke="#0284c7" stroke-width="6" stroke-dasharray="220" stroke-dashoffset="0" stroke-linecap="round" fill="transparent" />
                                     </svg>
                                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                        <span class="text-sm font-extrabold text-slate-900 font-mono">{{ $totalShipments }}</span>
+                                        <span class="text-sm font-extrabold text-slate-900 ">{{ $totalShipments }}</span>
                                     </div>
                                 </div>
                                 <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">Manifest</span>
-                                <span class="text-[9px] text-sky-700 font-mono font-bold">Total Kargo</span>
+                                <span class="text-[9px] text-sky-700 font-bold">Total Kargo</span>
                             </div>
                         </div>
 
@@ -466,7 +466,7 @@
                                     <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
                                     <span class="font-bold">Keterlambatan Armada</span>
                                 </div>
-                                <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 font-mono font-extrabold border border-rose-200">
+                                <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 font-extrabold border border-rose-200">
                                     {{ $delayedCount }} Kapal
                                 </span>
                             </div>
@@ -477,7 +477,7 @@
                                     <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
                                     <span class="font-bold">Kendala Lapangan (Exception)</span>
                                 </div>
-                                <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 font-mono font-extrabold border border-amber-200">
+                                <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 font-extrabold border border-amber-200">
                                     {{ $openExceptionsCount }} Kasus
                                 </span>
                             </div>
@@ -498,7 +498,7 @@
                             <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
                             <div>
                                 <h3 class="font-extrabold text-slate-800 uppercase tracking-wider">Radar Maritim Global & Jaringan Armada</h3>
-                                <p class="text-[10px] text-slate-400 font-mono">Proyeksi Morphing 2D/3D (Vercel Network Architecture Style)</p>
+                                <p class="text-[10px] text-slate-400 ">Proyeksi Morphing 2D/3D (Vercel Network Architecture Style)</p>
                             </div>
                         </div>
 
@@ -530,7 +530,7 @@
                         <div id="regions-sidebar" class="hidden md:flex flex-col w-56 border-r border-slate-200 bg-slate-50/70 p-3 space-y-2 overflow-y-auto custom-scroll text-xs transition-all duration-200">
                             <div class="flex items-center justify-between pb-2 border-b border-slate-200">
                                 <span class="font-bold text-[11px] text-slate-700 uppercase tracking-wider">Wilayah Pelabuhan</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold font-mono">6 Hub</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold ">6 Hub</span>
                             </div>
 
                             {{-- Item Wilayah Pelabuhan --}}
@@ -541,7 +541,7 @@
                                             <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Tanjung Priok</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">IDTPP</span>
+                                        <span class="text-[9px] text-slate-400">IDTPP</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Jakarta, Indonesia</div>
                                 </button>
@@ -552,7 +552,7 @@
                                             <span class="w-2 h-2 rounded-full bg-sky-500"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Rotterdam</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">NLRTM</span>
+                                        <span class="text-[9px] text-slate-400">NLRTM</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Rotterdam, Belanda</div>
                                 </button>
@@ -563,7 +563,7 @@
                                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Singapore</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">SGSIN</span>
+                                        <span class="text-[9px] text-slate-400">SGSIN</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">PSA Singapore, Hub Transit</div>
                                 </button>
@@ -574,7 +574,7 @@
                                             <span class="w-2 h-2 rounded-full bg-sky-500"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Hamburg</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">DEHAM</span>
+                                        <span class="text-[9px] text-slate-400">DEHAM</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Hamburg, Jerman</div>
                                 </button>
@@ -585,7 +585,7 @@
                                             <span class="w-2 h-2 rounded-full bg-sky-500"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port Botany</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">AUBOT</span>
+                                        <span class="text-[9px] text-slate-400">AUBOT</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Sydney, Australia</div>
                                 </button>
@@ -596,7 +596,7 @@
                                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                             <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Tanjung Perak</strong>
                                         </div>
-                                        <span class="text-[9px] font-mono text-slate-400">IDSUB</span>
+                                        <span class="text-[9px] text-slate-400">IDSUB</span>
                                     </div>
                                     <div class="text-[10px] text-slate-500 mt-0.5">Surabaya, Indonesia</div>
                                 </button>
@@ -615,7 +615,7 @@
                                 <canvas id="morph-canvas" class="w-full h-full cursor-grab active:cursor-grabbing block"></canvas>
                                 
                                 {{-- Petunjuk Interaktif Drag 3D Globe --}}
-                                <div id="globe-drag-hint" class="hidden absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 font-mono shadow-sm pointer-events-none">
+                                <div id="globe-drag-hint" class="hidden absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 shadow-sm pointer-events-none">
                                     <i class="fa-solid fa-hand-pointer text-sky-600 mr-1.5"></i> Geser mouse untuk memutar Globe 3D
                                 </div>
                             </div>
@@ -631,7 +631,7 @@
                                     <strong class="text-slate-900 font-extrabold flex items-center gap-2">
                                         <i class="fa-solid fa-shield-heart text-emerald-600"></i> SLA Ketepatan Armada
                                     </strong>
-                                    <span class="px-2 py-0.5 rounded-lg font-mono font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px]">{{ $onTimeRate }}%</span>
+                                    <span class="px-2 py-0.5 rounded-lg font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px]">{{ $onTimeRate }}%</span>
                                 </div>
                                 <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                                     <div class="bg-gradient-to-r from-emerald-500 to-sky-500 h-full rounded-full" style="width: {{ $onTimeRate }}%;"></div>
@@ -644,12 +644,12 @@
                             {{-- Floating Detail Popover Saat Wilayah Dipilih --}}
                             <div id="selected-port-card" class="hidden absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-sky-300 shadow-xl max-w-xs text-xs space-y-1.5 transition-all">
                                 <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5">
-                                    <span id="port-card-code" class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold font-mono text-[10px]">IDTPP</span>
+                                    <span id="port-card-code" class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold text-[10px]">IDTPP</span>
                                     <button onclick="closePortCard()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                                 <div id="port-card-title" class="font-extrabold text-slate-900 text-sm">Port of Tanjung Priok</div>
                                 <div id="port-card-city" class="text-slate-500 text-[11px]">Jakarta, Indonesia</div>
-                                <div id="port-card-coords" class="text-sky-700 font-mono text-[10px] pt-1">LAT: -6.1038 • LNG: 106.8827</div>
+                                <div id="port-card-coords" class="text-sky-700 text-[10px] pt-1">LAT: -6.1038 • LNG: 106.8827</div>
                             </div>
                         </div>
 
@@ -666,7 +666,7 @@
                                 <i class="fa-solid fa-boxes-stacked text-sky-600 text-sm"></i>
                                 <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Antrean Manifest Pelayaran</h3>
                             </div>
-                            <span class="text-xs text-sky-700 font-mono font-bold">{{ $shipments->total() }} Data Tercatat</span>
+                            <span class="text-xs text-sky-700 font-bold">{{ $shipments->total() }} Data Tercatat</span>
                         </div>
 
                         {{-- Kolom Pencarian --}}
@@ -717,7 +717,7 @@
                                 <div class="flex items-start justify-between gap-2">
                                     <div>
                                         <div class="flex items-center gap-2">
-                                            <span class="font-extrabold text-sm text-slate-900 group-hover:text-sky-600 transition font-mono">{{ $s->shipment_number }}</span>
+                                            <span class="font-extrabold text-sm text-slate-900 group-hover:text-sky-600 transition ">{{ $s->shipment_number }}</span>
                                             <span class="text-[10px] font-bold px-2 py-0.5 rounded {{ $statusBadge[$s->current_status] ?? 'bg-slate-200 text-slate-800' }}">
                                                 {{ $statusLabel[$s->current_status] ?? $s->current_status }}
                                             </span>
@@ -730,11 +730,11 @@
                                     {{-- Lencana Status Keterlambatan --}}
                                     <div>
                                         @if($s->delay_status === 'DELAYED')
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1 font-mono">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1 ">
                                                 <i class="fa-solid fa-triangle-exclamation text-[9px]"></i> +{{ $s->delay_hours }} Jam
                                             </span>
                                         @else
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 font-mono">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 ">
                                                 TEPAT WAKTU
                                             </span>
                                         @endif
@@ -745,7 +745,7 @@
                                 <div class="mt-3 p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
                                     <div class="text-left">
                                         <div class="font-bold text-slate-800">{{ $s->origin->city }}</div>
-                                        <div class="text-[10px] text-slate-400 font-mono">{{ $s->origin->code }}</div>
+                                        <div class="text-[10px] text-slate-400 ">{{ $s->origin->code }}</div>
                                     </div>
                                     <div class="flex-1 px-3 flex flex-col items-center">
                                         <div class="w-full flex items-center">
@@ -753,11 +753,11 @@
                                             <div class="flex-1 border-t-2 border-dashed border-sky-300 mx-1"></div>
                                             <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
                                         </div>
-                                        <span class="text-[9px] text-slate-400 font-mono mt-0.5">KORIDOR LAUT</span>
+                                        <span class="text-[9px] text-slate-400 mt-0.5">KORIDOR LAUT</span>
                                     </div>
                                     <div class="text-right">
                                         <div class="font-bold text-slate-800">{{ $s->destination->city }}</div>
-                                        <div class="text-[10px] text-slate-400 font-mono">{{ $s->destination->code }}</div>
+                                        <div class="text-[10px] text-slate-400 ">{{ $s->destination->code }}</div>
                                     </div>
                                 </div>
 
@@ -795,7 +795,7 @@
                             <i class="fa-solid fa-chart-column text-sky-600 text-sm"></i>
                             <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Distribusi Volume Armada per Status</h4>
                         </div>
-                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">Chart.js Engine</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">Chart.js Engine</span>
                     </div>
                     <div class="h-44 relative">
                         <canvas id="fleetStatusBarChart"></canvas>
@@ -815,7 +815,7 @@
                         <div class="space-y-2.5 text-xs">
                             <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900">
                                 <div class="font-bold flex items-center justify-between">
-                                    <span class="text-slate-900 font-mono">KARGO #CTG-2026-0081</span>
+                                    <span class="text-slate-900 ">KARGO #CTG-2026-0081</span>
                                     <span class="text-[10px] bg-rose-200 text-rose-800 px-2 py-0.5 rounded-md font-bold">BADAI MONSUN</span>
                                 </div>
                                 <p class="text-[11px] text-rose-700 mt-2 leading-relaxed">
@@ -1005,7 +1005,7 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             Sistem & API Sanctum Aktif (100% Operational)
                         </span>
-                        <span class="text-slate-400 font-mono">UAS Pemrograman Web 2</span>
+                        <span class="text-slate-400 ">UAS Pemrograman Web 2</span>
                     </div>
                 </div>
             </footer>
@@ -1548,7 +1548,7 @@
                     beaconMarker.bindPopup(`
                         <div style="font-family: sans-serif; font-size: 11px; line-height: 1.5; min-width: 170px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                                <strong style="color: #0f172a; font-size: 12px; font-family: monospace;">${item.number}</strong>
+                                <strong style="color: #0f172a; font-size: 12px; font-family: Inter, sans-serif;">${item.number}</strong>
                                 <span style="font-size: 9px; padding: 1px 6px; border-radius: 4px; font-weight: bold; background: ${isDelayed ? '#ffe4e6' : (isDelivered ? '#d1fae5' : '#e0f2fe')}; color: ${isDelayed ? '#be123c' : (isDelivered ? '#047857' : '#0369a1')};">
                                     ${item.status}
                                 </span>

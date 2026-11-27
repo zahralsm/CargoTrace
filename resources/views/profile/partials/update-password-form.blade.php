@@ -11,7 +11,7 @@
                 Gunakan kombinasi minimal 8 karakter dengan huruf kapital, angka, dan simbol untuk keamanan akun maksimal.
             </p>
         </div>
-        <span class="text-[11px] font-mono text-slate-400">Min. 8 Karakter</span>
+        <span class="text-[11px] text-slate-400">Min. 8 Karakter</span>
     </header>
 
     <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-5 text-xs">
