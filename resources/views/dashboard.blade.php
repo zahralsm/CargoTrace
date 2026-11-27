@@ -527,7 +527,7 @@
                     <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
                         
                         {{-- Panel Sisi Kiri: Daftar Wilayah Pelabuhan (Vercel Regions Sidebar) --}}
-                        <div class="hidden md:flex flex-col w-56 border-r border-slate-200 bg-slate-50/70 p-3 space-y-2 overflow-y-auto custom-scroll text-xs">
+                        <div id="regions-sidebar" class="hidden md:flex flex-col w-56 border-r border-slate-200 bg-slate-50/70 p-3 space-y-2 overflow-y-auto custom-scroll text-xs transition-all duration-200">
                             <div class="flex items-center justify-between pb-2 border-b border-slate-200">
                                 <span class="font-bold text-[11px] text-slate-700 uppercase tracking-wider">Wilayah Pelabuhan</span>
                                 <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold font-mono">6 Hub</span>
@@ -611,7 +611,7 @@
                         <div class="flex-1 relative bg-white overflow-hidden h-full">
                             
                             {{-- 1. Kanvas Morphing 2D Peta Datar & 3D Globe --}}
-                            <div id="morph-canvas-wrapper" class="w-full h-full relative">
+                            <div id="morph-canvas-wrapper" class="w-full h-full absolute inset-0 z-10 transition-opacity duration-300 opacity-100 pointer-events-auto">
                                 <canvas id="morph-canvas" class="w-full h-full cursor-grab active:cursor-grabbing block"></canvas>
                                 
                                 {{-- Petunjuk Interaktif Drag 3D Globe --}}
@@ -620,9 +620,9 @@
                                 </div>
                             </div>
 
-                            {{-- 2. Kanvas Peta Leaflet Satelit GIS --}}
-                            <div id="radar-canvas-wrapper" class="w-full h-full hidden absolute inset-0">
-                                <div id="radar-canvas" class="w-full h-full bg-slate-100"></div>
+                            {{-- 2. Kanvas Peta Leaflet Satelit GIS (Tidak display:none agar render ukuran akurat) --}}
+                            <div id="radar-canvas-wrapper" class="w-full h-full absolute inset-0 z-0 transition-opacity duration-300 opacity-0 pointer-events-none">
+                                <div id="radar-canvas" class="w-full h-full bg-[#f2efe9]"></div>
                             </div>
 
                             {{-- Floating Glass HUD: Ringkasan Telemetri Peta Melayang --}}
@@ -1356,6 +1356,7 @@
             const btnLeaflet = document.getElementById('btn-mode-leaflet');
             const morphWrapper = document.getElementById('morph-canvas-wrapper');
             const radarWrapper = document.getElementById('radar-canvas-wrapper');
+            const regionsSidebar = document.getElementById('regions-sidebar');
             const dragHint = document.getElementById('globe-drag-hint');
 
             // Reset Kelas Tombol
@@ -1371,23 +1372,71 @@
             if (mode === 'flat') {
                 targetMorphT = 0;
                 btnFlat.className = btnFlat.className.replace(inactiveClass, activeClass);
-                morphWrapper.classList.remove('hidden');
-                radarWrapper.classList.add('hidden');
-                dragHint.classList.add('hidden');
+                if (regionsSidebar) regionsSidebar.style.display = '';
+                if (morphWrapper) {
+                    morphWrapper.style.display = 'block';
+                    morphWrapper.classList.remove('opacity-0', 'pointer-events-none');
+                    morphWrapper.classList.add('opacity-100', 'pointer-events-auto');
+                }
+                if (radarWrapper) {
+                    radarWrapper.style.display = 'none';
+                    radarWrapper.classList.add('opacity-0', 'pointer-events-none');
+                    radarWrapper.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+                if (dragHint) dragHint.classList.add('hidden');
+                setTimeout(resizeMorphCanvas, 60);
             } else if (mode === 'globe') {
                 targetMorphT = 1;
                 btnGlobe.className = btnGlobe.className.replace(inactiveClass, activeClass);
-                morphWrapper.classList.remove('hidden');
-                radarWrapper.classList.add('hidden');
-                dragHint.classList.remove('hidden');
+                if (regionsSidebar) regionsSidebar.style.display = '';
+                if (morphWrapper) {
+                    morphWrapper.style.display = 'block';
+                    morphWrapper.classList.remove('opacity-0', 'pointer-events-none');
+                    morphWrapper.classList.add('opacity-100', 'pointer-events-auto');
+                }
+                if (radarWrapper) {
+                    radarWrapper.style.display = 'none';
+                    radarWrapper.classList.add('opacity-0', 'pointer-events-none');
+                    radarWrapper.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+                if (dragHint) dragHint.classList.remove('hidden');
+                setTimeout(resizeMorphCanvas, 60);
             } else if (mode === 'leaflet') {
                 btnLeaflet.className = btnLeaflet.className.replace(inactiveClass, activeClass);
-                morphWrapper.classList.add('hidden');
-                radarWrapper.classList.remove('hidden');
-                dragHint.classList.add('hidden');
+                
+                // Pada mode Satelit GIS, sembunyikan sidebar kiri agar peta OpenStreetMap tampil 100% penuh persis desain sebelumnya
+                if (regionsSidebar) regionsSidebar.style.display = 'none';
+                
+                if (morphWrapper) {
+                    morphWrapper.style.display = 'none';
+                    morphWrapper.classList.add('opacity-0', 'pointer-events-none');
+                    morphWrapper.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+                if (radarWrapper) {
+                    radarWrapper.style.display = 'block';
+                    radarWrapper.classList.remove('opacity-0', 'pointer-events-none');
+                    radarWrapper.classList.add('opacity-100', 'pointer-events-auto');
+                }
+                if (dragHint) dragHint.classList.add('hidden');
 
+                // Render ulang ukuran & koordinat Leaflet OpenStreetMap secara instan
                 if (radarMap) {
-                    setTimeout(() => { radarMap.invalidateSize(); }, 200);
+                    setTimeout(() => {
+                        radarMap.invalidateSize(true);
+                        if (initialBounds && initialBounds.length > 0) {
+                            radarMap.fitBounds(initialBounds, { padding: [40, 40] });
+                        }
+                        // Buka popup kapal tertunda otomatis persis desain sebelumnya
+                        const mapData = @json($mapShipments);
+                        const delayedItem = mapData.find(d => d.delay_status === 'DELAYED');
+                        if (delayedItem && markersMap[delayedItem.id]) {
+                            markersMap[delayedItem.id].marker.openPopup();
+                        }
+                    }, 50);
+
+                    setTimeout(() => {
+                        if (radarMap) radarMap.invalidateSize(true);
+                    }, 250);
                 }
             }
         }
