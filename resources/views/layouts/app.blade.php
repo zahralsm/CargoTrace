@@ -91,7 +91,7 @@
             <!-- Header Halaman -->
             @isset($header)
                 <header class="bg-white border-b border-slate-200">
-                    <div class="max-w-7xl mx-auto py-3.5 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-[1600px] mx-auto py-3.5 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>

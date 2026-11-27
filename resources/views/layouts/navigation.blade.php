@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-[#1b1f3b] border-b border-[#292f54] text-white">
     <!-- Menu Navigasi Utama -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center gap-8">
                 <!-- Logo CargoTrace -->

@@ -27,7 +27,7 @@
     </x-slot>
 
     <div x-data="{ activeTab: 'audit' }" class="py-6 bg-slate-100 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             {{-- Pesan Notifikasi Sukses --}}
             @if(session('success'))

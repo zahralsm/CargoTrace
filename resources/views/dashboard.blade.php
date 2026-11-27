@@ -854,7 +854,7 @@
                     <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" @click="showCreateModal = false"></div>
 
                     <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-6">
-                        <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-3xl border border-slate-200">
+                        <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border border-slate-200">
                             
                             {{-- Header Modal --}}
                             <div class="bg-[#1b1f3b] px-6 py-5 flex items-center justify-between text-white border-b border-[#292f54]">
