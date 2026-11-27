@@ -490,44 +490,170 @@
             {{-- 3. BENTO GRID BARIS 2: RADAR MARITIM GLOBAL (7 Kolom) + ANTREAN PELAYARAN KARGO (5 Kolom) --}}
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-                {{-- BENTO TILE 4 (7 Kolom): RADAR MARITIM GLOBAL DENGAN PETA LEAFLET --}}
-                <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden relative flex flex-col">
-                    {{-- Header Bar Peta Radar --}}
+                {{-- BENTO TILE 4 (7 Kolom): RADAR MARITIM 2D/3D GLOBE MORPHING (GAYA DESIGN SPELLS / VERCEL REGIONS) --}}
+                <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden relative flex flex-col h-[585px]">
+                    {{-- Header Bar Peta Radar dengan Toggle Kontrol Vercel Style --}}
                     <div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-3 text-xs">
                         <div class="flex items-center gap-2.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
-                            <h3 class="font-extrabold text-slate-800 uppercase tracking-wider">Radar Maritim Global & Lintasan Armada</h3>
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 uppercase tracking-wider">Radar Maritim Global & Jaringan Armada</h3>
+                                <p class="text-[10px] text-slate-400 font-mono">Proyeksi Morphing 2D/3D (Vercel Network Architecture Style)</p>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2 text-slate-500 font-mono text-[11px]">
-                            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold">OpenStreetMap GIS</span>
-                            <span>• Koordinat WGS-84</span>
+
+                        {{-- Tombol Segmented Toggle: 2D Peta Datar / 3D Globe / Satelit GIS --}}
+                        <div class="flex items-center bg-slate-200/80 p-1 rounded-xl border border-slate-300/80 text-xs font-bold shadow-2xs">
+                            <button id="btn-mode-flat" onclick="switchMapMode('flat')" title="Lihat wilayah pada peta 2D datar" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition bg-white text-slate-900 shadow-xs">
+                                <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <path d="M21 15l-5-5L5 21"/>
+                                </svg>
+                                <span>Peta 2D</span>
+                            </button>
+                            <button id="btn-mode-globe" onclick="switchMapMode('globe')" title="Lihat wilayah pada bola dunia 3D interaktif" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition text-slate-600 hover:text-slate-900">
+                                <i class="fa-solid fa-earth-americas text-xs text-sky-600"></i>
+                                <span>Globe 3D</span>
+                            </button>
+                            <button id="btn-mode-leaflet" onclick="switchMapMode('leaflet')" title="Beralih ke peta satelit GIS OSM" class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition text-slate-600 hover:text-slate-900">
+                                <i class="fa-solid fa-satellite text-xs text-slate-500"></i>
+                                <span>Satelit GIS</span>
+                            </button>
                         </div>
                     </div>
 
-                    {{-- Kanvas Peta Leaflet --}}
-                    <div id="radar-canvas" class="w-full h-[520px] bg-slate-100 relative z-0"></div>
+                    {{-- Konten Utama: Sidebar Wilayah Pelabuhan (Kiri) + Kanvas Peta Morphing / GIS (Kanan) --}}
+                    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+                        
+                        {{-- Panel Sisi Kiri: Daftar Wilayah Pelabuhan (Vercel Regions Sidebar) --}}
+                        <div class="hidden md:flex flex-col w-56 border-r border-slate-200 bg-slate-50/70 p-3 space-y-2 overflow-y-auto custom-scroll text-xs">
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                                <span class="font-bold text-[11px] text-slate-700 uppercase tracking-wider">Wilayah Pelabuhan</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-bold font-mono">6 Hub</span>
+                            </div>
 
-                    {{-- Floating Glass HUD: Ringkasan Telemetri Peta Melayang --}}
-                    <div class="absolute bottom-5 left-5 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-lg max-w-xs text-xs space-y-2">
-                        <div class="flex items-center justify-between gap-4">
-                            <strong class="text-slate-900 font-extrabold flex items-center gap-2">
-                                <i class="fa-solid fa-shield-heart text-emerald-600"></i> SLA Ketepatan Armada
-                            </strong>
-                            <span class="px-2 py-0.5 rounded-lg font-mono font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px]">{{ $onTimeRate }}%</span>
+                            {{-- Item Wilayah Pelabuhan --}}
+                            <div class="space-y-1.5">
+                                <button onclick="selectPortFromList('IDTPP')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Tanjung Priok</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">IDTPP</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">Jakarta, Indonesia</div>
+                                </button>
+
+                                <button onclick="selectPortFromList('NLRTM')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Rotterdam</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">NLRTM</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">Rotterdam, Belanda</div>
+                                </button>
+
+                                <button onclick="selectPortFromList('SGSIN')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Singapore</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">SGSIN</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">PSA Singapore, Hub Transit</div>
+                                </button>
+
+                                <button onclick="selectPortFromList('DEHAM')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port of Hamburg</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">DEHAM</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">Hamburg, Jerman</div>
+                                </button>
+
+                                <button onclick="selectPortFromList('AUBOT')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Port Botany</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">AUBOT</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">Sydney, Australia</div>
+                                </button>
+
+                                <button onclick="selectPortFromList('IDSUB')" class="w-full text-left p-2 rounded-xl border border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/40 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                            <strong class="text-slate-800 text-[11px] group-hover:text-sky-600">Tanjung Perak</strong>
+                                        </div>
+                                        <span class="text-[9px] font-mono text-slate-400">IDSUB</span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">Surabaya, Indonesia</div>
+                                </button>
+                            </div>
+
+                            <div class="pt-2 text-[10px] text-slate-400 leading-tight">
+                                <i class="fa-solid fa-circle-info mr-1"></i> Klik wilayah untuk rotasi & fokus otomatis pada peta/globe.
+                            </div>
                         </div>
-                        <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-emerald-500 to-sky-500 h-full rounded-full" style="width: {{ $onTimeRate }}%;"></div>
+
+                        {{-- Area Kanvas Utama: Kanvas Morphing 2D/3D & Peta Leaflet --}}
+                        <div class="flex-1 relative bg-white overflow-hidden h-full">
+                            
+                            {{-- 1. Kanvas Morphing 2D Peta Datar & 3D Globe --}}
+                            <div id="morph-canvas-wrapper" class="w-full h-full relative">
+                                <canvas id="morph-canvas" class="w-full h-full cursor-grab active:cursor-grabbing block"></canvas>
+                                
+                                {{-- Petunjuk Interaktif Drag 3D Globe --}}
+                                <div id="globe-drag-hint" class="hidden absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 text-[11px] text-slate-600 font-mono shadow-sm pointer-events-none">
+                                    <i class="fa-solid fa-hand-pointer text-sky-600 mr-1.5"></i> Geser mouse untuk memutar Globe 3D
+                                </div>
+                            </div>
+
+                            {{-- 2. Kanvas Peta Leaflet Satelit GIS --}}
+                            <div id="radar-canvas-wrapper" class="w-full h-full hidden absolute inset-0">
+                                <div id="radar-canvas" class="w-full h-full bg-slate-100"></div>
+                            </div>
+
+                            {{-- Floating Glass HUD: Ringkasan Telemetri Peta Melayang --}}
+                            <div class="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-lg max-w-xs text-xs space-y-2 pointer-events-auto">
+                                <div class="flex items-center justify-between gap-4">
+                                    <strong class="text-slate-900 font-extrabold flex items-center gap-2">
+                                        <i class="fa-solid fa-shield-heart text-emerald-600"></i> SLA Ketepatan Armada
+                                    </strong>
+                                    <span class="px-2 py-0.5 rounded-lg font-mono font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px]">{{ $onTimeRate }}%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-emerald-500 to-sky-500 h-full rounded-full" style="width: {{ $onTimeRate }}%;"></div>
+                                </div>
+                                <p class="text-[10px] text-slate-500 leading-relaxed">
+                                    {{ $totalShipments - $delayedCount }} dari {{ $totalShipments }} kargo berlayar tepat waktu. Putar globe 3D atau klik wilayah untuk inspeksi.
+                                </p>
+                            </div>
+
+                            {{-- Floating Detail Popover Saat Wilayah Dipilih --}}
+                            <div id="selected-port-card" class="hidden absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-sky-300 shadow-xl max-w-xs text-xs space-y-1.5 transition-all">
+                                <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5">
+                                    <span id="port-card-code" class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold font-mono text-[10px]">IDTPP</span>
+                                    <button onclick="closePortCard()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                                <div id="port-card-title" class="font-extrabold text-slate-900 text-sm">Port of Tanjung Priok</div>
+                                <div id="port-card-city" class="text-slate-500 text-[11px]">Jakarta, Indonesia</div>
+                                <div id="port-card-coords" class="text-sky-700 font-mono text-[10px] pt-1">LAT: -6.1038 • LNG: 106.8827</div>
+                            </div>
                         </div>
-                        <p class="text-[10px] text-slate-500 leading-relaxed">
-                            {{ $totalShipments - $delayedCount }} dari {{ $totalShipments }} kargo berlayar tepat waktu. Klik kartu kargo untuk fokus radar otomatis.
-                        </p>
+
                     </div>
-
-                    {{-- Tombol Reset Pandangan Peta --}}
-                    <button onclick="resetRadarView()" class="absolute top-16 right-4 z-[400] bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-bold shadow-md transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-arrows-to-eye text-sky-600"></i>
-                        <span>Pusatkan Armada</span>
-                    </button>
                 </div>
 
                 {{-- BENTO TILE 5 (5 Kolom): ANTREAN MANIFEST PELAYARAN KARGO --}}
@@ -887,7 +1013,7 @@
         </div>
     </div>
 
-    {{-- SCRIPT: JAM UTC, RADAR LEAFLET TERANG, DAN CHART.JS --}}
+    {{-- SCRIPT: JAM UTC, KANVAS MORPHING 2D/3D (VERCEL DESIGN SPELLS), LEAFLET SATELIT, & CHART.JS --}}
     <script>
         let radarMap;
         const markersMap = {};
@@ -905,7 +1031,408 @@
         setInterval(updateUtcClock, 1000);
         updateUtcClock();
 
-        // 2. Radar Interaktif Leaflet dengan Tile Peta Terang OpenStreetMap
+        // 2. Data Wilayah Pelabuhan & Koridor Maritim (Vercel Regions Inspired)
+        const maritimeRegions = [
+            { id: 1, code: 'IDTPP', city: 'Jakarta', name: 'Port of Tanjung Priok', country: 'Indonesia', lat: -6.1038, lng: 106.8827, role: 'Hub Utama (Flagship)', cargo: 'Arabica Coffee, Textile', isDelayed: true },
+            { id: 2, code: 'NLRTM', city: 'Rotterdam', name: 'Port of Rotterdam', country: 'Belanda', lat: 51.9496, lng: 4.1453, role: 'Gateway Eropa Barat', cargo: 'Crude Oil, Electronics', isDelayed: false },
+            { id: 3, code: 'SGSIN', city: 'Singapura', name: 'Port of Singapore', country: 'Singapura', lat: 1.2644, lng: 103.8228, role: 'Hub Transit Malaka', cargo: 'Transshipment Cargo', isDelayed: false },
+            { id: 4, code: 'DEHAM', city: 'Hamburg', name: 'Port of Hamburg', country: 'Jerman', lat: 53.5353, lng: 9.9872, role: 'Koridor Baltik', cargo: 'Machinery & Steel', isDelayed: false },
+            { id: 5, code: 'AUBOT', city: 'Sydney', name: 'Port Botany', country: 'Australia', lat: -33.9744, lng: 151.2181, role: 'Terminal Pasifik Selatan', cargo: 'Agricultural Grains', isDelayed: false },
+            { id: 6, code: 'IDSUB', city: 'Surabaya', name: 'Port of Tanjung Perak', country: 'Indonesia', lat: -7.1982, lng: 112.7339, role: 'Feeder Domestik Timur', cargo: 'Fertilizer, Cocoa', isDelayed: false }
+        ];
+
+        // Rute Koridor Kapal
+        const activeCorridors = [
+            { from: maritimeRegions[0], to: maritimeRegions[1], label: 'Jakarta - Rotterdam', isDelayed: true },
+            { from: maritimeRegions[0], to: maritimeRegions[4], label: 'Jakarta - Sydney', isDelayed: false },
+            { from: maritimeRegions[0], to: maritimeRegions[3], label: 'Jakarta - Hamburg', isDelayed: false },
+            { from: maritimeRegions[5], to: maritimeRegions[2], label: 'Surabaya - Singapore', isDelayed: false }
+        ];
+
+        // Titik Benua (Stippled World Dots)
+        let worldPoints = [];
+        fetch('{{ asset("data/world_points.json") }}')
+            .then(res => res.json())
+            .then(data => { worldPoints = data; })
+            .catch(() => {
+                // Fallback titik grid jika fetch gagal
+                worldPoints = [
+                    [55,-130],[40,-100],[30,-90],[10,-70],[-20,-50],[-35,-60],[50,10],[45,2],[55,30],
+                    [20,20],[0,20],[-30,25],[30,75],[20,80],[35,105],[50,120],[35,135],[0,105],
+                    [-7,110],[-30,135],[-35,145],[52,4],[53,10],[-6,106],[-33,151],[1,103]
+                ];
+            });
+
+        // 3. Engine Kanvas Morphing 2D Peta Datar & 3D Globe
+        let currentMapMode = 'flat'; // 'flat' | 'globe' | 'leaflet'
+        let morphT = 0;             // 0 = 2D Flat, 1 = 3D Globe
+        let targetMorphT = 0;
+        let globeRotationPhi = 95;   // Orientasi longitude awal (fokus Nusantara & Samudra Hindia)
+        let globeRotationTheta = 12; // Tilt elevasi
+        let isDraggingGlobe = false;
+        let lastMousePos = { x: 0, y: 0 };
+        let selectedPort = null;
+        let pulseTimer = 0;
+
+        const morphCanvas = document.getElementById('morph-canvas');
+        const ctx = morphCanvas ? morphCanvas.getContext('2d') : null;
+
+        function resizeMorphCanvas() {
+            if (!morphCanvas) return;
+            const rect = morphCanvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            morphCanvas.width = rect.width * dpr;
+            morphCanvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resizeMorphCanvas);
+        setTimeout(resizeMorphCanvas, 100);
+
+        // Kontrol Mouse Drag untuk Globe 3D
+        if (morphCanvas) {
+            morphCanvas.addEventListener('mousedown', (e) => {
+                if (currentMapMode === 'globe' || morphT > 0.5) {
+                    isDraggingGlobe = true;
+                    lastMousePos = { x: e.clientX, y: e.clientY };
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDraggingGlobe) {
+                    const dx = e.clientX - lastMousePos.x;
+                    const dy = e.clientY - lastMousePos.y;
+                    globeRotationPhi -= dx * 0.4;
+                    globeRotationTheta = Math.max(-45, Math.min(45, globeRotationTheta - dy * 0.4));
+                    lastMousePos = { x: e.clientX, y: e.clientY };
+                }
+            });
+
+            window.addEventListener('mouseup', () => { isDraggingGlobe = false; });
+
+            // Touch events untuk layar sentuh / mobile
+            morphCanvas.addEventListener('touchstart', (e) => {
+                if ((currentMapMode === 'globe' || morphT > 0.5) && e.touches.length === 1) {
+                    isDraggingGlobe = true;
+                    lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            });
+            window.addEventListener('touchmove', (e) => {
+                if (isDraggingGlobe && e.touches.length === 1) {
+                    const dx = e.touches[0].clientX - lastMousePos.x;
+                    const dy = e.touches[0].clientY - lastMousePos.y;
+                    globeRotationPhi -= dx * 0.4;
+                    globeRotationTheta = Math.max(-45, Math.min(45, globeRotationTheta - dy * 0.4));
+                    lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            });
+            window.addEventListener('touchend', () => { isDraggingGlobe = false; });
+        }
+
+        // Loop Animasi Render Morphing 60 FPS
+        function renderMorphFrame() {
+            if (!ctx || currentMapMode === 'leaflet') {
+                requestAnimationFrame(renderMorphFrame);
+                return;
+            }
+
+            const w = morphCanvas.width / (window.devicePixelRatio || 1);
+            const h = morphCanvas.height / (window.devicePixelRatio || 1);
+            pulseTimer += 0.04;
+
+            // Transisi halus morphing
+            morphT += (targetMorphT - morphT) * 0.08;
+
+            // Auto-rotasi lembut pada Globe 3D jika sedang tidak ditarik mouse
+            if ((currentMapMode === 'globe' || morphT > 0.6) && !isDraggingGlobe) {
+                globeRotationPhi += 0.12;
+            }
+
+            // Bersihkan kanvas putih
+            ctx.clearRect(0, 0, w, h);
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const globeRadius = Math.min(w, h) * 0.38;
+
+            // Latar Belakang Bola Globe 3D saat transisi atau di mode globe
+            if (morphT > 0.02) {
+                ctx.save();
+                ctx.globalAlpha = morphT;
+                // Bayangan bola dunia
+                const globeGrad = ctx.createRadialGradient(cx - globeRadius * 0.3, cy - globeRadius * 0.3, globeRadius * 0.1, cx, cy, globeRadius);
+                globeGrad.addColorStop(0, '#ffffff');
+                globeGrad.addColorStop(0.8, '#f1f5f9');
+                globeGrad.addColorStop(1, '#e2e8f0');
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
+                ctx.fillStyle = globeGrad;
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.stroke();
+
+                // Efek atmosfer halus
+                ctx.beginPath();
+                ctx.arc(cx, cy, globeRadius + 3, 0, Math.PI * 2);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(2, 132, 199, 0.15)';
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Fungsi Proyeksi Geometris: 2D Equirectangular & 3D Orthographic
+            function project(lat, lng) {
+                // 1. Posisi 2D Datar
+                const x2d = cx + (lng / 180) * (w * 0.44);
+                const y2d = cy - (lat / 90) * (h * 0.42);
+
+                // 2. Posisi 3D Bola Globe
+                const rad = Math.PI / 180;
+                const phi0 = globeRotationTheta * rad;
+                const deltaLambda = (lng - globeRotationPhi) * rad;
+                const phi = lat * rad;
+
+                const cosPhi = Math.cos(phi);
+                const sinPhi = Math.sin(phi);
+                const cosDelta = Math.cos(deltaLambda);
+                const sinDelta = Math.sin(deltaLambda);
+                const cosPhi0 = Math.cos(phi0);
+                const sinPhi0 = Math.sin(phi0);
+
+                const x3d = cx + globeRadius * cosPhi * sinDelta;
+                const y3d = cy - globeRadius * (cosPhi0 * sinPhi - sinPhi0 * cosPhi * cosDelta);
+                const z3d = sinPhi0 * sinPhi + cosPhi0 * cosPhi * cosDelta; // z > 0 = tampak di depan bola
+
+                // Interpolasi Morphing (Blend 2D -> 3D)
+                const x = (1 - morphT) * x2d + morphT * x3d;
+                const y = (1 - morphT) * y2d + morphT * y3d;
+                const visible = morphT < 0.2 || z3d > 0;
+                const depthAlpha = morphT > 0.5 ? Math.max(0, z3d) : 1;
+
+                return { x, y, visible, depthAlpha, z3d };
+            }
+
+            // Gambar Titik-Titik Benua (Stippled Dots Matrix)
+            ctx.fillStyle = '#94a3b8';
+            worldPoints.forEach(pt => {
+                const p = project(pt[0], pt[1]);
+                if (p.visible) {
+                    ctx.save();
+                    ctx.globalAlpha = p.depthAlpha * 0.65;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 1.4, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+
+            // Gambar Garis Koridor Pelayaran Laut (Dashed Great-Circle Arcs)
+            activeCorridors.forEach((route, idx) => {
+                const pStart = project(route.from.lat, route.from.lng);
+                const pEnd = project(route.to.lat, route.to.lng);
+
+                if (pStart.visible || pEnd.visible) {
+                    ctx.save();
+                    ctx.beginPath();
+                    const steps = 30;
+                    let first = true;
+
+                    for (let s = 0; s <= steps; s++) {
+                        const t = s / steps;
+                        // Interpolasi lat & lng sepanjang garis
+                        const curLat = route.from.lat + (route.to.lat - route.from.lat) * t;
+                        const curLng = route.from.lng + (route.to.lng - route.from.lng) * t;
+                        const pt = project(curLat, curLng);
+
+                        // Kelengkungan 3D ke atas permukaan globe
+                        let px = pt.x;
+                        let py = pt.y;
+                        if (morphT > 0.2) {
+                            const arcHeight = Math.sin(t * Math.PI) * 16 * morphT;
+                            py -= arcHeight;
+                        }
+
+                        if (first) {
+                            ctx.moveTo(px, py);
+                            first = false;
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                    }
+
+                    ctx.lineWidth = route.isDelayed ? 2.2 : 1.8;
+                    ctx.strokeStyle = route.isDelayed ? '#f43f5e' : '#0284c7';
+                    ctx.setLineDash([5, 5]);
+                    ctx.globalAlpha = Math.min(pStart.depthAlpha, pEnd.depthAlpha) * 0.8;
+                    ctx.stroke();
+
+                    // Simbol Kapal Berlayar Animatif di Lintasan
+                    const shipProgress = (pulseTimer * 0.15 + idx * 0.25) % 1.0;
+                    const shipLat = route.from.lat + (route.to.lat - route.from.lat) * shipProgress;
+                    const shipLng = route.from.lng + (route.to.lng - route.from.lng) * shipProgress;
+                    const pShip = project(shipLat, shipLng);
+
+                    if (pShip.visible) {
+                        ctx.fillStyle = route.isDelayed ? '#e11d48' : '#0284c7';
+                        ctx.beginPath();
+                        ctx.arc(pShip.x, pShip.y, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    ctx.restore();
+                }
+            });
+
+            // Gambar Node Titik Wilayah Pelabuhan & LABEL TEKS NAMA WILAYAH
+            maritimeRegions.forEach(port => {
+                const p = project(port.lat, port.lng);
+                if (p.visible && p.depthAlpha > 0.1) {
+                    const isSelected = selectedPort && selectedPort.code === port.code;
+                    const pulseRadius = 5 + (Math.sin(pulseTimer * 3) + 1) * 3;
+
+                    ctx.save();
+                    ctx.globalAlpha = p.depthAlpha;
+
+                    // Lingkaran Berdenyut Transparan
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, pulseRadius, 0, Math.PI * 2);
+                    ctx.strokeStyle = isSelected ? '#0284c7' : 'rgba(2, 132, 199, 0.4)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+
+                    // Titik Inti Biru/Hijau Solid
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+                    ctx.fillStyle = port.isDelayed ? '#f43f5e' : '#0284c7';
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+
+                    // LABEL NAMA WILAYAH (TETAP TERTERAKAN & SANGAT JELAS DIBACA)
+                    const labelText = `${port.city} (${port.code})`;
+                    ctx.font = 'bold 11px Inter, sans-serif';
+                    const textMetrics = ctx.measureText(labelText);
+                    const boxW = textMetrics.width + 16;
+                    const boxH = 20;
+                    const boxX = p.x + 8;
+                    const boxY = p.y - 10;
+
+                    // Background Pill Badge Putih
+                    ctx.fillStyle = isSelected ? '#0f172a' : 'rgba(255, 255, 255, 0.95)';
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.12)';
+                    ctx.shadowBlur = 6;
+                    ctx.shadowOffsetY = 2;
+
+                    ctx.beginPath();
+                    ctx.roundRect(boxX, boxY, boxW, boxH, 6);
+                    ctx.fill();
+
+                    // Border Pill
+                    ctx.shadowColor = 'transparent';
+                    ctx.strokeStyle = isSelected ? '#0284c7' : '#cbd5e1';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    // Teks Nama Wilayah
+                    ctx.fillStyle = isSelected ? '#ffffff' : '#0f172a';
+                    ctx.fillText(labelText, boxX + 8, boxY + 14);
+
+                    ctx.restore();
+                }
+            });
+
+            requestAnimationFrame(renderMorphFrame);
+        }
+        requestAnimationFrame(renderMorphFrame);
+
+        // 4. Tombol Pengalih Mode Peta (2D Flat / 3D Globe / Leaflet GIS)
+        function switchMapMode(mode) {
+            currentMapMode = mode;
+
+            const btnFlat = document.getElementById('btn-mode-flat');
+            const btnGlobe = document.getElementById('btn-mode-globe');
+            const btnLeaflet = document.getElementById('btn-mode-leaflet');
+            const morphWrapper = document.getElementById('morph-canvas-wrapper');
+            const radarWrapper = document.getElementById('radar-canvas-wrapper');
+            const dragHint = document.getElementById('globe-drag-hint');
+
+            // Reset Kelas Tombol
+            const activeClass = 'bg-white text-slate-900 shadow-xs';
+            const inactiveClass = 'text-slate-600 hover:text-slate-900';
+
+            [btnFlat, btnGlobe, btnLeaflet].forEach(b => {
+                if (b) {
+                    b.className = b.className.replace(activeClass, '').replace(inactiveClass, '') + ' ' + inactiveClass;
+                }
+            });
+
+            if (mode === 'flat') {
+                targetMorphT = 0;
+                btnFlat.className = btnFlat.className.replace(inactiveClass, activeClass);
+                morphWrapper.classList.remove('hidden');
+                radarWrapper.classList.add('hidden');
+                dragHint.classList.add('hidden');
+            } else if (mode === 'globe') {
+                targetMorphT = 1;
+                btnGlobe.className = btnGlobe.className.replace(inactiveClass, activeClass);
+                morphWrapper.classList.remove('hidden');
+                radarWrapper.classList.add('hidden');
+                dragHint.classList.remove('hidden');
+            } else if (mode === 'leaflet') {
+                btnLeaflet.className = btnLeaflet.className.replace(inactiveClass, activeClass);
+                morphWrapper.classList.add('hidden');
+                radarWrapper.classList.remove('hidden');
+                dragHint.classList.add('hidden');
+
+                if (radarMap) {
+                    setTimeout(() => { radarMap.invalidateSize(); }, 200);
+                }
+            }
+        }
+
+        // 5. Interaksi Klik Daftar Wilayah Pelabuhan di Sisi Kiri
+        function selectPortFromList(code) {
+            const port = maritimeRegions.find(p => p.code === code);
+            if (!port) return;
+
+            selectedPort = port;
+
+            // Jika dalam mode Globe 3D, putar bola dunia menghadap ke pelabuhan ini
+            if (currentMapMode === 'globe' || morphT > 0.5) {
+                globeRotationPhi = port.lng;
+                globeRotationTheta = Math.max(-30, Math.min(30, port.lat));
+            }
+
+            // Tampilkan Card Popover Wilayah
+            const card = document.getElementById('selected-port-card');
+            const titleEl = document.getElementById('port-card-title');
+            const cityEl = document.getElementById('port-card-city');
+            const coordsEl = document.getElementById('port-card-coords');
+            const codeEl = document.getElementById('port-card-code');
+
+            if (card && titleEl) {
+                titleEl.innerText = port.name;
+                cityEl.innerText = `${port.city}, ${port.country} • ${port.role}`;
+                coordsEl.innerText = `LAT: ${port.lat} • LNG: ${port.lng}`;
+                codeEl.innerText = port.code;
+                card.classList.remove('hidden');
+            }
+
+            // Jika dalam mode Leaflet
+            if (currentMapMode === 'leaflet' && radarMap) {
+                radarMap.flyTo([port.lat, port.lng], 6, { duration: 1.2 });
+            }
+        }
+
+        function closePortCard() {
+            const card = document.getElementById('selected-port-card');
+            if (card) card.classList.add('hidden');
+            selectedPort = null;
+        }
+
+        // 6. Inisialisasi Peta Leaflet Resmi OpenStreetMap
         document.addEventListener('DOMContentLoaded', function () {
             const mapData = @json($mapShipments);
             const mapEl = document.getElementById('radar-canvas');
@@ -916,7 +1443,6 @@
                     attributionControl: false
                 }).setView([10.0, 75.0], 3);
 
-                // OpenStreetMap Tile Layer Resmi (100% Bebas Watermark)
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 18,
                     attribution: '&copy; OpenStreetMap contributors'
@@ -935,7 +1461,6 @@
                     const isDelivered = item.status === 'DELIVERED';
                     const routeColor = isDelayed ? '#f43f5e' : (isDelivered ? '#10b981' : '#0284c7');
 
-                    // Garis Lintasan Laut (Polyline)
                     L.polyline([origin, current, dest], {
                         color: routeColor,
                         weight: 2.8,
@@ -943,35 +1468,22 @@
                         opacity: 0.85
                     }).addTo(radarMap);
 
-                    // Marker Pelabuhan Asal
                     L.circleMarker(origin, {
                         radius: 5,
                         color: '#0369a1',
                         fillColor: '#ffffff',
                         fillOpacity: 1,
                         weight: 2
-                    }).addTo(radarMap).bindPopup(`
-                        <div style="font-family: sans-serif; font-size: 11px; padding: 2px;">
-                            <b style="color: #0369a1;">Pelabuhan Asal:</b> ${item.origin.name}<br>
-                            <b>No. Kargo:</b> ${item.number}
-                        </div>
-                    `);
+                    }).addTo(radarMap).bindPopup(`<b>Pelabuhan Asal:</b> ${item.origin.name}<br><b>No. Kargo:</b> ${item.number}`);
 
-                    // Marker Pelabuhan Tujuan
                     L.circleMarker(dest, {
                         radius: 5,
                         color: '#059669',
                         fillColor: '#10b981',
                         fillOpacity: 1,
                         weight: 2
-                    }).addTo(radarMap).bindPopup(`
-                        <div style="font-family: sans-serif; font-size: 11px; padding: 2px;">
-                            <b style="color: #059669;">Pelabuhan Tujuan:</b> ${item.destination.name}<br>
-                            <b>No. Kargo:</b> ${item.number}
-                        </div>
-                    `);
+                    }).addTo(radarMap).bindPopup(`<b>Pelabuhan Tujuan:</b> ${item.destination.name}<br><b>No. Kargo:</b> ${item.number}`);
 
-                    // Beacon Titik Kapal Berdenyut (Pulse Beacon)
                     let beaconClass = 'beacon-pulse';
                     if (isDelayed) beaconClass += ' beacon-pulse-delayed';
                     if (isDelivered) beaconClass += ' beacon-pulse-delivered';
@@ -993,8 +1505,7 @@
                                 </span>
                             </div>
                             <span style="color: #475569;">Maskapai: <b>${item.carrier}</b></span><br>
-                            <span style="color: #475569;">Komoditas: ${item.cargo}</span><br>
-                            ${isDelayed ? '<div style="margin-top: 4px; font-size: 10px; font-weight: bold; color: #e11d48;"><i class="fa-solid fa-triangle-exclamation"></i> Keterlambatan Pelayaran</div>' : ''}
+                            <span style="color: #475569;">Komoditas: ${item.cargo}</span>
                         </div>
                     `);
 
@@ -1010,7 +1521,7 @@
                 }
             }
 
-            // 3. Diagram Batang Chart.js Tema Terang
+            // 7. Diagram Batang Chart.js Tema Terang
             const chartCanvas = document.getElementById('fleetStatusBarChart');
             if (chartCanvas) {
                 new Chart(chartCanvas, {
@@ -1049,22 +1560,29 @@
             }
         });
 
-        // 4. Interaksi Klik Kartu -> Otomatis Geser Peta Radar ke Posisi Kapal
+        // 8. Interaksi Klik Kartu -> Otomatis Geser Peta Radar ke Posisi Kapal
         function focusOnShipment(id, lat, lng) {
-            if (radarMap && lat && lng) {
+            if (currentMapMode === 'leaflet' && radarMap && lat && lng) {
                 radarMap.flyTo([lat, lng], 6, { duration: 1.2 });
                 if (markersMap[id]) {
-                    setTimeout(() => {
-                        markersMap[id].marker.openPopup();
-                    }, 1200);
+                    setTimeout(() => { markersMap[id].marker.openPopup(); }, 1200);
+                }
+            } else if (lat && lng) {
+                // Dalam mode 2D / 3D Globe: putar globe menghadap kapal
+                if (currentMapMode === 'globe' || morphT > 0.5) {
+                    globeRotationPhi = lng;
+                    globeRotationTheta = Math.max(-30, Math.min(30, lat));
                 }
             }
         }
 
-        // 5. Reset Tampilan Radar ke Cakupan Seluruh Armada
+        // 9. Reset Tampilan Radar
         function resetRadarView() {
-            if (radarMap && initialBounds.length > 0) {
+            if (currentMapMode === 'leaflet' && radarMap && initialBounds.length > 0) {
                 radarMap.fitBounds(initialBounds, { padding: [40, 40] });
+            } else {
+                globeRotationPhi = 95;
+                globeRotationTheta = 12;
             }
         }
     </script>
