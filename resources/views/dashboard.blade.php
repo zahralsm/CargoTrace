@@ -71,7 +71,7 @@
     </style>
 
     {{-- KANVAS DECK MARITIM UTAMA (TEMA PUTIH BERSIH / EXECUTIVE LIGHT MODE) --}}
-    <div x-data="{ showCreateModal: false }" class="bg-slate-100 text-slate-800 min-h-screen py-5 px-3 sm:px-6 lg:px-8">
+    <div x-data="{ showCreateModal: false, showBookingModal: false }" class="bg-slate-100 text-slate-800 min-h-screen py-5 px-3 sm:px-6 lg:px-8">
         <div class="max-w-[1600px] mx-auto space-y-5">
 
             {{-- 1. PITA PUSAT KENDALI TELEMETRI MARITIM --}}
@@ -84,10 +84,10 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2.5">
-                            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">Pusat Kendali Pelayaran Maritim</h1>
+                            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">{{ Auth::user()->isCustomer() ? 'Pusat Pelacakan Kargo Maritim' : 'Pusat Kendali Pelayaran Maritim' }}</h1>
                             <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">
                                 <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
-                                TELEMETRI BENTO AKTIF
+                                {{ Auth::user()->isCustomer() ? 'MONITORING KARGO AKTIF' : 'TELEMETRI BENTO AKTIF' }}
                             </span>
                         </div>
                         <div class="text-xs text-slate-500 flex flex-wrap items-center gap-3 mt-0.5">
@@ -106,6 +106,11 @@
                         <button @click="showCreateModal = true" class="px-4 py-2 bg-[#1b1f3b] hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-2 transition duration-200">
                             <i class="fa-solid fa-plus text-xs"></i>
                             <span>Daftarkan Manifest Kargo</span>
+                        </button>
+                    @else
+                        <button @click="showBookingModal = true" class="px-4 py-2 bg-[#1b1f3b] hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-2 transition duration-200">
+                            <i class="fa-solid fa-cart-flatbed text-xs text-sky-400"></i>
+                            <span>Booking Kontainer Baru</span>
                         </button>
                     @endif
 
@@ -143,10 +148,10 @@
                             <div class="flex items-center gap-2">
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200 tracking-wider uppercase flex items-center gap-1.5">
                                     <span class="w-2 h-2 rounded-full bg-sky-500 animate-ping"></span>
-                                    KAPAL FLAGSHIP AKTIF
+                                    {{ Auth::user()->isCustomer() ? 'KAPAL PEMBAWA KARGO ANDA' : 'KAPAL FLAGSHIP AKTIF' }}
                                 </span>
                             </div>
-                            <span class="text-[11px] text-slate-400">IMO CALLSIGN: 9463047</span>
+                            <span class="text-[11px] text-slate-400">{{ Auth::user()->isCustomer() ? 'STATUS PELAYARAN AKTIF' : 'IMO CALLSIGN: 9463047' }}</span>
                         </div>
 
                         {{-- Ilustrasi Kapal Kontainer Isometrik 3D Modern --}}
@@ -290,7 +295,7 @@
                         </div>
                         @if($flagship)
                             <a href="{{ route('shipments.show', $flagship) }}" class="inline-flex items-center gap-1.5 font-bold text-sky-600 hover:text-sky-800 transition group/link">
-                                <span>Detail Kendali</span>
+                                <span>{{ Auth::user()->isCustomer() ? 'Lacak Rute & Status' : 'Detail Kendali' }}</span>
                                 <i class="fa-solid fa-arrow-right text-[11px] group-hover/link:translate-x-1 transition"></i>
                             </a>
                         @endif
@@ -398,9 +403,9 @@
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-chart-pie text-emerald-600 text-sm"></i>
-                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Telemetri Armada & SLA</h3>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">{{ Auth::user()->isCustomer() ? 'Ringkasan Status Kargo Saya' : 'Telemetri Armada & SLA' }}</h3>
                             </div>
-                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">LIVE METRICS</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">{{ Auth::user()->isCustomer() ? 'STATUS SAYA' : 'LIVE METRICS' }}</span>
                         </div>
 
                         {{-- 3 Circular Radial Progress Gauges (Tema Terang) --}}
@@ -419,7 +424,7 @@
                                         <span class="text-sm font-extrabold text-slate-900 ">{{ $onTimeRate }}%</span>
                                     </div>
                                 </div>
-                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">SLA On-Time</span>
+                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">{{ Auth::user()->isCustomer() ? 'Ketepatan Waktu' : 'SLA On-Time' }}</span>
                                 <span class="text-[9px] text-emerald-700 font-bold">Target: &gt;95%</span>
                             </div>
 
@@ -438,8 +443,8 @@
                                         <span class="text-sm font-extrabold text-slate-900 ">{{ $inTransitCount }}</span>
                                     </div>
                                 </div>
-                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">Berlayar</span>
-                                <span class="text-[9px] text-amber-700 font-bold">Aktif di Laut</span>
+                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">{{ Auth::user()->isCustomer() ? 'Sedang Berlayar' : 'Berlayar' }}</span>
+                                <span class="text-[9px] text-amber-700 font-bold">{{ Auth::user()->isCustomer() ? 'Dalam Rute' : 'Aktif di Laut' }}</span>
                             </div>
 
                             {{-- Gauge 3: Total Manifest --}}
@@ -453,8 +458,8 @@
                                         <span class="text-sm font-extrabold text-slate-900 ">{{ $totalShipments }}</span>
                                     </div>
                                 </div>
-                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">Manifest</span>
-                                <span class="text-[9px] text-sky-700 font-bold">Total Kargo</span>
+                                <span class="text-[11px] font-bold text-slate-700 mt-2 text-center">{{ Auth::user()->isCustomer() ? 'Total Kargo' : 'Manifest' }}</span>
+                                <span class="text-[9px] text-sky-700 font-bold">{{ Auth::user()->isCustomer() ? 'Milik Anda' : 'Total Kargo' }}</span>
                             </div>
                         </div>
 
@@ -464,10 +469,10 @@
                             <div class="p-3 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between text-xs">
                                 <div class="flex items-center gap-2 text-rose-800">
                                     <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-                                    <span class="font-bold">Keterlambatan Armada</span>
+                                    <span class="font-bold">{{ Auth::user()->isCustomer() ? 'Keterlambatan Kargo Saya' : 'Keterlambatan Armada' }}</span>
                                 </div>
                                 <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 font-extrabold border border-rose-200">
-                                    {{ $delayedCount }} Kapal
+                                    {{ $delayedCount }} {{ Auth::user()->isCustomer() ? 'Kargo' : 'Kapal' }}
                                 </span>
                             </div>
 
@@ -475,7 +480,7 @@
                             <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs">
                                 <div class="flex items-center gap-2 text-amber-800">
                                     <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                                    <span class="font-bold">Kendala Lapangan (Exception)</span>
+                                    <span class="font-bold">{{ Auth::user()->isCustomer() ? 'Kendala Pengiriman Kargo' : 'Kendala Lapangan (Exception)' }}</span>
                                 </div>
                                 <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 font-extrabold border border-amber-200">
                                     {{ $openExceptionsCount }} Kasus
@@ -497,8 +502,8 @@
                         <div class="flex items-center gap-2.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
                             <div>
-                                <h3 class="font-extrabold text-slate-800 uppercase tracking-wider">Radar Maritim Global & Jaringan Armada</h3>
-                                <p class="text-[10px] text-slate-400 ">Proyeksi Morphing 2D/3D (Vercel Network Architecture Style)</p>
+                                <h3 class="font-extrabold text-slate-800 uppercase tracking-wider">{{ Auth::user()->isCustomer() ? 'Peta Rute & Wilayah Pelabuhan' : 'Radar Maritim Global & Jaringan Armada' }}</h3>
+                                <p class="text-[10px] text-slate-400 ">{{ Auth::user()->isCustomer() ? 'Visualisasi Interaktif Rute Pelayaran dan Pelabuhan Muatan Anda' : 'Proyeksi Morphing 2D/3D (Vercel Network Architecture Style)' }}</p>
                             </div>
                         </div>
 
@@ -664,9 +669,9 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-boxes-stacked text-sky-600 text-sm"></i>
-                                <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Antrean Manifest Pelayaran</h3>
+                                <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">{{ Auth::user()->isCustomer() ? 'Daftar Kargo Pengiriman Saya' : 'Antrean Manifest Pelayaran' }}</h3>
                             </div>
-                            <span class="text-xs text-sky-700 font-bold">{{ $shipments->total() }} Data Tercatat</span>
+                            <span class="text-xs text-sky-700 font-bold">{{ $shipments->total() }} {{ Auth::user()->isCustomer() ? 'Kargo Terdaftar' : 'Data Tercatat' }}</span>
                         </div>
 
                         {{-- Kolom Pencarian --}}
@@ -765,7 +770,7 @@
                                 <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
                                     <span class="truncate max-w-[210px]" title="{{ $s->cargo_type }}"><i class="fa-solid fa-box-open mr-1 text-slate-400"></i> {{ $s->cargo_type }}</span>
                                     <a href="{{ route('shipments.show', $s) }}" class="font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1 group/btn">
-                                        <span>Detail & Kendali</span>
+                                        <span>{{ Auth::user()->isCustomer() ? 'Lacak & Riwayat' : 'Detail & Kendali' }}</span>
                                         <i class="fa-solid fa-chevron-right text-[10px] group-hover/btn:translate-x-0.5 transition"></i>
                                     </a>
                                 </div>
@@ -793,7 +798,7 @@
                     <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-chart-column text-sky-600 text-sm"></i>
-                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Distribusi Volume Armada per Status</h4>
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ Auth::user()->isCustomer() ? 'Status Pelayaran Kargo Saya' : 'Distribusi Volume Armada per Status' }}</h4>
                         </div>
                         <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">Chart.js Engine</span>
                     </div>
@@ -808,14 +813,14 @@
                         <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i>
-                                <h4 class="text-xs font-bold text-rose-800 uppercase tracking-wider">Prioritas Gangguan & Resolusi Kendala</h4>
+                                <h4 class="text-xs font-bold text-rose-800 uppercase tracking-wider">{{ Auth::user()->isCustomer() ? 'Peringatan Operasional & Kendala Kargo' : 'Prioritas Gangguan & Resolusi Kendala' }}</h4>
                             </div>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">LEVEL 1 ALERT</span>
                         </div>
                         <div class="space-y-2.5 text-xs">
                             <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900">
                                 <div class="font-bold flex items-center justify-between">
-                                    <span class="text-slate-900 ">KARGO #CTG-2026-0081</span>
+                                    <span class="text-slate-900 ">KARGO #{{ $flagship ? $flagship->shipment_number : 'CTG-2026-0081' }}</span>
                                     <span class="text-[10px] bg-rose-200 text-rose-800 px-2 py-0.5 rounded-md font-bold">BADAI MONSUN</span>
                                 </div>
                                 <p class="text-[11px] text-rose-700 mt-2 leading-relaxed">
@@ -825,10 +830,12 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-100 text-right">
-                        <a href="{{ route('shipments.show', 1) }}" class="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center justify-end gap-1.5 transition">
-                            <span>Tinjau Prosedur Investigasi Lapangan</span>
-                            <i class="fa-solid fa-arrow-right text-[11px]"></i>
-                        </a>
+                        @if($flagship)
+                            <a href="{{ route('shipments.show', $flagship) }}" class="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center justify-end gap-1.5 transition">
+                                <span>{{ Auth::user()->isCustomer() ? 'Lihat Informasi Kendala & Rute Kargo' : 'Tinjau Prosedur Investigasi Lapangan' }}</span>
+                                <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -984,6 +991,122 @@
                                 </div>
                             </form>
 
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- 6. MODAL PENGAJUAN BOOKING KONTAINER (Khusus Pelanggan / Customer) --}}
+            @if(Auth::user()->isCustomer())
+                <div x-show="showBookingModal" 
+                     x-cloak 
+                     class="fixed inset-0 z-[99999] overflow-y-auto" 
+                     style="display: none;"
+                     @keydown.escape.window="showBookingModal = false">
+                    
+                    {{-- Backdrop Gelap dengan Blur --}}
+                    <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" @click="showBookingModal = false"></div>
+
+                    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-6" x-data="{ bookedSuccess: false, originPort: '', destPort: '', cargoType: '', weight: '' }">
+                        <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                            
+                            {{-- Header Modal --}}
+                            <div class="bg-[#1b1f3b] px-6 py-5 flex items-center justify-between text-white border-b border-[#292f54]">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 text-sky-400 flex items-center justify-center text-lg">
+                                        <i class="fa-solid fa-ship"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-black text-white tracking-tight">Booking & Pengajuan Kargo Baru</h3>
+                                        <p class="text-xs text-slate-300 mt-0.5">Reservasi Kontainer Maritim (FCL & LCL) & Dispatcher Service</p>
+                                    </div>
+                                </div>
+                                <button type="button" @click="showBookingModal = false" class="text-slate-400 hover:text-white transition">
+                                    <i class="fa-solid fa-xmark text-lg"></i>
+                                </button>
+                            </div>
+
+                            {{-- Isi Modal --}}
+                            <div class="p-6 space-y-5">
+                                {{-- Kotak Edukasi / Alur SOP --}}
+                                <div class="p-4 rounded-2xl bg-sky-50 border border-sky-200 flex items-start gap-3 text-xs text-sky-900 leading-relaxed">
+                                    <i class="fa-solid fa-circle-info text-sky-600 text-base mt-0.5"></i>
+                                    <div>
+                                        <strong class="font-bold text-sky-950">Alur Resmi Pemesanan Kontainer:</strong>
+                                        <p class="mt-1 text-sky-800">Sesuai SOP pelabuhan & arsitektur sistem CargoTrace, manifest kontainer dan nomor pelacakan resmi diterbitkan langsung oleh <strong>Tim Dispatcher / Operator Logistik</strong> setelah slot kapal dan dokumen muatan Anda diverifikasi.</p>
+                                    </div>
+                                </div>
+
+                                <template x-if="bookedSuccess">
+                                    <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
+                                        <div class="w-12 h-12 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                        </div>
+                                        <h4 class="font-extrabold text-slate-900 text-sm">Permintaan Booking Berhasil Dikirim!</h4>
+                                        <p class="text-xs text-slate-600 max-w-md mx-auto">
+                                            Tiket reservasi kontainer Anda telah diteruskan ke Operator Dispatcher Pelabuhan. Operator akan menyiapkan slot manifest kargo Anda dan menghubungi Anda sesaat lagi.
+                                        </p>
+                                        <button @click="bookedSuccess = false; showBookingModal = false" class="mt-2 px-5 py-2.5 rounded-xl bg-[#1b1f3b] text-white text-xs font-bold hover:bg-sky-600 transition">
+                                            Tutup & Kembali ke Dashboard
+                                        </button>
+                                    </div>
+                                </template>
+
+                                <template x-if="!bookedSuccess">
+                                    <form @submit.prevent="bookedSuccess = true" class="space-y-4">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Pelabuhan Muat (Asal)</label>
+                                                <select x-model="originPort" required class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-white text-slate-800 focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                                                    <option value="">Pilih Pelabuhan Asal...</option>
+                                                    <option value="Jakarta (IDTPP)">Tanjung Priok, Jakarta (IDTPP)</option>
+                                                    <option value="Surabaya (IDSUB)">Tanjung Perak, Surabaya (IDSUB)</option>
+                                                    <option value="Singapore (SGSIN)">Port of Singapore (SGSIN)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Pelabuhan Bongkar (Tujuan)</label>
+                                                <select x-model="destPort" required class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-white text-slate-800 focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                                                    <option value="">Pilih Pelabuhan Tujuan...</option>
+                                                    <option value="Rotterdam (NLRTM)">Port of Rotterdam, Belanda (NLRTM)</option>
+                                                    <option value="Sydney (AUBOT)">Port Botany, Sydney (AUBOT)</option>
+                                                    <option value="Singapore (SGSIN)">Port of Singapore (SGSIN)</option>
+                                                    <option value="Los Angeles (USLAX)">Port of Los Angeles (USLAX)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Deskripsi Komoditas Barang</label>
+                                                <input type="text" x-model="cargoType" required placeholder="Contoh: Biji Kopi Robusta / Elektronik" class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-white text-slate-800 focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Estimasi Bobot Muatan (Kg)</label>
+                                                <input type="number" x-model="weight" required min="100" placeholder="Contoh: 18500" class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-white text-slate-800 focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+                                            </div>
+                                        </div>
+
+                                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-headset text-sky-600"></i>
+                                                <span>Layanan Dispatcher & Call Center:</span>
+                                            </div>
+                                            <span class="font-extrabold text-sky-700">+62 21 8000-CARGO (24/7)</span>
+                                        </div>
+
+                                        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                                            <button type="button" @click="showBookingModal = false" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition">
+                                                Batal
+                                            </button>
+                                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition flex items-center gap-2 shadow-xs">
+                                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                                                <span>Kirim Permintaan Booking</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
