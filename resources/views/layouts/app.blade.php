@@ -49,7 +49,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-slate-100 text-slate-800">
-        <div class="min-h-screen">
+        <div class="min-h-screen bg-slate-100">
             @include('layouts.navigation')
 
             <!-- Header Halaman -->
