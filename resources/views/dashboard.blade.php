@@ -79,29 +79,66 @@
                 {{-- Kiri: Judul Deck Maritim & Waktu UTC --}}
                 <div class="flex items-center gap-3.5">
                     <div class="relative w-11 h-11 rounded-xl bg-[#1b1f3b] text-sky-400 flex items-center justify-center text-lg font-bold shadow-xs">
-                        <i class="fa-solid fa-satellite-dish"></i>
+                        @if(Auth::user()->isAdmin())
+                            <i class="fa-solid fa-shield-halved text-purple-400"></i>
+                        @elseif(Auth::user()->isOperator())
+                            <i class="fa-solid fa-compass text-amber-400"></i>
+                        @else
+                            <i class="fa-solid fa-box-open text-emerald-400"></i>
+                        @endif
                         <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white animate-ping"></span>
                     </div>
                     <div>
                         <div class="flex items-center gap-2.5">
-                            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">{{ Auth::user()->isCustomer() ? 'Pusat Pelacakan Kargo Maritim' : 'Pusat Kendali Pelayaran Maritim' }}</h1>
-                            <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
-                                {{ Auth::user()->isCustomer() ? 'MONITORING KARGO AKTIF' : 'TELEMETRI BENTO AKTIF' }}
-                            </span>
+                            <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                                @if(Auth::user()->isAdmin())
+                                    Pusat Administrasi & Kendali Global
+                                @elseif(Auth::user()->isOperator())
+                                    Pusat Kendali Dispatcher & Operasional Armada
+                                @else
+                                    Pusat Pelacakan & Monitoring Kargo Saya
+                                @endif
+                            </h1>
+                            @if(Auth::user()->isAdmin())
+                                <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-50 text-purple-700 border border-purple-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-600 animate-pulse"></span>
+                                    KONSOL ADMINISTRATOR AKTIF
+                                </span>
+                            @elseif(Auth::user()->isOperator())
+                                <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                    MODE DISPATCH OPERATOR AKTIF
+                                </span>
+                            @else
+                                <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    PORTAL PELANGGAN RESMI
+                                </span>
+                            @endif
                         </div>
                         <div class="text-xs text-slate-500 flex flex-wrap items-center gap-3 mt-0.5">
                             <span class="text-sky-700 font-semibold"><i class="fa-regular fa-clock mr-1 text-sky-600"></i> <strong id="utc-time-hud">--:--:-- UTC</strong></span>
                             <span class="text-slate-300">•</span>
                             <span>Satelit AIS: <strong class="text-emerald-700 font-bold">TERKONEKSI (100% ONLINE)</strong></span>
                             <span class="text-slate-300">•</span>
-                            <span>Peran: <strong class="text-slate-700 uppercase font-bold">{{ Auth::user()->role === 'admin' ? 'Administrator' : (Auth::user()->role === 'operator' ? 'Operator Logistik' : 'Pelanggan') }}</strong></span>
+                            <span>Peran Akun: 
+                                <strong class="uppercase font-bold {{ Auth::user()->isAdmin() ? 'text-purple-700' : (Auth::user()->isOperator() ? 'text-amber-700' : 'text-emerald-700') }}">
+                                    {{ Auth::user()->role === 'admin' ? 'Administrator' : (Auth::user()->role === 'operator' ? 'Operator Logistik' : 'Pelanggan') }}
+                                </strong>
+                            </span>
                         </div>
                     </div>
                 </div>
 
                 {{-- Kanan: Aksi Registrasi Kargo & Status Ringkas --}}
                 <div class="flex items-center gap-3">
+                    @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.index') }}" class="px-3.5 py-2 bg-purple-900/10 hover:bg-purple-900/20 text-purple-700 border border-purple-300 rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-screwdriver-wrench text-xs text-purple-600"></i>
+                            <span class="hidden md:inline">Konsol Master Data ↗</span>
+                        </a>
+                    @endif
+
                     @if(!Auth::user()->isCustomer())
                         <button @click="showCreateModal = true" class="px-4 py-2 bg-[#1b1f3b] hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-2 transition duration-200">
                             <i class="fa-solid fa-plus text-xs"></i>
